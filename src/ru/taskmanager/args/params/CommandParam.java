@@ -1,7 +1,7 @@
 package ru.taskmanager.args.params;
 
-import ru.taskmanager.args.errors.CorruptedParamException;
-import ru.taskmanager.args.errors.StringIsEmptyException;
+import ru.taskmanager.errors.CorruptedParamException;
+import ru.taskmanager.errors.StringIsEmptyException;
 
 public class CommandParam extends BaseParam {
 

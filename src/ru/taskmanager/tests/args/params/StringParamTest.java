@@ -1,8 +1,8 @@
-package ru.taskmanager.tests.args;
+package ru.taskmanager.tests.args.params;
 
 import org.junit.Test;
-import ru.taskmanager.args.errors.CorruptedParamException;
-import ru.taskmanager.args.errors.StringIsEmptyException;
+import ru.taskmanager.errors.CorruptedParamException;
+import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.args.params.BaseParam;
 import ru.taskmanager.args.params.StringParam;
 

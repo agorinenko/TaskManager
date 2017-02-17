@@ -1,4 +1,4 @@
-package ru.taskmanager.tests;
+package ru.taskmanager.tests.args;
 
 import org.junit.Test;
 import ru.taskmanager.args.ParamsFactory;

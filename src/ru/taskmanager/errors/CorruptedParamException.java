@@ -1,4 +1,4 @@
-package ru.taskmanager.args.errors;
+package ru.taskmanager.errors;
 
 public class CorruptedParamException extends Exception {
     public CorruptedParamException() { super(); }

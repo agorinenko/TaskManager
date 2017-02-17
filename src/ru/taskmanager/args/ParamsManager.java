@@ -1,8 +1,8 @@
 package ru.taskmanager.args;
 
-import ru.taskmanager.args.errors.CorruptedParamException;
-import ru.taskmanager.args.errors.RequiredParamException;
-import ru.taskmanager.args.errors.StringIsEmptyException;
+import ru.taskmanager.errors.CorruptedParamException;
+import ru.taskmanager.errors.RequiredParamException;
+import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.args.params.BaseParam;
 import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.KeyValueParam;
@@ -76,7 +76,7 @@ public class ParamsManager {
     /**
      * Проверка существования ключа в коллекциях параметров
      * @param key - ключ
-     * @return
+     * @return - ключ существует
      */
     public boolean keyExist(String key){
         return keys.stream().filter(k -> k.equalsIgnoreCase(key)).findFirst().isPresent();
@@ -87,7 +87,7 @@ public class ParamsManager {
             return;
         }
 
-        if(!requiredKeys.stream().allMatch(k -> keyExist(k))){
+        if(!requiredKeys.stream().allMatch(this::keyExist)){
             throw new RequiredParamException();
         }
     }

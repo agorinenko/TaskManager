@@ -1,8 +1,8 @@
-package ru.taskmanager.tests;
+package ru.taskmanager.tests.args;
 
 import org.junit.Test;
 import ru.taskmanager.args.ParamsManager;
-import ru.taskmanager.args.errors.RequiredParamException;
+import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.IntegerParam;
 import ru.taskmanager.args.params.KeyValueParam;

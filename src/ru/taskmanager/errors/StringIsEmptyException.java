@@ -1,8 +1,5 @@
-package ru.taskmanager.args.errors;
+package ru.taskmanager.errors;
 
-/**
- * Created by Home User on 21.01.2017.
- */
 public class StringIsEmptyException extends Exception {
     public StringIsEmptyException() { super(); }
     public StringIsEmptyException(String message) { super(message); }

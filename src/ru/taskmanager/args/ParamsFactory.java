@@ -1,7 +1,7 @@
 package ru.taskmanager.args;
 
-import ru.taskmanager.args.errors.CorruptedParamException;
-import ru.taskmanager.args.errors.StringIsEmptyException;
+import ru.taskmanager.errors.CorruptedParamException;
+import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.args.params.*;
 
 
