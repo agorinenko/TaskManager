@@ -11,7 +11,7 @@ public class ErrorResult extends CommandResult {
 
     @Override
     public String getMessage() {
-        return message.isEmpty() ? exception.getMessage() : message;
+        return( null == message || message.isEmpty()) ? exception.getMessage() : message;
     }
 
     @Override
