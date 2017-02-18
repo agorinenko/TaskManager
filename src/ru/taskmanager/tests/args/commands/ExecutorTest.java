@@ -2,12 +2,10 @@ package ru.taskmanager.tests.args.commands;
 
 import org.junit.Test;
 import ru.taskmanager.args.ParamsManager;
-import ru.taskmanager.args.params.StringParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.ErrorResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.commands.imp.TestSuccessCommand;
 import ru.taskmanager.errors.CorruptedParamException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
