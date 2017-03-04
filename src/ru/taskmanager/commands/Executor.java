@@ -3,6 +3,7 @@ package ru.taskmanager.commands;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.KeyValueParam;
+import ru.taskmanager.errors.ConfigurationException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
 
@@ -16,7 +17,7 @@ public final class Executor {
         this.paramsManager = paramsManager;
     }
 
-    public List<CommandResult> execute() throws RequiredParamException, ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException {
+    public List<CommandResult> execute() throws RequiredParamException, ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {
         List<CommandResult> result  = new ArrayList<>();
         List<CommandParam> commands = paramsManager.getCommandParams();
         List<KeyValueParam> params = paramsManager.getKeyValueParams();
@@ -28,7 +29,7 @@ public final class Executor {
         return result;
     }
 
-    private CommandResult executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException {
+    private CommandResult executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {
         CommandMapper mapper = new CommandMapper(commandParam);
         Command command = mapper.initCommandObject();
 

@@ -1,0 +1,3 @@
+<config>
+    <setting key="HelpCommand" class="ru.taskmanager.commands.imp.HelpCommand" />
+</config>
