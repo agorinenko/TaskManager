@@ -1,11 +1,6 @@
 package ru.taskmanager.tests.args.utils;
 
 import org.junit.Test;
-import ru.taskmanager.args.ParamsFactory;
-import ru.taskmanager.args.params.BaseParam;
-import ru.taskmanager.args.params.CommandParam;
-import ru.taskmanager.args.params.IntegerParam;
-import ru.taskmanager.args.params.StringParam;
 import ru.taskmanager.utils.StringUtils;
 
 import static org.junit.Assert.assertEquals;

@@ -1,4 +1,7 @@
 <config>
     <setting key="test" p1="p1" p2="p2" />
-    <setting key="test2" p1="p1" p2="p2" />
+    <setting key="help" text="
+========= Task manager console 0.0.1 =========#NEW_LINE#
+todo: Написать хелп#NEW_LINE#
+==============================================" />
 </config>

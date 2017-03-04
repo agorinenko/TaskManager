@@ -23,4 +23,10 @@ public class StringUtils {
         str = trimEnd(str, characters);
         return str;
     }
+
+    public static String replaceAllSpecialSonstants(String str){
+        str = str.replaceAll("#NEW_LINE#",  System.lineSeparator());
+
+        return str;
+    }
 }

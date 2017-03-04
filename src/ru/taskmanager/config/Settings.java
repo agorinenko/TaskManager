@@ -21,7 +21,7 @@ public class Settings extends ConfigurationManager {
         return localInstance;
     }
     @Override
-    public String getAppConfig() {
+    protected String getAppConfig() {
         return getBaseDir() + "\\settings.xml";
     }
 }
