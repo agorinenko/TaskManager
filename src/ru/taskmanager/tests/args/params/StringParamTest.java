@@ -33,6 +33,7 @@ public class StringParamTest {
         assertEquals(value, "v1:v2");
     }
 
+    @Test
     public void getValue3() throws Exception {
         BaseParam param = new StringParam(" p1 : v1 ");
         String key = param.getKey();

@@ -21,6 +21,8 @@ public final class CommandMapper {
 
         Class commandClass = Class.forName(className);
         Object commandInstance = commandClass.newInstance();
-        return (Command)commandInstance;
+        Command c = (Command)commandInstance;
+
+        return c;
     }
 }

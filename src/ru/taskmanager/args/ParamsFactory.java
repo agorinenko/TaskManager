@@ -15,6 +15,10 @@ public class ParamsFactory {
                 return new IntegerParam(arg);
             }
 
+            if(IntegerParam.isBooleanParam(stringValue)){
+                return new BooleanParam(arg);
+            }
+
             return stringParam;
         } else {
             return new CommandParam(arg);

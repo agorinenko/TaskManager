@@ -24,7 +24,7 @@ public class StringUtils {
         return str;
     }
 
-    public static String replaceAllSpecialSonstants(String str){
+    public static String replaceAllSpecialConstants(String str){
         str = str.replaceAll("#NEW_LINE#",  System.lineSeparator());
 
         return str;

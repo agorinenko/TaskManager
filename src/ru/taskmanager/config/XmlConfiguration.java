@@ -8,13 +8,14 @@ import ru.taskmanager.utils.XmlUtils;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class XmlConfiguration implements Configuration {
     private Map<String, Map<String, String>> dictionary;
     private Document xDoc;
 
     public XmlConfiguration(Document xDoc){
-        dictionary = new HashMap<>();
+        dictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         this.xDoc = xDoc;
     }
 

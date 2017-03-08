@@ -21,9 +21,10 @@ public abstract class KeyValueParam extends BaseParam {
         }
     }
 
-//    public boolean isIntegerParam(){
-//        return this instanceof IntegerParam;
-//    }
+    public static boolean isBooleanParam(String stringValue){
+        return stringValue.equalsIgnoreCase("true") ||
+                stringValue.equalsIgnoreCase("false");
+    }
 
     public KeyValueParam(String arg) throws StringIsEmptyException, CorruptedParamException {
         super(arg);
@@ -37,9 +38,9 @@ public abstract class KeyValueParam extends BaseParam {
         }
 
         key = arg.substring(0, separatorIndex);
-        sanitizeString(key);
+        key = sanitizeString(key);
 
         stringValue = arg.substring(separatorIndex + 1);
-        sanitizeString(stringValue);
+        stringValue = sanitizeString(stringValue);
     }
 }

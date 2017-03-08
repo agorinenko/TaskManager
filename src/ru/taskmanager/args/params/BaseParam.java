@@ -2,6 +2,7 @@ package ru.taskmanager.args.params;
 
 import ru.taskmanager.errors.CorruptedParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.utils.StringUtils;
 
 public abstract class BaseParam {
     protected String key;
@@ -19,7 +20,7 @@ public abstract class BaseParam {
     protected abstract void parseArg(String arg) throws CorruptedParamException, StringIsEmptyException;
 
     protected String sanitizeString(String str) throws StringIsEmptyException {
-        str = str.trim();
+        str = StringUtils.trim(str, " ");
         checkString(str);
 
         return str;

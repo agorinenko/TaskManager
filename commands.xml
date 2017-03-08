@@ -1,3 +1,7 @@
 <config>
     <setting key="HelpCommand" class="ru.taskmanager.commands.imp.HelpCommand" />
+    <setting key="TestSuccessCommand" class="ru.taskmanager.commands.imp.TestSuccessCommand" />
+    <setting key="TestErrorCommand" class="ru.taskmanager.commands.imp.TestErrorCommand" />
+    <setting key="g" class="ru.taskmanager.commands.imp.GenerateCommand" />
+    <setting key="generate" class="ru.taskmanager.commands.imp.GenerateCommand" />
 </config>

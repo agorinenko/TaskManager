@@ -24,7 +24,7 @@ public class HelpCommand extends SafetyCommand {
         }
         String helpText = null != items ? items.get("text") : "";
         helpText = StringUtils.trim(helpText, " ");
-        helpText = StringUtils.replaceAllSpecialSonstants(helpText);
+        helpText = StringUtils.replaceAllSpecialConstants(helpText);
         result.setMessage(helpText);
         return result;
     }
