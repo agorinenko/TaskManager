@@ -22,6 +22,24 @@ public class GenerateCommand {
     }
 
     @Test
+    public void exec0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        ParamsManager manager = new ParamsManager(new String[]{ "g" });
+        testMigration(manager);
+    }
+
+    @Test
+    public void exec1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:sql", "n:test" });
+        testMigration(manager);
+    }
+
+    @Test
+    public void exec3() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:log", "n:test", "stamp:false" });
+        testMigration(manager);
+    }
+
+    @Test
     public void exec2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
         ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:sql" });
         testMigration(manager);
