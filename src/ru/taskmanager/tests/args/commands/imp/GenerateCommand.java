@@ -35,7 +35,7 @@ public class GenerateCommand {
 
     @Test
     public void exec3() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
-        ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:log", "n:test", "stamp:false" });
+        ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:log", "n:test", "stamp:true" });
         testMigration(manager);
     }
 

@@ -27,7 +27,7 @@ public abstract class BaseParam {
     }
 
     protected void checkString(String str) throws StringIsEmptyException {
-        if(str.isEmpty()) throw new StringIsEmptyException();
+        if(StringUtils.isNullOrEmpty(str)) throw new StringIsEmptyException("key=" + (null == key ? "undefined" : key));
     }
 
     public String getStringValue() throws StringIsEmptyException {
