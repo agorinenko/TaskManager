@@ -1,6 +1,6 @@
 <config>
     <setting key="commands.imp.baseDir" value="out" />
-    <setting key="commands.imp.db.url" value="jdbc:postgresql://localhost/test:5432?user=postgres&amp;password=Bandit777rus&amp;ssl=false" />
+    <setting key="commands.imp.db.url" value="jdbc:postgresql://localhost:5432/?user=postgres&amp;password=Bandit777rus&amp;ssl=false" />
     <setting key="help" value="
 ========= Task manager console 0.0.1 =========#NEW_LINE#
 todo: Написать хелп#NEW_LINE#
