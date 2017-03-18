@@ -5,18 +5,15 @@ import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.CommandException;
+import ru.taskmanager.sql.ActiveDriver;
 import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StatementQueueBuilder;
 import ru.taskmanager.utils.StringUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.*;
 import java.util.List;
 
 public class Init extends SafetyCommand {
@@ -26,11 +23,18 @@ public class Init extends SafetyCommand {
         String resultMessage = "";
 
         String url = SettingsUtils.getSettingsValue("commands.imp.db.url");
+        String driver = SettingsUtils.getSettingsValue("commands.imp.db.driver");
+        String driverName = SettingsUtils.getSettingsValue("commands.imp.db.driver.name");
+        String separator = SettingsUtils.getSettingsValue("commands.imp.db.separator.default");
+
         try {
-            Class.forName("org.postgresql.Driver");
+            URL u = new URL(driver);
+            URLClassLoader ucl = new URLClassLoader(new URL[] { u });
+            Driver d = (Driver)Class.forName(driverName, true, ucl).newInstance();
+            DriverManager.registerDriver(new ActiveDriver(d));
 
             String file = StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "/scripts/pg/create_db.sql";
-            StatementQueueBuilder builder = new StatementQueueBuilder(file, "--SEP--");
+            StatementQueueBuilder builder = new StatementQueueBuilder(file, separator);
             builder.build();
             List<String> statements = builder.getStatements();
 
@@ -67,6 +71,10 @@ public class Init extends SafetyCommand {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            throw new CommandException("Driver " + driver + " not found");
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 

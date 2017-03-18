@@ -7,6 +7,15 @@ import java.util.Map;
 
 public class SettingsUtils {
 
+    public static String getSettingsOrDefaultValue(String key){
+        String value = getSettingsValue(key);
+
+        if(StringUtils.isNullOrEmpty(value)){
+            value = getSettingsValue(key + ".default");
+        }
+
+        return value;
+    }
     public static String getSettingsValue(String key){
         Map<String, String> items = null;
         try {
