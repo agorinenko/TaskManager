@@ -73,11 +73,4 @@ public class Init extends SafetyCommand {
         result.setMessage(resultMessage);
         return result;
     }
-
-    private String sanitizeString(String str){
-        str = StringUtils.trim(str, " ");
-        return str;
-    }
-
-    private final String separator = "--SEP--";
 }
