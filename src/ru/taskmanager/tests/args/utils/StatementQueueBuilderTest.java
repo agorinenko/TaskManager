@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class StatementQueueBuilderTest {
     @Test
     public void Test() throws IOException {
-        String file = StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "/scripts/pg/test_sql.sql";
+        String file = StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "/settings/scripts/pg/test_sql.sql";
         StatementQueueBuilder builder = new StatementQueueBuilder(file, "--SEP--");
         builder.build();
         List<String> statements = builder.getStatements();

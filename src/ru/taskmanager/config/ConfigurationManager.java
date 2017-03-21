@@ -33,7 +33,7 @@ public abstract class ConfigurationManager {
     protected abstract String getAppConfig();
 
     protected String getBaseDir(){
-        return StringUtils.trimEnd(System.getProperty("user.dir"), "//");
+        return StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "//settings";
     }
 
     public Map<String, String> getEntityByKey(String key) {
