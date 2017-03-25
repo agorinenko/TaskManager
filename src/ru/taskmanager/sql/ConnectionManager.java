@@ -2,7 +2,6 @@ package ru.taskmanager.sql;
 
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.utils.SettingsUtils;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -28,22 +27,21 @@ public class ConnectionManager {
         Driver d;
         try {
             d = (Driver)Class.forName(driverName, true, ucl).newInstance();
-
         } catch (ClassNotFoundException e) {
             throw new CommandException("Driver " + driver + " not found");
         } catch (InstantiationException e) {
-            throw new CommandException("Driver " + driver + " cannot be instantiated");
+            throw new CommandException("(Instantiation driver " + driver + " exception:" + e.getMessage());
         } catch (IllegalAccessException e) {
-            throw new CommandException("Illegal access to driver " + driver);
+            throw new CommandException("Illegal access driver " + driver + " exception:" + e.getMessage());
         }
         try {
             DriverManager.registerDriver(new ActiveDriver(d));
         } catch (SQLException e) {
-            throw new CommandException("Register driver exception " + driver);
+            throw new CommandException("Sql driver " + driver + " exception:" + e.getMessage());
         }
     }
 
-    public static ConnectionManager getInstance() {
+    public static ConnectionManager getInstance() throws CommandException {
         ConnectionManager localInstance = instance;
         if (localInstance == null) {
             synchronized (ConnectionManager.class) {
