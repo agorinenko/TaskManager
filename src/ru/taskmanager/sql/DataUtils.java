@@ -3,9 +3,13 @@ package ru.taskmanager.sql;
 import ru.taskmanager.errors.CommandException;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class DataUtils {
 
@@ -21,6 +25,30 @@ public class DataUtils {
         } finally {
             if (null != conn) {
                 conn.close();
+            }
+        }
+    }
+    public static void executeStatements(Connection conn, List<String> statements, HashMap<String, Object> params) throws SQLException {
+        for (String sql : statements) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            try{
+                int i = 1;
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    //String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(value instanceof Integer){
+                        stmt.setInt(i, (int)entry.getValue());
+                    } else if(value instanceof String){
+                        stmt.setString(i, (String) entry.getValue());
+                    }
+
+                    i++;
+                }
+                stmt.execute();
+            }finally {
+                if (null != stmt) {
+                    stmt.close();
+                }
             }
         }
     }

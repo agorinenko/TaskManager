@@ -116,6 +116,7 @@ public class StatementQueueBuilder {
         sql = StringUtils.trim(sql, " ");
 
         if (!StringUtils.isNullOrEmpty(sql)) {
+            sql = StringUtils.replaceAllDbConstants(sql);
             statements.add(sql);
 
             appendStatement = false;

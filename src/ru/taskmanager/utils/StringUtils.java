@@ -29,4 +29,10 @@ public class StringUtils {
 
         return str;
     }
+
+    public static String replaceAllDbConstants(String str){
+        str = str.replaceAll("DATA_BASE_NAME",  SettingsUtils.getSettingsValue("commands.imp.db.db"));
+
+        return str;
+    }
 }

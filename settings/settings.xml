@@ -1,6 +1,7 @@
 <config>
     <setting key="commands.imp.baseDir" value="out" />
     <setting key="commands.imp.db.url" value="jdbc:postgresql://localhost:5432/?user=postgres&amp;password=Bandit777rus&amp;ssl=false" />
+    <setting key="commands.imp.db.db" value="test11" />
     <setting key="commands.imp.db.driver" value="jar:file:D://PostgreSQL/postgresql-42.0.0.jar!/" />
     <setting key="commands.imp.db.driver.name" value="org.postgresql.Driver" />
     <setting key="commands.imp.db.separator.default" value="--SEP--" />

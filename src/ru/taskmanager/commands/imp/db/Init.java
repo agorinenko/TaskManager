@@ -14,7 +14,9 @@ import ru.taskmanager.utils.StringUtils;
 
 import java.io.*;
 import java.sql.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Init extends SafetyCommand {
     @Override
@@ -30,9 +32,7 @@ public class Init extends SafetyCommand {
             builder.build();
             List<String> statements = builder.getStatements();
 
-            DataUtils.createConnection(conn -> {
-                DataUtils.executeStatements(conn, statements);
-            });
+            DataUtils.createConnection(conn -> DataUtils.executeStatements(conn, statements));
 
         } catch (SQLException e) {
             throw new CommandException(String.format("MESSAGE:%1$s; CODE:%2$s;", e.getMessage(), e.getErrorCode()));
