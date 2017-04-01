@@ -5,18 +5,13 @@ import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.CommandException;
-import ru.taskmanager.sql.ActiveDriver;
-import ru.taskmanager.sql.ConnectionManager;
+import ru.taskmanager.errors.ConnectionManagerException;
 import ru.taskmanager.sql.DataUtils;
-import ru.taskmanager.utils.SettingsUtils;
-import ru.taskmanager.utils.StatementQueueBuilder;
-import ru.taskmanager.utils.StringUtils;
+import ru.taskmanager.utils.StatementUtils;
 
 import java.io.*;
 import java.sql.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Init extends SafetyCommand {
     @Override
@@ -24,22 +19,25 @@ public class Init extends SafetyCommand {
         SuccessResult result = new SuccessResult();
         String resultMessage = "";
 
-        String separator = SettingsUtils.getSettingsValue("commands.imp.db.separator.default");
-
         try {
-            String file = StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "/settings/scripts/pg/create_db.sql";
-            StatementQueueBuilder builder = new StatementQueueBuilder(file, separator);
-            builder.build();
-            List<String> statements = builder.getStatements();
+            List<String> createDbStatements = StatementUtils.getStatements("create_db.sql");
+            List<String> createSchemaStatements = StatementUtils.getStatements("create_schema.sql");
 
-            DataUtils.createConnection(conn -> DataUtils.executeStatements(conn, statements));
+            DataUtils.createConnection(conn -> {
+                DataUtils.executeStatements(conn, createDbStatements);
+            }, true);
 
+            DataUtils.createConnection(conn -> {
+                DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements);
+            });
+            resultMessage = "The operation was successful";
         } catch (SQLException e) {
             throw new CommandException(String.format("MESSAGE:%1$s; CODE:%2$s;", e.getMessage(), e.getErrorCode()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();        }
+            throw new CommandException(String.format("%1$s", e.getMessage()));
+        } catch (ConnectionManagerException e) {
+            throw new CommandException(String.format("%1$s", e.getMessage()));
+        }
 
         result.setMessage(resultMessage);
         return result;

@@ -1,6 +1,7 @@
 package ru.taskmanager.sql;
 
 import ru.taskmanager.errors.CommandException;
+import ru.taskmanager.errors.ConnectionManagerException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,13 +14,12 @@ import java.util.Map;
 
 public class DataUtils {
 
-    public static void createConnection(SqlAction action) throws CommandException, SQLException {
-
+    public static void createConnection(SqlAction action, boolean isGlobal) throws ConnectionManagerException, SQLException {
         if(null == action){
-            throw new CommandException("Sql action is null");
+            throw new ConnectionManagerException("Sql action is null");
         }
 
-        Connection conn = ConnectionManager.getInstance().getConnection();
+        Connection conn = isGlobal ? ConnectionManager.getInstance().getGlobalConnection(): ConnectionManager.getInstance().getConnection();
         try {
             action.execute(conn);
         } finally {
@@ -28,6 +28,10 @@ public class DataUtils {
             }
         }
     }
+    public static void createConnection(SqlAction action) throws ConnectionManagerException, SQLException {
+        createConnection(action, false);
+    }
+
     public static void executeStatements(Connection conn, List<String> statements, HashMap<String, Object> params) throws SQLException {
         for (String sql : statements) {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -60,7 +64,6 @@ public class DataUtils {
                 try {
                     stmt.execute(sql);
                 }catch (SQLException e) {
-                    conn.rollback();
                     throw e;
                 }
             }

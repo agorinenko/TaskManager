@@ -3,6 +3,7 @@ package ru.taskmanager.config;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import ru.taskmanager.errors.ConfigurationException;
+import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
 import ru.taskmanager.utils.XmlUtils;
 
@@ -33,10 +34,16 @@ public abstract class ConfigurationManager {
     protected abstract String getAppConfig();
 
     protected String getBaseDir(){
-        return StringUtils.trimEnd(System.getProperty("user.dir"), "//") + "//settings";
+        return SettingsUtils.getBaseSettingsDir();
     }
 
-    public Map<String, String> getEntityByKey(String key) {
-        return (Map<String, String>)xmlConfiguration.getEntityByKey(key);
+    public Map<String, String> getEntityByKey(String key) throws ConfigurationException {
+        Map<String, String> item = (Map<String, String>)xmlConfiguration.getEntityByKey(key);
+
+        if(null == item){
+            throw new ConfigurationException("Item " + key + " not found");
+        }
+
+        return item;
     }
 }
