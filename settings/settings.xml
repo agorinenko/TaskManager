@@ -1,14 +1,15 @@
 <config>
-    <setting key="commands.imp.out" value="out" />
-    <setting key="commands.imp.db.url" value="jdbc:postgresql://localhost:5432/" />
-    <setting key="commands.imp.db.name" value="test11" />
-    <setting key="commands.imp.db.user" value="postgres" />
-    <setting key="commands.imp.db.pwd" value="Bandit777rus" />
-    <setting key="commands.imp.db.driver" value="jar:file:D://PostgreSQL/postgresql-42.0.0.jar!/" />
-    <setting key="commands.imp.db.driver.name" value="org.postgresql.Driver" />
-    <setting key="commands.imp.db.folder" value="pg" />
-    <setting key="commands.imp.db.separator.default" value="--SEP--" />
-    <setting key="commands.imp.db.separator" value="" />
+    <setting key="out" value="out" />
+    <setting key="db.url" value="jdbc:postgresql://localhost:5432/" />
+    <setting key="db.name" value="test11" />
+    <setting key="db.user" value="postgres" />
+    <setting key="db.pwd" value="Bandit777rus" />
+    <setting key="db.driver" value="jar:file:D://PostgreSQL/postgresql-42.0.0.jar!/" />
+    <setting key="db.driver.name" value="org.postgresql.Driver" />
+    <setting key="db.folder" value="pg" />
+    <setting key="db.separator.default" value="--SEP--" />
+    <setting key="db.separator" value="" />
+    <setting key="author" value="Anonymous" />
     <setting key="help" value="
 ========= Task manager console 0.0.1 =========#NEW_LINE#
 todo: Написать хелп#NEW_LINE#

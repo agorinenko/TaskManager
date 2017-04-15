@@ -8,25 +8,20 @@ import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.StatementUtils;
 
+import java.sql.ResultSet;
 import java.util.List;
 
-public class Init extends SafetyCommand {
+public class Push extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
         SuccessResult result = new SuccessResult();
         String resultMessage = "";
 
-            List<String> createDbStatements = StatementUtils.getStatements("create_db.sql");
-            List<String> createSchemaStatements = StatementUtils.getStatements("create_schema.sql");
+        List<String> selectVersionsStatements = StatementUtils.getStatements("select_versions.sql");
 
-            DataUtils.createConnectionInCommandContext(conn -> {
-                DataUtils.executeStatements(conn, createDbStatements);
-            }, true);
-
-            DataUtils.createConnectionInCommandContext(conn -> {
-                DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements);
-            });
-            resultMessage = "The operation was successful";
+        DataUtils.createConnectionInCommandContext(conn -> {
+            List<ResultSet> sqlResult = DataUtils.executeStatementsAsTransaction(conn, selectVersionsStatements);
+        });
 
         result.setMessage(resultMessage);
         return result;

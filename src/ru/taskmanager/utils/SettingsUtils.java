@@ -16,7 +16,7 @@ public class SettingsUtils {
     }
 
     public static String getBaseScriptDir(){
-        String dbFolder = SettingsUtils.getSettingsValue("commands.imp.db.folder");
+        String dbFolder = SettingsUtils.getSettingsValue("db.folder");
         dbFolder = StringUtils.trimEnd(dbFolder, "//");
 
         Path path = Paths.get(getBaseSettingsDir(), "scripts", dbFolder);

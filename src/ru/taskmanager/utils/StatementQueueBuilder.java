@@ -31,35 +31,41 @@ public class StatementQueueBuilder {
         this.separator = separator;
     }
 
-    public void build() throws IOException {
+    public void build() {
         statements = new ArrayList<>();
         setState("START");
-        Reader reader = Files.newBufferedReader(filePath);
+        Reader reader = null;
         try {
-            LineNumberReader lineReader = new LineNumberReader(reader);
-            StringBuilder builder =  new StringBuilder();
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                line = StringUtils.trim(line, " ");
-                line = step(line);
+            reader = Files.newBufferedReader(filePath);
 
-                if (!StringUtils.isNullOrEmpty(line)) {
-                    builder.append(line);
-                    builder.append(" ");
+            try {
+                LineNumberReader lineReader = new LineNumberReader(reader);
+                StringBuilder builder =  new StringBuilder();
+                String line;
+                while ((line = lineReader.readLine()) != null) {
+                    line = StringUtils.trim(line, " ");
+                    line = step(line);
+
+                    if (!StringUtils.isNullOrEmpty(line)) {
+                        builder.append(line);
+                        builder.append(" ");
+                    }
+
+                    if(appendStatement){
+                        appendStatement(builder);
+                        builder = new StringBuilder();
+                    }
                 }
 
-                if(appendStatement){
+                if(!appendStatement) {
                     appendStatement(builder);
-                    builder = new StringBuilder();
                 }
-            }
 
-            if(!appendStatement) {
-                appendStatement(builder);
+            }finally {
+                if(null != reader) reader.close();
             }
+        } catch (IOException e) {
 
-        }finally {
-            if(null != reader) reader.close();
         }
     }
 

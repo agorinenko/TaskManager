@@ -1,12 +1,13 @@
 package ru.taskmanager.utils;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatementUtils {
 
-    public static List<String> getStatements(String fileName) throws IOException {
-        String separator = SettingsUtils.getSettingsValue("commands.imp.db.separator.default");
+    public static List<String> getStatements(String fileName) {
+        String separator = SettingsUtils.getSettingsValue("db.separator.default");
 
         String baseScriptDir = SettingsUtils.getBaseScriptDir();
 
@@ -14,9 +15,15 @@ public class StatementUtils {
 
         String file =  baseScriptDir + "/" + fileName;
 
-        StatementQueueBuilder builder = new StatementQueueBuilder(file, separator);
-        builder.build();
-        List<String> statements = builder.getStatements();
+        List<String> statements;
+        try {
+            StatementQueueBuilder builder = new StatementQueueBuilder(file, separator);
+            builder.build();
+            statements = builder.getStatements();
+        } catch (FileNotFoundException e) {
+            statements = new ArrayList<>();
+        }
+
 
         return statements;
     }

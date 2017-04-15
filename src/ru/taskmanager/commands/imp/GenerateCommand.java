@@ -66,7 +66,7 @@ public class GenerateCommand extends SafetyCommand {
     }
 
     private Path createFile(String filePath) throws CommandException {
-        String baseDir = SettingsUtils.getSettingsValue("commands.imp.out");
+        String baseDir = SettingsUtils.getSettingsValue("out");
 
         if(!StringUtils.isNullOrEmpty(baseDir)){
             filePath = String.format("%1$s\\%2$s", StringUtils.trimEnd(baseDir, "\\\\"), StringUtils.trimStart(filePath, "\\\\"));

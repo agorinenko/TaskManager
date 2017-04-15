@@ -23,14 +23,14 @@ public class ConnectionManager {
     private String dbName;
 
     public ConnectionManager() throws ConnectionManagerException {
-        String driver = SettingsUtils.getSettingsValue("commands.imp.db.driver");
-        String driverName = SettingsUtils.getSettingsValue("commands.imp.db.driver.name");
+        String driver = SettingsUtils.getSettingsValue("db.driver");
+        String driverName = SettingsUtils.getSettingsValue("db.driver.name");
 
-        url = SettingsUtils.getSettingsValue("commands.imp.db.url");
-        user = SettingsUtils.getSettingsValue("commands.imp.db.user");
-        pwd = SettingsUtils.getSettingsValue("commands.imp.db.pwd");
+        url = SettingsUtils.getSettingsValue("db.url");
+        user = SettingsUtils.getSettingsValue("db.user");
+        pwd = SettingsUtils.getSettingsValue("db.pwd");
 
-        dbName = SettingsUtils.getSettingsValue("commands.imp.db.name");
+        dbName = SettingsUtils.getSettingsValue("db.name");
 
         urlWithDb = formatUrl();
 
@@ -83,7 +83,7 @@ public class ConnectionManager {
     }
 
     private String formatUrl() throws ConnectionManagerException {
-        String driver = SettingsUtils.getSettingsValue("commands.imp.db.driver.name");
+        String driver = SettingsUtils.getSettingsValue("db.driver.name");
         if(driver.equalsIgnoreCase("org.postgresql.Driver")){
             String _url = StringUtils.trimEnd(url, "//");
             return String.format("%1$s/%2$s", _url, dbName);
