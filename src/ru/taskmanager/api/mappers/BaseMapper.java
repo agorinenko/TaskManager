@@ -1,24 +1,31 @@
 package ru.taskmanager.api.mappers;
 
 import ru.taskmanager.api.Row;
-import ru.taskmanager.errors.ConnectionManagerException;
-import ru.taskmanager.sql.DataUtils;
-import ru.taskmanager.utils.StatementUtils;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseMapper {
+public abstract class BaseMapper<T extends Row> {
 
-    protected abstract Row rowObjectInit();
+    //private final Constructor<? extends T> ctor;
 
-    public List<Row> select(ResultSet rs) throws SQLException {
-        List<Row> rows  = new ArrayList<>();
+    private List<T> result;
+
+//    protected BaseMapper(Class<? extends T> impl) throws NoSuchMethodException {
+//        this.ctor =  impl.getConstructor();;
+//    }
+
+    protected abstract T createInstanceOfRow();
+
+    protected List<T> select(ResultSet rs) throws SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        List<T> rows  = new ArrayList<>();
 
         while (rs.next()) {
-            Row row = rowObjectInit();
+            T row = createInstanceOfRow();
             row.init(rs);
 
             rows.add(row);
@@ -27,16 +34,15 @@ public abstract class BaseMapper {
         return rows;
     }
 
-    public List<Row> select(String statementFile) throws SQLException, ConnectionManagerException {
-        List<String> selectVersionsStatements = StatementUtils.getStatements(statementFile);
-
-        DataUtils.createConnection(conn -> {
-            List<ResultSet> sqlResult = DataUtils.executeStatementsAsTransaction(conn, selectVersionsStatements);
-            ResultSet rs = sqlResult.get(0);
-
-            List<Row> result = select(rs);
-        });
-
+    public List<T> getResult() {
         return result;
     }
+
+    public void initResilt(ResultSet rs) throws SQLException, IllegalAccessException, InstantiationException, InvocationTargetException {
+        this.result = select(rs);
+    }
+
+    public abstract boolean insert(T row);
+
+    public abstract boolean update(T row);
 }
