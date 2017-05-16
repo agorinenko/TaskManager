@@ -5,7 +5,6 @@ import ru.taskmanager.api.Version;
 
 public class VersionMapper extends BaseMapper {
 
-
     @Override
     protected Row createInstanceOfRow() {
         return new Version();

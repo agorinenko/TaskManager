@@ -79,15 +79,7 @@ public class DataUtils {
 
                 if(null != builder) {
                     MapperType mapper = builder.build();
-                    try {
-                        mapper.initResilt(rs);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                    mapper.initResilt(rs);
 
                     result.add(mapper);
                 }
