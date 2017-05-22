@@ -20,4 +20,6 @@ public abstract class Row {
     }
 
     protected abstract void mapFields(ResultSet rs) throws SQLException;
+
+    public abstract void update();
 }

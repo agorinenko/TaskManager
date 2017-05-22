@@ -3,11 +3,40 @@ package ru.taskmanager.tests.args.utils;
 import org.junit.Test;
 import ru.taskmanager.utils.StringUtils;
 
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class StringUtilsTest {
+    @Test
+    public void getVersionTimestamp() throws ParseException {
+        String str1 = "20170522124649370_file.sql";
+        Date date = StringUtils.getVersionTimestamp(str1);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int h = cal.get(Calendar.HOUR_OF_DAY);
+        int m = cal.get(Calendar.MINUTE);
+        int s = cal.get(Calendar.SECOND);
+        int ms = cal.get(Calendar.MILLISECOND);
+
+
+        assertEquals(year, 2017);
+        assertEquals(month, 4);//Начиная с 0
+        assertEquals(day, 22);
+
+        assertEquals(h, 12);
+        assertEquals(m, 46);
+        assertEquals(s, 49);
+        assertEquals(ms, 370);
+    }
     @Test
     public void trimStart() {
         String str1 = "//test";

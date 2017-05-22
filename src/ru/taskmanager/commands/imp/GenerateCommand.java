@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 public class GenerateCommand extends SafetyCommand {
-    private static final DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssS");
+    //private static final DateFormat sdf = new SimpleDateFormat(StringUtils.timestampFormat);
 
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
@@ -54,7 +54,7 @@ public class GenerateCommand extends SafetyCommand {
         String timeStamp = "";
         if(useTimeStamp){
             Date date = new Date();
-            timeStamp = sdf.format(date) + "_";
+            timeStamp = StringUtils.sdf.format(date) + "_";
         }
 
         String formatFileName = String.format("%1$s%2$s.%3$s", timeStamp, fileName, fileExtension);

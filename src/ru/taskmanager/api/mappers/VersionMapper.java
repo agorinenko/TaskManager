@@ -2,6 +2,7 @@ package ru.taskmanager.api.mappers;
 
 import ru.taskmanager.api.Row;
 import ru.taskmanager.api.Version;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class VersionMapper extends BaseMapper {
 
@@ -12,11 +13,6 @@ public class VersionMapper extends BaseMapper {
 
     @Override
     public int insert(Row row) {
-        return -1;
-    }
-
-    @Override
-    public boolean update(Row row) {
-        return false;
+        throw new NotImplementedException();
     }
 }

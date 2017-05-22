@@ -1,6 +1,14 @@
 package ru.taskmanager.utils;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StringUtils {
+    public static final DateFormat sdf = new SimpleDateFormat(StringUtils.timestampFormat);
+    public static final String timestampFormat = "yyyyMMddHHmmssS";
+
     public static  boolean isNullOrEmpty(String str){
         if(null == str){
             return true;
@@ -34,5 +42,11 @@ public class StringUtils {
         str = str.replaceAll("DATA_BASE_NAME",  SettingsUtils.getSettingsValue("db.name"));
 
         return str;
+    }
+
+    public static Date getVersionTimestamp(String version) throws ParseException {
+        int separatorIndex = version.indexOf('_');
+        String versionTimestamp = version.substring(0, separatorIndex);
+        return sdf.parse(versionTimestamp);
     }
 }

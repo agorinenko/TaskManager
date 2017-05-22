@@ -33,6 +33,4 @@ public abstract class BaseMapper<T extends Row> {
     }
 
     public abstract int insert(T row);
-
-    public abstract boolean update(T row);
 }

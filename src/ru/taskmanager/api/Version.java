@@ -1,7 +1,11 @@
 package ru.taskmanager.api;
 
+import ru.taskmanager.utils.StringUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 
 public class Version extends Row {
@@ -42,11 +46,22 @@ public class Version extends Row {
         this.version = version;
     }
 
+    public Date getVersionTimestamp() throws ParseException {
+        String ver = getVersion();
+        Date date = StringUtils.getVersionTimestamp(ver);
+        return date;
+    }
+
     @Override
     protected void mapFields(ResultSet rs) throws SQLException {
         setVersion(rs.getString("version"));
         setDescription(rs.getString("description"));
         setCreatedBy(rs.getString("created_by"));
         setCreatedAt(rs.getDate("created_at"));
+    }
+
+    @Override
+    public void update() {
+        throw new NotImplementedException();
     }
 }
