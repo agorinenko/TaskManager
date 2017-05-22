@@ -11,8 +11,8 @@ public class VersionMapper extends BaseMapper {
     }
 
     @Override
-    public boolean insert(Row row) {
-        return false;
+    public int insert(Row row) {
+        return -1;
     }
 
     @Override
