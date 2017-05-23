@@ -37,6 +37,7 @@ public class StringUtilsTest {
         assertEquals(s, 49);
         assertEquals(ms, 370);
     }
+
     @Test
     public void trimStart() {
         String str1 = "//test";
@@ -89,5 +90,23 @@ public class StringUtilsTest {
         assertTrue(StringUtils.isNullOrEmpty(str2));
         assertTrue(StringUtils.isNullOrEmpty(str3));
         assertTrue(StringUtils.isNullOrEmpty(str4));
+    }
+
+    @Test
+    public void getFileExtension() {
+
+        String str1 = "20170522124649370_file.sql";
+        String str2 = " 20170522124649370_file.sql ";
+        String str3 = "    ";
+        String str4 = "20170522124649370_file.sql.";
+        String str5 = "20170522124649370_file.sql.sql";
+        String str6 = ".sql";
+
+        assertEquals(StringUtils.getFileExtension(str1), "sql");
+        assertEquals(StringUtils.getFileExtension(str2), "sql");
+        assertEquals(StringUtils.getFileExtension(str3), "");
+        assertEquals(StringUtils.getFileExtension(str4), "");
+        assertEquals(StringUtils.getFileExtension(str5), "sql");
+        assertEquals(StringUtils.getFileExtension(str6), "sql");
     }
 }

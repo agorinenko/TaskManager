@@ -6,6 +6,7 @@ import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.commands.imp.db.Init;
 import ru.taskmanager.commands.imp.db.Push;
+import ru.taskmanager.commands.imp.db.Status;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.utils.ListUtils;
@@ -34,8 +35,9 @@ public class DbCommand extends SafetyCommand {
             safetyCommand = new Init();
         } else if(command.equalsIgnoreCase("push")) {
             safetyCommand = new Push();
-        }
-        else {
+        } else if(command.equalsIgnoreCase("status")) {
+            safetyCommand = new Status();
+        } else {
             throw new CommandException("Command '"+ command +"' not found. " + forExampleText);
         }
 

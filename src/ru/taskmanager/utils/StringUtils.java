@@ -46,7 +46,23 @@ public class StringUtils {
 
     public static Date getVersionTimestamp(String version) throws ParseException {
         int separatorIndex = version.indexOf('_');
-        String versionTimestamp = version.substring(0, separatorIndex);
-        return sdf.parse(versionTimestamp);
+        if(separatorIndex > 0){
+            String versionTimestamp = version.substring(0, separatorIndex);
+            versionTimestamp = StringUtils.trim(versionTimestamp, " ");
+            return sdf.parse(versionTimestamp);
+        }
+        throw new ParseException("Expected symbol '_'", separatorIndex);
+    }
+
+    public static String getFileExtension(String fileName) {
+        int separatorIndex = fileName.lastIndexOf('.');
+        if(separatorIndex >= 0) {
+            String fileExtension = fileName.substring(separatorIndex + 1);
+            fileExtension = StringUtils.trim(fileExtension, " ");
+
+            return fileExtension;
+        }
+
+        return "";
     }
 }

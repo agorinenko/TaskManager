@@ -18,11 +18,25 @@ public class LocalVersion {
         return date;
     }
 
-    public String getVersion() {
-        return version;
+    public String getName(){
+        String ver = getVersion();
+
+        int separatorIndex1 = ver.indexOf('_');
+        int separatorIndex2 = ver.lastIndexOf('.');
+
+        if(separatorIndex1 > 0 && separatorIndex2 > separatorIndex1){
+            return ver.substring(separatorIndex1, separatorIndex2);
+        }
+
+        return "";
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public String getExtension(){
+        String ver = getVersion();
+        return StringUtils.getFileExtension(ver);
+    }
+
+    public String getVersion() {
+        return version;
     }
 }

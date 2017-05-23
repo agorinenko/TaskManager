@@ -46,11 +46,6 @@ public class Version extends Row {
         this.version = version;
     }
 
-    public Date getVersionTimestamp() throws ParseException {
-        String ver = getVersion();
-        Date date = StringUtils.getVersionTimestamp(ver);
-        return date;
-    }
 
     @Override
     protected void mapFields(ResultSet rs) throws SQLException {

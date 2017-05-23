@@ -33,7 +33,7 @@ public class DataUtils {
         try {
             createConnection(action, isGlobal);
         } catch (SQLException e) {
-            throw new CommandException(String.format("MESSAGE:%1$s; CODE:%2$s;", e.getMessage(), e.getErrorCode()));
+            throw new CommandException(String.format("%1$s; Code:%2$s;", e.getMessage(), e.getErrorCode()));
         } catch (ConnectionManagerException e) {
             throw new CommandException(String.format("%1$s", e.getMessage()));
         }

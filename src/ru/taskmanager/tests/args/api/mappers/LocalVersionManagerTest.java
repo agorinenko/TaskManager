@@ -12,8 +12,8 @@ import static org.junit.Assert.assertTrue;
 public class LocalVersionManagerTest {
     @Test
     public void select() throws IOException {
-        LocalVersionManager mngr = new LocalVersionManager();
-        List<LocalVersion> list = mngr.select();
+        LocalVersionManager manager = new LocalVersionManager();
+        List<LocalVersion> list = manager.select();
 
         assertTrue(list.size() > 0);
     }
