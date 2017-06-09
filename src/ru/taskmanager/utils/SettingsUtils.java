@@ -23,6 +23,14 @@ public class SettingsUtils {
         return path.toString();
     }
 
+    public static String getOutScriptDir(){
+        String outFolder = SettingsUtils.getSettingsValue("out");
+        outFolder = StringUtils.trimEnd(outFolder, "//");
+
+        Path path = Paths.get(outFolder);
+        return path.toString();
+    }
+
     public static String getSettingsOrDefaultValue(String key){
         String value = getSettingsValue(key);
 

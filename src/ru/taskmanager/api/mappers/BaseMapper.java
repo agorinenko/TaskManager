@@ -1,12 +1,14 @@
 package ru.taskmanager.api.mappers;
 
 import ru.taskmanager.api.Row;
+import ru.taskmanager.errors.CommandException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseMapper<T extends Row> {
+public abstract class BaseMapper<T> {
     private List<T> result;
 
     protected abstract T createInstanceOfRow();
@@ -16,7 +18,7 @@ public abstract class BaseMapper<T extends Row> {
 
         while (rs.next()) {
             T row = createInstanceOfRow();
-            row.init(rs);
+            mapFields(row, rs);
 
             rows.add(row);
         }
@@ -28,9 +30,11 @@ public abstract class BaseMapper<T extends Row> {
         return result;
     }
 
-    public void initResilt(ResultSet rs) throws SQLException {
+    public void initResult(ResultSet rs) throws SQLException {
         this.result = select(rs);
     }
 
-    public abstract int insert(T row);
+    public abstract int insert(T row) throws CommandException;
+
+    protected abstract void mapFields(T row, ResultSet rs) throws SQLException;
 }

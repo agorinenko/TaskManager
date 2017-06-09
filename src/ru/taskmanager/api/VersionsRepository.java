@@ -14,24 +14,25 @@ import java.util.List;
 public class VersionsRepository {
     private VersionMapper versionMapper;
 
-    private List<LocalVersion> remoteVersions;
-    private List<LocalVersion> localVersions;
-    private List<LocalVersion> allVersions;
+    private List<Version> remoteVersions;
+    private List<Version> localVersions;
+    private List<Version> allVersions;
 
     public VersionsRepository() throws CommandException {
-        List<String> selectVersionsStatements = StatementUtils.getStatements("select_versions.sql");
+        List<String> selectVersionsStatements = StatementUtils.getDbFolderStatements("select_versions.sql");
 
         DataUtils.createConnectionInCommandContext(conn -> {
             List<BaseMapper> sqlResult = DataUtils.executeStatementsAsTransaction(conn, selectVersionsStatements, () ->  new VersionMapper());
             versionMapper = (VersionMapper) sqlResult.get(0);
         });
 
-        List<Version> versions = versionMapper.getResult();
-        remoteVersions = LocalVersionManager.convertToLocalVersions(versions);
+        remoteVersions = versionMapper.getResult();
+        remoteVersions.sort(Collections.reverseOrder(new VersionComparator()));
 
         LocalVersionManager manager = new LocalVersionManager();
         try {
             localVersions = manager.select();
+            localVersions.sort(Collections.reverseOrder(new VersionComparator()));
         } catch (IOException e) {
             throw new CommandException(e.getMessage());
         }
@@ -40,23 +41,30 @@ public class VersionsRepository {
         allVersions.sort(Collections.reverseOrder(new VersionComparator()));
     }
 
-    public List<LocalVersion> getRemoteVersions() {
+    public List<Version> getRemoteVersions() {
         return this.remoteVersions;
     }
 
-    public List<LocalVersion> getLocalVersions() {
+    public List<Version> getLocalVersions() {
         return this.localVersions;
     }
 
-    public List<LocalVersion> getAllVersions() {
+    public List<Version> getAllVersions() {
         return this.allVersions;
     }
 
-    public Boolean isLocal(LocalVersion version){
+    public Boolean isLocal(Version version){
         return LocalVersionManager.versionExist(this.localVersions, version);
     }
 
-    public Boolean isRemote(LocalVersion version){
+    public Boolean isRemote(Version version){
         return LocalVersionManager.versionExist(this.remoteVersions, version);
+    }
+
+    public int pushItem(Version version) throws CommandException {
+        VersionMapper mapper = new VersionMapper();
+        int id = mapper.insert(version);
+
+        return id;
     }
 }

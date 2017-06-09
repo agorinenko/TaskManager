@@ -65,4 +65,30 @@ public class StringUtils {
 
         return "";
     }
+
+    public static String formatString(String str, int length, char character){
+        if(isNullOrEmpty(str)){
+            return "";
+        }
+
+        int i = length - str.length();
+
+        if(i > 0){
+            StringBuilder builder = new StringBuilder(str);
+
+            for (int j = 0; j < i; j++){
+                builder.append(character);
+            }
+            return builder.toString();
+        } else{
+            return str.substring(0, length);
+        }
+    }
+
+    public static void appendLine(StringBuilder sb){
+        sb.append("------------------------------------------------------------------------------------------------------------------------------");
+    }
+    public static void appendLineSeparator(StringBuilder sb){
+        sb.append(System.lineSeparator());
+    }
 }

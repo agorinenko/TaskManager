@@ -43,30 +43,38 @@ public class DataUtils {
         createConnectionInCommandContext(action, false);
     }
 
-//    public static void executeStatements(Connection conn, List<String> statements, HashMap<String, Object> params) throws SQLException {
-//        for (String sql : statements) {
-//            PreparedStatement stmt = conn.prepareStatement(sql);
-//            try{
-//                int i = 1;
-//                for (Map.Entry<String, Object> entry : params.entrySet()) {
-//                    //String key = entry.getKey();
-//                    Object value = entry.getValue();
-//                    if(value instanceof Integer){
-//                        stmt.setInt(i, (int)entry.getValue());
-//                    } else if(value instanceof String){
-//                        stmt.setString(i, (String) entry.getValue());
-//                    }
-//
-//                    i++;
-//                }
-//                stmt.execute();
-//            }finally {
-//                if (null != stmt) {
-//                    stmt.close();
-//                }
-//            }
-//        }
-//    }
+    public static<MapperType extends BaseMapper> List<BaseMapper> executeStatement(Connection conn, String statement, Object[] params, Builder<MapperType> builder) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(statement);
+        List<BaseMapper> result = new ArrayList<>();
+        try{
+            int i = 1;
+            for (Object value : params) {
+                if (value instanceof Integer){
+                    stmt.setInt(i, (int)value);
+                } else if(value instanceof String){
+                    stmt.setString(i, (String)value);
+                }
+
+                i++;
+            }
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+
+            if(null != builder) {
+                MapperType mapper = builder.build();
+                mapper.initResult(rs);
+
+                result.add(mapper);
+            }
+        }finally {
+            if (null != stmt) {
+                stmt.close();
+            }
+        }
+
+        return result;
+    }
+
 
     public static<MapperType extends BaseMapper> List<BaseMapper> executeStatements(Connection conn, List<String> statements, Builder<MapperType> builder) throws SQLException {
         Statement stmt = conn.createStatement();
@@ -79,7 +87,7 @@ public class DataUtils {
 
                 if(null != builder) {
                     MapperType mapper = builder.build();
-                    mapper.initResilt(rs);
+                    mapper.initResult(rs);
 
                     result.add(mapper);
                 }

@@ -1,25 +1,16 @@
 package ru.taskmanager.commands.imp.db;
 
-import ru.taskmanager.api.LocalVersion;
 import ru.taskmanager.api.Version;
-import ru.taskmanager.api.VersionComparator;
 import ru.taskmanager.api.VersionsRepository;
-import ru.taskmanager.api.mappers.BaseMapper;
-import ru.taskmanager.api.mappers.LocalVersionManager;
-import ru.taskmanager.api.mappers.VersionMapper;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.CommandException;
-import ru.taskmanager.sql.DataUtils;
-import ru.taskmanager.utils.StatementUtils;
+import ru.taskmanager.utils.StringUtils;
 
-import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.List;
 
 public class Status extends SafetyCommand {
@@ -31,32 +22,38 @@ public class Status extends SafetyCommand {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Versions list:");
-        sb.append(System.lineSeparator());
-        sb.append("-----------------------------------------------------------");
-        sb.append(System.lineSeparator());
-        sb.append("Timestamp               | Local | Remote | Name");
-        sb.append(System.lineSeparator());
-        sb.append("-----------------------------------------------------------");
-        sb.append(System.lineSeparator());
+        StringUtils.appendLineSeparator(sb);
+        StringUtils.appendLine(sb);
+        StringUtils.appendLineSeparator(sb);
+        sb.append("Timestamp               | Local | Remote | Author           | Name                           | Description                    ");
+        StringUtils.appendLineSeparator(sb);
+        StringUtils.appendLine(sb);
+        StringUtils.appendLineSeparator(sb);
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
         VersionsRepository versionsRepository = new VersionsRepository();
-        List<LocalVersion> allVersions = versionsRepository.getAllVersions();
+        List<Version> allVersions = versionsRepository.getAllVersions();
 
         allVersions.forEach(version -> {
-            try {
+            if(null != version.getVersionTimestamp()) {
+                String createdBy = StringUtils.formatString(version.getCreatedBy(), 16, ' ');
+                String name = StringUtils.formatString(version.getName(), 30, ' ');
+                String description = StringUtils.formatString(version.getDescription(), 30, ' ');
                 String versionTimestamp = df.format(version.getVersionTimestamp());
                 Boolean isLocal = versionsRepository.isLocal(version);
                 Boolean isRemote = versionsRepository.isRemote(version);
 
-                sb.append(String.format("%1$s |   %2$s   |   %3$s    | %4$s", versionTimestamp, isLocal ? "t" : "f", isRemote ? "t" : "f", version.getVersion()));
-            } catch (ParseException e) {
-                sb.append(String.format("Error: %1$s", e.getMessage()));
+                sb.append(String.format("%1$s |   %2$s   |   %3$s    | %4$s | %5$s | %6$s ", versionTimestamp,
+                        isLocal ? "t" : "f",
+                        isRemote ? "t" : "f",
+                        createdBy,
+                        name,
+                        description));
             }
-            sb.append(System.lineSeparator());
+            StringUtils.appendLineSeparator(sb);
         });
-        sb.append("-----------------------------------------------------------");
-        sb.append(System.lineSeparator());
+        StringUtils.appendLine(sb);
+        StringUtils.appendLineSeparator(sb);
 
         String resultMessage = sb.toString();
         result.setMessage(resultMessage);

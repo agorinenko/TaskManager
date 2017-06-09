@@ -1,5 +1,6 @@
 package ru.taskmanager.api;
 
+import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -9,11 +10,23 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class Version extends Row {
-    private String version;
+    private Date version;
     private Date createdAt;
     private String createdBy;
     private String description;
+    private String name;
 
+    public Version(){}
+
+    public Version(String name) {
+        try {
+            setVersionTimestamp(StringUtils.getVersionTimestamp(name));
+        } catch (ParseException e) {
+            setVersionTimestamp(null);
+        }
+        setName(name);
+        setCreatedBy(SettingsUtils.getSettingsValue("author"));
+    }
 
     public String getDescription() {
         return description;
@@ -39,25 +52,23 @@ public class Version extends Row {
         this.createdAt = createdAt;
     }
 
-    public String getVersion() {
+    public Date getVersionTimestamp() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public String getVersionTimestampString() {
+        return StringUtils.sdf.format(getVersionTimestamp());
+    }
+
+    public void setVersionTimestamp(Date version) {
         this.version = version;
     }
 
-
-    @Override
-    protected void mapFields(ResultSet rs) throws SQLException {
-        setVersion(rs.getString("version"));
-        setDescription(rs.getString("description"));
-        setCreatedBy(rs.getString("created_by"));
-        setCreatedAt(rs.getDate("created_at"));
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public void update() {
-        throw new NotImplementedException();
+    public void setName(String name) {
+        this.name = name;
     }
 }
