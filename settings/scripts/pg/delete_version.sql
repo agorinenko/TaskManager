@@ -1,0 +1,1 @@
+select ver.DELETE_VERSION(?) as res;

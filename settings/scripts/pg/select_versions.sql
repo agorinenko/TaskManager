@@ -6,5 +6,5 @@ SELECT
   name,
   description
 FROM
-  ver.version_set
+  ver.V_VERSIONS
 ORDER BY version ASC;

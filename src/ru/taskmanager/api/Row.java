@@ -1,7 +1,16 @@
 package ru.taskmanager.api;
 
+import ru.taskmanager.api.mappers.BaseMapper;
+import ru.taskmanager.api.mappers.InsertVersionMapper;
+import ru.taskmanager.errors.CommandException;
+import ru.taskmanager.sql.DataUtils;
+import ru.taskmanager.utils.StatementUtils;
+import ru.taskmanager.utils.StringUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Row {
     private Integer id;
@@ -14,12 +23,9 @@ public class Row {
         this.id = id;
     }
 
-//    public void init(ResultSet rs) throws SQLException {
-//        setId(rs.getInt("id"));
-//        mapFields(rs);
-//    }
 
-    //protected abstract void mapFields(ResultSet rs) throws SQLException;
 
-    //public abstract void update();
+    public int delete() throws CommandException {
+        throw new NotImplementedException();
+    }
 }

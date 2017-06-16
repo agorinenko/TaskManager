@@ -59,4 +59,19 @@ public class DbCommand {
         assertTrue(result.get(0) instanceof SuccessResult);
         assertTrue(message.length() > 0);
     }
+
+    @Test
+    public void delete() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        ParamsManager manager = new ParamsManager(new String[]{ "db", "o:delete", "v:20170522124649370" });
+
+        Executor executor = new Executor(manager);
+        List<CommandResult> result = executor.execute();
+        String message = result.get(0).getMessage();
+
+        System.out.print(message);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0) instanceof SuccessResult);
+        assertTrue(message.length() > 0);
+    }
 }

@@ -6,6 +6,7 @@ import ru.taskmanager.api.mappers.VersionMapper;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.StatementUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -66,5 +67,9 @@ public class VersionsRepository {
         int id = mapper.insert(version);
 
         return id;
+    }
+
+    public Version getRemoteVersion(String version){
+        throw new NotImplementedException();
     }
 }

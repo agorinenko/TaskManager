@@ -4,12 +4,15 @@ import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
+import ru.taskmanager.commands.imp.db.Delete;
 import ru.taskmanager.commands.imp.db.Init;
 import ru.taskmanager.commands.imp.db.Push;
 import ru.taskmanager.commands.imp.db.Status;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.utils.ListUtils;
+import ru.taskmanager.utils.SettingsUtils;
+import ru.taskmanager.utils.StringUtils;
 
 import java.util.List;
 
@@ -18,8 +21,9 @@ public class DbCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam commandParam  = ListUtils.getKeyValueParam(params, "o");
-        String forExampleText = "For example, o:init, o:push, o:rollback";
 
+        String forExampleText = SettingsUtils.getSettingsValue("dbCommandsHelp");
+        forExampleText = StringUtils.replaceAllSpecialConstants(forExampleText);
         if(null == commandParam){
             throw new CommandException("Parameter 'o' is required. " + forExampleText);
         }
@@ -37,6 +41,8 @@ public class DbCommand extends SafetyCommand {
             safetyCommand = new Push();
         } else if(command.equalsIgnoreCase("status")) {
             safetyCommand = new Status();
+        } else if(command.equalsIgnoreCase("delete")) {
+            safetyCommand = new Delete();
         } else {
             throw new CommandException("Command '"+ command +"' not found. " + forExampleText);
         }
