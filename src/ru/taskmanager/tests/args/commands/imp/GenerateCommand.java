@@ -10,6 +10,7 @@ import ru.taskmanager.errors.CorruptedParamException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;
@@ -49,9 +50,11 @@ public class GenerateCommand {
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();
         String message = result.get(0).getMessage();
+        Path fileName = (Path) result.get(0).getMetaData("file");
 
         assertTrue(result.size() > 0);
         assertTrue(result.get(0) instanceof SuccessResult);
         assertTrue(message.length() > 0);
+        assertTrue(fileName.toString().length() > 0);
     }
 }

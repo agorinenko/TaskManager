@@ -19,7 +19,13 @@ public class SettingsUtils {
         String dbFolder = SettingsUtils.getSettingsValue("db.folder");
         dbFolder = StringUtils.trimEnd(dbFolder, "//");
 
-        Path path = Paths.get(getBaseSettingsDir(), "scripts", dbFolder);
+        Path path = Paths.get(getBaseSettingsDir(), "assets", dbFolder);
+        return path.toString();
+    }
+
+    public static String getScriptPath(String script){
+        String baseScriptDir = SettingsUtils.getBaseScriptDir();
+        Path path = Paths.get(baseScriptDir, script);
         return path.toString();
     }
 

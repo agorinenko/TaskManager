@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 
 public class GenerateCommand extends SafetyCommand {
-    //private static final DateFormat sdf = new SimpleDateFormat(StringUtils.timestampFormat);
 
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
@@ -62,6 +61,7 @@ public class GenerateCommand extends SafetyCommand {
 
         resultMessage = String.format("File '%1$s' created", file);
         result.setMessage(resultMessage);
+        result.addMetaData("file", file);
         return result;
     }
 

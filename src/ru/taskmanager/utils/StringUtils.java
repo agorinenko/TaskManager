@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
 
 public class StringUtils {
     public static final DateFormat sdf = new SimpleDateFormat(StringUtils.timestampFormat);
@@ -34,6 +35,9 @@ public class StringUtils {
 
     public static String replaceAllSpecialConstants(String str){
         str = str.replaceAll("#NEW_LINE#",  System.lineSeparator());
+
+        String baseScriptDir = Matcher.quoteReplacement(SettingsUtils.getBaseScriptDir());
+        str = str.replaceAll("#BASE_SCRIPT_DIR#",  baseScriptDir);
 
         return str;
     }

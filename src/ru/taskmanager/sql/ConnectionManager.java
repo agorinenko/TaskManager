@@ -23,7 +23,8 @@ public class ConnectionManager {
     private String dbName;
 
     public ConnectionManager() throws ConnectionManagerException {
-        String driver = SettingsUtils.getSettingsValue("db.driver");
+        String driver = SettingsUtils.getSettingsOrDefaultValue("db.driver");
+        driver = StringUtils.replaceAllSpecialConstants(driver);
         String driverName = SettingsUtils.getSettingsValue("db.driver.name");
 
         url = SettingsUtils.getSettingsValue("db.url");

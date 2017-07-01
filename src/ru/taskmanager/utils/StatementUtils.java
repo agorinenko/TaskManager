@@ -1,6 +1,8 @@
 package ru.taskmanager.utils;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +17,23 @@ public class StatementUtils {
     }
 
     public static List<String> getDbFolderStatements(String fileName) {
-        String baseScriptDir = SettingsUtils.getBaseScriptDir();
-        return getStatements(baseScriptDir, fileName);
+        String scriptPath = SettingsUtils.getScriptPath(fileName);
+        return getStatementsByFullFilePath(scriptPath);
     }
 
     public static List<String> getOutFolderStatements(String fileName) {
         String baseScriptDir = SettingsUtils.getOutScriptDir();
-        return getStatements(baseScriptDir, fileName);
+        Path path = Paths.get(baseScriptDir, fileName);
+
+        return getStatementsByFullFilePath(path.toString());
     }
 
-    public static List<String> getStatements(String baseScriptDir, String fileName) {
-        fileName = StringUtils.trimStart(fileName, "//");
-        String fullFilePath =  baseScriptDir + "/" + fileName;
-
-        return getStatementsByFullFilePath(fullFilePath);
-    }
+//    public static List<String> getStatements(String baseScriptDir, String fileName) {
+//        fileName = StringUtils.trimStart(fileName, "//");
+//        String fullFilePath =  baseScriptDir + "/" + fileName;
+//
+//        return getStatementsByFullFilePath(fullFilePath);
+//    }
 
     public static List<String> getStatementsByFullFilePath(String fullFilePath) {
         List<String> statements;
