@@ -89,7 +89,7 @@ TaskManager.exe "plan" "f:init_and_upgrade_db.json"
 }
 ```
 ### Действие `script` (недоступно в текущей версии)
-Выполнение скрипт
+Выполнение скрипта
 ```
 TaskManager.exe "script" "f:deploy.sh"
 ```
