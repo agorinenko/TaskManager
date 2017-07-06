@@ -31,11 +31,6 @@ TaskManager.exe "generate" "t:sql"
 ```
 TaskManager.exe "db" "o:init"
 ```
-#### Операция `init`
-Инициализация базы данных: создание, а также развертывание вспомогательной схемы ver
-```
-TaskManager.exe "db" "o:init"
-```
 #### Операция `remove`
 Полное удаление базы данных
 ```
