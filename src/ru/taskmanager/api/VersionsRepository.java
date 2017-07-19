@@ -4,6 +4,7 @@ import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.api.mappers.LocalVersionManager;
 import ru.taskmanager.api.mappers.VersionMapper;
 import ru.taskmanager.errors.CommandException;
+import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.StatementUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -70,6 +71,16 @@ public class VersionsRepository {
     }
 
     public Version getRemoteVersion(String version){
-        throw new NotImplementedException();
+        List<Version> remoteVersions = getRemoteVersions();
+        Version remoteVersion = remoteVersions.stream().filter(i -> i.getVersionTimestampString().equalsIgnoreCase(version)).findFirst().orElse(null);
+
+        return remoteVersion;
+    }
+
+    public Version getFirstRemoteVersion(){
+        List<Version> remoteVersions = getRemoteVersions();
+        Version remoteVersion = remoteVersions.stream().findFirst().orElse(null);
+
+        return remoteVersion;
     }
 }

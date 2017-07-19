@@ -34,6 +34,14 @@ public abstract class BaseParam {
         return sanitizeString(stringValue);
     }
 
+    public String getDefaultOrStringValue(String defaultValue){
+        try {
+            return getStringValue();
+        } catch (StringIsEmptyException e) {
+            return defaultValue;
+        }
+    }
+
     public String getKey() throws StringIsEmptyException {
         return sanitizeString(key);
     }

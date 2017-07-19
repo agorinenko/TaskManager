@@ -6,6 +6,7 @@ import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.args.params.BaseParam;
 import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.KeyValueParam;
+import ru.taskmanager.utils.StringUtils;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
@@ -27,16 +28,18 @@ public class ParamsManager {
         keys = new ArrayList<>();
 
         for (String arg: args) {
-            BaseParam param = factory.create(arg);
-            if(param instanceof CommandParam){
-                commandParams.add((CommandParam) param);
-            } else if(param instanceof KeyValueParam) {
-                keyValueParams.add((KeyValueParam) param);
-            } else{
-              throw new NotImplementedException();
-            }
+            if(!StringUtils.isNullOrEmpty(arg)){
+                BaseParam param = factory.create(arg);
+                if(param instanceof CommandParam){
+                    commandParams.add((CommandParam) param);
+                } else if(param instanceof KeyValueParam) {
+                    keyValueParams.add((KeyValueParam) param);
+                } else{
+                    throw new NotImplementedException();
+                }
 
-            keys.add(param.getKey());
+                keys.add(param.getKey());
+            }
         }
     }
     /**

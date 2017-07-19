@@ -25,7 +25,7 @@ public class Status extends SafetyCommand {
         StringUtils.appendLineSeparator(sb);
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
-        sb.append("Timestamp               | Local | Remote | Author           | Name                           | Description                    ");
+        sb.append("Timestamp                | Local     | Remote    | Author           | Name                           | Description                    ");
         StringUtils.appendLineSeparator(sb);
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
@@ -43,15 +43,17 @@ public class Status extends SafetyCommand {
                 Boolean isLocal = versionsRepository.isLocal(version);
                 Boolean isRemote = versionsRepository.isRemote(version);
 
-                sb.append(String.format("%1$s |   %2$s   |   %3$s    | %4$s | %5$s | %6$s ", versionTimestamp,
-                        isLocal ? "t" : "f",
-                        isRemote ? "t" : "f",
+                sb.append(String.format("%1$s |   %2$s   |   %3$s   | %4$s | %5$s | %6$s ",
+                        StringUtils.formatString(versionTimestamp, 24, ' '),
+                        StringUtils.formatString(isLocal ? "TRUE" : "FALSE", 5, ' '),
+                        StringUtils.formatString(isRemote ? "TRUE" : "FALSE", 5, ' '),
                         createdBy,
                         name,
                         description));
             }
             StringUtils.appendLineSeparator(sb);
         });
+
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
 

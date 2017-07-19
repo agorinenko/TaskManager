@@ -1,6 +1,7 @@
 package ru.taskmanager.api;
 
 import ru.taskmanager.api.mappers.BaseMapper;
+import ru.taskmanager.api.mappers.DeleteVersionMapper;
 import ru.taskmanager.api.mappers.InsertVersionMapper;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
@@ -91,9 +92,9 @@ public class Version extends Row {
                         getVersionTimestampString()
                 };
 
-                List<BaseMapper> sqlResult = DataUtils.executeStatement(conn, deleteVersionStatement, params, () -> new InsertVersionMapper());
+                List<BaseMapper> sqlResult = DataUtils.executeStatement(conn, deleteVersionStatement, params, () -> new DeleteVersionMapper());
                 if(sqlResult.size() > 0) {
-                    InsertVersionMapper result = (InsertVersionMapper) sqlResult.get(0);
+                    DeleteVersionMapper result = (DeleteVersionMapper) sqlResult.get(0);
                     List<Row> rows = result.getResult();
                     if(rows.size() > 0) {
                         Row newVersion = rows.get(0);
