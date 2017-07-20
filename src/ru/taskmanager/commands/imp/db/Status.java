@@ -12,9 +12,9 @@ import ru.taskmanager.utils.StringUtils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.function.Consumer;
 
-public class Status extends SafetyCommand {
-
+public class Status extends BaseDbCommand {
 
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
@@ -31,10 +31,10 @@ public class Status extends SafetyCommand {
         StringUtils.appendLineSeparator(sb);
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
-        VersionsRepository versionsRepository = new VersionsRepository();
+        VersionsRepository versionsRepository = initVersionsRepository(params);
         List<Version> allVersions = versionsRepository.getAllVersions();
 
-        allVersions.forEach(version -> {
+        for (Version version : allVersions) {
             if(null != version.getVersionTimestamp()) {
                 String createdBy = StringUtils.formatString(version.getCreatedBy(), 16, ' ');
                 String name = StringUtils.formatString(version.getName(), 30, ' ');
@@ -52,7 +52,7 @@ public class Status extends SafetyCommand {
                         description));
             }
             StringUtils.appendLineSeparator(sb);
-        });
+        }
 
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);

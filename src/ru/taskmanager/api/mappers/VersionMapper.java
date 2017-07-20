@@ -1,5 +1,6 @@
 package ru.taskmanager.api.mappers;
 
+import ru.taskmanager.api.LocalVersion;
 import ru.taskmanager.api.Row;
 import ru.taskmanager.api.Version;
 import ru.taskmanager.errors.CommandException;
@@ -24,15 +25,13 @@ public class VersionMapper extends BaseMapper {
 
         final int[] resultId = {-1};
 
-        Version version = (Version) row;
+        LocalVersion version = (LocalVersion) row;
         List<String> insertVersionStatements = StatementUtils.getDbFolderStatements("insert_version.sql");
         String insertVersionStatement = StatementUtils.getSingleStatement(insertVersionStatements);
         if(!StringUtils.isNullOrEmpty(insertVersionStatement)) {
-
-            List<String> insertStatements = StatementUtils.getOutFolderStatements(version.getName());
+            List<String> insertStatements = version.getStatements();
             if (insertStatements.size() > 0) {
-
-                DataUtils.createConnectionInCommandContext(conn -> {
+                List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(conn -> {
                     Object[] params = {
                             version.getVersionTimestampString(),
                             version.getCreatedBy(),
@@ -42,16 +41,17 @@ public class VersionMapper extends BaseMapper {
 
                     DataUtils.executeStatementsAsTransaction(conn, insertStatements);
 
-                    List<BaseMapper> sqlResult = DataUtils.executeStatement(conn, insertVersionStatement, params, () -> new InsertVersionMapper());
-                    if(sqlResult.size() > 0) {
-                        InsertVersionMapper result = (InsertVersionMapper) sqlResult.get(0);
-                        List<Row> rows = result.getResult();
-                        if(rows.size() > 0) {
-                            Row newVersion = rows.get(0);
-                            resultId[0] = newVersion.getId();
-                        }
-                    }
+                    return DataUtils.executeStatement(conn, insertVersionStatement, params, () -> new InsertVersionMapper());
                 });
+
+                if(sqlResult.size() > 0) {
+                    InsertVersionMapper result = (InsertVersionMapper) sqlResult.get(0);
+                    List<Row> rows = result.getResult();
+                    if(rows.size() > 0) {
+                        Row newVersion = rows.get(0);
+                        resultId[0] = newVersion.getId();
+                    }
+                }
             } else {
                 resultId[0] = 0;
             }

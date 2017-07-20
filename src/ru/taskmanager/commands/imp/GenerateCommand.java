@@ -1,5 +1,6 @@
 package ru.taskmanager.commands.imp;
 
+import ru.taskmanager.api.mappers.LocalVersionManager;
 import ru.taskmanager.args.params.BooleanParam;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
@@ -30,6 +31,7 @@ public class GenerateCommand extends SafetyCommand {
         KeyValueParam typeParam = ListUtils.getKeyValueParam(params, "t");
         KeyValueParam fileNameParam = ListUtils.getKeyValueParam(params, "n");
         KeyValueParam useTimeStampParam  = ListUtils.getKeyValueParam(params, "stamp");
+        KeyValueParam out = ListUtils.getKeyValueParam(params, "out");
 
         String fileExtension = "txt";
         if(null != typeParam){
@@ -57,38 +59,22 @@ public class GenerateCommand extends SafetyCommand {
         }
 
         String formatFileName = String.format("%1$s%2$s.%3$s", timeStamp, fileName, fileExtension);
-        Path file = createFile(formatFileName);
+        LocalVersionManager manager = new LocalVersionManager();
+        if(null != out){
+            String outValue = null;
+            try {
+                outValue = out.getStringValue();
+            } catch (StringIsEmptyException e) {}
+
+            if(!StringUtils.isNullOrEmpty(outValue)){
+                manager.setBaseDir(outValue);
+            }
+        }
+        Path file = manager.createFile(formatFileName);
 
         resultMessage = String.format("File '%1$s' created", file);
         result.setMessage(resultMessage);
         result.addMetaData("file", file);
         return result;
-    }
-
-    private Path createFile(String filePath) throws CommandException {
-        String baseDir = SettingsUtils.getOutScriptDir();
-
-        if(!StringUtils.isNullOrEmpty(baseDir)){
-            filePath = String.format("%1$s\\%2$s", StringUtils.trimEnd(baseDir, "\\\\"), StringUtils.trimStart(filePath, "\\\\"));
-        }
-
-        Path path = Paths.get(filePath);
-        path = path.normalize();
-
-        Path parent  = path.getParent();
-        try {
-
-            if(null != parent && !Files.exists(parent)) {
-                Files.createDirectories(parent);
-            }
-        } catch (IOException e) {
-            throw new CommandException(String.format("Create new dir '%1$s' IOException", parent));
-        }
-
-        try {
-            return Files.createFile(path);
-        } catch (IOException e) {
-            throw new CommandException(String.format("Create new file '%1$s' IOException", path));
-        }
     }
 }

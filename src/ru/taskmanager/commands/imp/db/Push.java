@@ -14,7 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class Push extends SafetyCommand {
+public class Push extends BaseDbCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
 
@@ -33,7 +33,7 @@ public class Push extends SafetyCommand {
         StringUtils.appendLineSeparator(sb);
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
-        VersionsRepository versionsRepository = new VersionsRepository();
+        VersionsRepository versionsRepository = initVersionsRepository(params);
         List<Version> localVersions = versionsRepository.getLocalVersions();
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
 

@@ -21,13 +21,6 @@ public class StatementUtils {
         return getStatementsByFullFilePath(scriptPath);
     }
 
-    public static List<String> getOutFolderStatements(String fileName) {
-        String baseScriptDir = SettingsUtils.getOutScriptDir();
-        Path path = Paths.get(baseScriptDir, fileName);
-
-        return getStatementsByFullFilePath(path.toString());
-    }
-
 //    public static List<String> getStatements(String baseScriptDir, String fileName) {
 //        fileName = StringUtils.trimStart(fileName, "//");
 //        String fullFilePath =  baseScriptDir + "/" + fileName;

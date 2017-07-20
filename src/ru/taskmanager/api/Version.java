@@ -85,23 +85,22 @@ public class Version extends Row {
 
         List<String> deleteVersionStatements = StatementUtils.getDbFolderStatements("delete_version.sql");
         String deleteVersionStatement = StatementUtils.getSingleStatement(deleteVersionStatements);
-        if(!StringUtils.isNullOrEmpty(deleteVersionStatement)) {
+        if (!StringUtils.isNullOrEmpty(deleteVersionStatement)) {
 
-            DataUtils.createConnectionInCommandContext(conn -> {
+            List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(conn -> {
                 Object[] params = {
                         getVersionTimestampString()
                 };
-
-                List<BaseMapper> sqlResult = DataUtils.executeStatement(conn, deleteVersionStatement, params, () -> new DeleteVersionMapper());
-                if(sqlResult.size() > 0) {
-                    DeleteVersionMapper result = (DeleteVersionMapper) sqlResult.get(0);
-                    List<Row> rows = result.getResult();
-                    if(rows.size() > 0) {
-                        Row newVersion = rows.get(0);
-                        resultId[0] = newVersion.getId();
-                    }
-                }
+                return DataUtils.executeStatement(conn, deleteVersionStatement, params, () -> new DeleteVersionMapper());
             });
+            if (sqlResult.size() > 0) {
+                DeleteVersionMapper result = (DeleteVersionMapper) sqlResult.get(0);
+                List<Row> rows = result.getResult();
+                if (rows.size() > 0) {
+                    Row newVersion = rows.get(0);
+                    resultId[0] = newVersion.getId();
+                }
+            }
         }
 
         return resultId[0];

@@ -1,5 +1,6 @@
 package ru.taskmanager.commands.imp.db;
 
+import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
@@ -16,18 +17,14 @@ public class Init extends SafetyCommand {
         SuccessResult result = new SuccessResult();
         String resultMessage = "";
 
-            List<String> createDbStatements = StatementUtils.getDbFolderStatements("create_db.sql");
-            List<String> createSchemaStatements = StatementUtils.getDbFolderStatements("create_schema.sql");
+        List<String> createDbStatements = StatementUtils.getDbFolderStatements("create_db.sql");
+        List<String> createSchemaStatements = StatementUtils.getDbFolderStatements("create_schema.sql");
 
-            DataUtils.createConnectionInCommandContext(conn -> {
-                DataUtils.executeStatements(conn, createDbStatements);
-            }, true);
+        DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatements(conn, createDbStatements), true);
 
-            DataUtils.createConnectionInCommandContext(conn -> {
-                DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements);
-            });
+        DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
 
-            resultMessage = "The operation was successful";
+        resultMessage = "The operation was successful";
 
         result.setMessage(resultMessage);
         return result;

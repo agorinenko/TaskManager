@@ -15,8 +15,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class Delete extends SafetyCommand {
-
+public class Delete extends BaseDbCommand {
 
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
@@ -26,7 +25,7 @@ public class Delete extends SafetyCommand {
         String version = null != versionParam ? versionParam.getDefaultOrStringValue("") : "";
         boolean versionIsMissing = StringUtils.isNullOrEmpty(version) ? true : false;
 
-        VersionsRepository versionsRepository = new VersionsRepository();
+        VersionsRepository versionsRepository = initVersionsRepository(params);
         Version remoteVersion = versionIsMissing ? versionsRepository.getFirstRemoteVersion() :versionsRepository.getRemoteVersion(version);
         if(null == remoteVersion){
             throw new CommandException("Remote version '" + version + "' not found");
