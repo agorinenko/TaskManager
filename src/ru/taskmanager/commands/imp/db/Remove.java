@@ -1,11 +1,9 @@
 package ru.taskmanager.commands.imp.db;
 
-import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.config.Settings;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.SettingsUtils;
@@ -13,20 +11,16 @@ import ru.taskmanager.utils.StatementUtils;
 
 import java.util.List;
 
-public class Init extends SafetyCommand {
+public class Remove  extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
         SuccessResult result = new SuccessResult();
         String resultMessage = "";
 
-        List<String> createDbStatements = StatementUtils.getDbFolderStatements("create_db.sql");
-        List<String> createSchemaStatements = StatementUtils.getDbFolderStatements("create_schema.sql");
-
+        List<String> createDbStatements = StatementUtils.getDbFolderStatements("drop_db.sql");
         DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatements(conn, createDbStatements), true);
 
-        DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
-
-        resultMessage = "The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
+        resultMessage = "The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
 
         result.setMessage(resultMessage);
         return result;

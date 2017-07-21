@@ -4,10 +4,7 @@ import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.commands.imp.db.Delete;
-import ru.taskmanager.commands.imp.db.Init;
-import ru.taskmanager.commands.imp.db.Push;
-import ru.taskmanager.commands.imp.db.Status;
+import ru.taskmanager.commands.imp.db.*;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.utils.ListUtils;
@@ -43,6 +40,8 @@ public class DbCommand extends SafetyCommand {
             safetyCommand = new Status();
         } else if(command.equalsIgnoreCase("delete")) {
             safetyCommand = new Delete();
+        } else if(command.equalsIgnoreCase("remove")) {
+            safetyCommand = new Remove();
         } else {
             throw new CommandException("Command '"+ command +"' not found. " + forExampleText);
         }

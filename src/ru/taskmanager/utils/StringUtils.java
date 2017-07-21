@@ -90,7 +90,7 @@ public class StringUtils {
     }
 
     public static void appendLine(StringBuilder sb){
-        sb.append("------------------------------------------------------------------------------------------------------------------------------");
+        sb.append("--------------------------------------------------------------------------------");
     }
     public static void appendLineSeparator(StringBuilder sb){
         sb.append(System.lineSeparator());
