@@ -1,8 +1,12 @@
 package ru.taskmanager.utils;
 
+import ru.taskmanager.Main;
 import ru.taskmanager.config.Settings;
 import ru.taskmanager.errors.ConfigurationException;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -10,7 +14,20 @@ import java.util.Map;
 public class SettingsUtils {
 
     public static String getBaseSettingsDir(){
-        Path path = Paths.get(StringUtils.trimEnd(System.getProperty("user.dir"), "//"), "settings");
+        String base = "";
+
+        Map<String, String> env = System.getenv();
+        if (env.containsKey("TM_HOME")){
+            base = env.get("TM_HOME");
+        } else {
+            try {
+                File codeSource = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                base = codeSource.getParent();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        Path path = Paths.get(StringUtils.trimEnd(base, "//"), "settings");
 
         return path.toString();
     }

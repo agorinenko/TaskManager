@@ -1,1 +1,1 @@
-java -jar TaskManager.jar %*
+java -jar %~dp0TaskManager.jar %*
