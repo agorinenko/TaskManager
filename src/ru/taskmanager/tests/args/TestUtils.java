@@ -27,9 +27,8 @@ public class TestUtils {
             Path fileName = (Path) result.get(0).getMetaData("file");
 
             String tableName = "test.\"" + java.util.UUID.randomUUID().toString().replace('-', '0') + "\"";
-            String s = "DROP TABLE IF EXISTS " + tableName + ";" +
-                    "CREATE TABLE " + tableName + " (\n" +
-                    "  ID  SERIAL PRIMARY KEY\n" +
+            String s = "CREATE TABLE " + tableName + " (\n" +
+                    "  ID INT PRIMARY KEY\n" +
                     ");";
             byte data[] = s.getBytes();
 

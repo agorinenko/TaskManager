@@ -88,6 +88,9 @@ public class ConnectionManager {
         if(driver.equalsIgnoreCase("org.postgresql.Driver")){
             String _url = StringUtils.trimEnd(url, "//");
             return String.format("%1$s/%2$s", _url, dbName);
+        } else if(driver.equalsIgnoreCase("com.microsoft.sqlserver.jdbc.SQLServerDriver")){
+            String _url = StringUtils.trimEnd(url, ";");
+            return String.format("%1$s;databaseName=%2$s;", _url, dbName);
         }
 
         throw new ConnectionManagerException(String.format("Driver %1$s doesn't support", driver));

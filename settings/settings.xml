@@ -1,12 +1,17 @@
 <config>
     <setting key="out" value="out" />
     <setting key="db.url" value="jdbc:postgresql://localhost:5432/" />
+    <!--<setting key="db.url" value="jdbc:sqlserver://192.168.168.151:1433" />-->
     <setting key="db.name" value="tests" />
     <setting key="db.user" value="postgres" />
+    <!--<setting key="db.user" value="sa" />-->
+    <!--<setting key="db.user" value="sa" />-->
     <setting key="db.pwd" value="Bandit777rus" />
     <setting key="db.driver.default" value="jar:file:#BASE_SCRIPT_DIR#/driver.jar!/" />
     <setting key="db.driver.name" value="org.postgresql.Driver" />
+    <!--<setting key="db.driver.name" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />-->
     <setting key="db.folder" value="pg" />
+    <!--<setting key="db.folder" value="sql" />-->
     <setting key="db.separator.default" value="--SEP--" />
     <setting key="db.separator" value="" />
     <setting key="author" value="Anonymous" />
