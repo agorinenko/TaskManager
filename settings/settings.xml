@@ -5,7 +5,6 @@
     <setting key="db.name" value="tests" />
     <setting key="db.user" value="postgres" />
     <!--<setting key="db.user" value="sa" />-->
-    <!--<setting key="db.user" value="sa" />-->
     <setting key="db.pwd" value="Bandit777rus" />
     <setting key="db.driver.default" value="jar:file:#BASE_SCRIPT_DIR#/driver.jar!/" />
     <setting key="db.driver.name" value="org.postgresql.Driver" />
