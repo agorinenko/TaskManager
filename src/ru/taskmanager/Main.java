@@ -16,8 +16,10 @@ public class Main {
             List<CommandResult> result = executor.execute();
             String message = result.get(0).getMessage();
 
-            System.out.print(message);
-            System.out.print(System.lineSeparator());
+            if(null != message) {
+                System.out.print(message);
+                System.out.print(System.lineSeparator());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

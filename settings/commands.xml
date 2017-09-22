@@ -5,4 +5,5 @@
     <setting key="g" class="ru.taskmanager.commands.imp.GenerateCommand" />
     <setting key="generate" class="ru.taskmanager.commands.imp.GenerateCommand" />
     <setting key="db" class="ru.taskmanager.commands.imp.DbCommand" />
+    <setting key="oro" class="ru.taskmanager.commands.imp.OroCommand" />
 </config>

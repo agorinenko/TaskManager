@@ -24,4 +24,9 @@ o:init - drop and create database and 'ver' schema #NEW_LINE#
 o:push - create sql versions on remote database #NEW_LINE#
 o:status - get status of sql versions #NEW_LINE#
 o:delete - delete sql version" />
+    <setting key="oroCommandsHelp" value="
+========= Orodruin server =========
+#NEW_LINE#See full description on
+#NEW_LINE#https://github.com/agorinenko/orodruin/blob/master/README.md
+#NEW_LINE#==============================================" />
 </config>
