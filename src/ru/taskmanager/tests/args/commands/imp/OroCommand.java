@@ -15,7 +15,7 @@ import java.util.List;
  * Created by agorinenko on 21.09.2017.
  */
 public class OroCommand {
-    @Test
+
     public void startMaster() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
         ParamsManager manager = new ParamsManager(new String[]{ "oro", "o:start", "t:master" });
 

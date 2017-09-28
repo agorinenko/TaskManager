@@ -17,8 +17,6 @@ public abstract class CommandResult {
 
     public abstract boolean isResult();
 
-
-
     public void addMetaData(String key, Object value){
         if(null == this.metaData){
             this.metaData = new HashMap<>();

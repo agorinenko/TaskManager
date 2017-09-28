@@ -28,12 +28,17 @@ public class LocalVersionManager {
     }
 
     public List<Version> select() throws IOException {
+            return select("");
+    }
+
+    public List<Version> select(String extension) throws IOException {
         List<Version> rows  = new ArrayList<>();
 
         Path path = Paths.get(baseDir);
         path = path.normalize();
         if (Files.exists(path)) {
-            try(Stream<Path> paths = Files.walk(path).filter(Files::isRegularFile)) {
+            try(Stream<Path> paths = createPaths(path, extension)) {
+
                 paths.forEach(filePath -> {
                     Version local = new LocalVersion(filePath);
                     if(null != local.getVersionTimestamp()) {
@@ -41,8 +46,19 @@ public class LocalVersionManager {
                     }
                 });
             }
+        } else {
+            throw new IOException("Path '" + path + "' not found");
         }
         return rows;
+    }
+
+    private Stream<Path> createPaths(Path path, String extension) throws IOException {
+
+        if(!StringUtils.isNullOrEmpty(extension)){
+            return Files.walk(path).filter(Files::isRegularFile).filter(foundPath -> foundPath.toString().endsWith(extension));
+        }else {
+            return Files.walk(path).filter(Files::isRegularFile);
+        }
     }
 
     public static List<Version> merge(List<Version> first, List<Version> second){

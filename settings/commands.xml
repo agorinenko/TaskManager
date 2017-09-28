@@ -6,4 +6,5 @@
     <setting key="generate" class="ru.taskmanager.commands.imp.GenerateCommand" />
     <setting key="db" class="ru.taskmanager.commands.imp.DbCommand" />
     <setting key="oro" class="ru.taskmanager.commands.imp.OroCommand" />
+    <setting key="ps" class="ru.taskmanager.commands.imp.PowerShellCommand" />
 </config>

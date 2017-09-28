@@ -36,7 +36,7 @@ public class VersionsRepository {
             VersionMapper versionMapper = (VersionMapper) sqlResult.get(0);
 
             remoteVersions = versionMapper.getResult();
-            remoteVersions.sort(Collections.reverseOrder(new VersionComparator()));
+            remoteVersions.sort(new VersionComparator());
         }
 
         return this.remoteVersions;
@@ -51,7 +51,7 @@ public class VersionsRepository {
 
             try {
                 localVersions = manager.select();
-                localVersions.sort(Collections.reverseOrder(new VersionComparator()));
+                localVersions.sort(new VersionComparator());
             } catch (IOException e) {
                 throw new CommandException(e.getMessage());
             }
@@ -63,7 +63,7 @@ public class VersionsRepository {
     public List<Version> getAllVersions() throws CommandException {
         if(null == this.allVersions){
             allVersions = LocalVersionManager.merge(getRemoteVersions(), getLocalVersions());
-            allVersions.sort(Collections.reverseOrder(new VersionComparator()));
+            allVersions.sort(new VersionComparator());
         }
 
         return this.allVersions;

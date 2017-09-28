@@ -52,6 +52,12 @@ public class GenerateCommand {
         testMigration(manager);
     }
 
+    @Test
+    public void exec5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        ParamsManager manager = new ParamsManager(new String[]{ "g", "t:ps1" });
+        testMigration(manager);
+    }
+
     private void testMigration(ParamsManager manager) throws StringIsEmptyException, InstantiationException, ClassNotFoundException, IllegalAccessException, ConfigurationException, RequiredParamException {
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();
