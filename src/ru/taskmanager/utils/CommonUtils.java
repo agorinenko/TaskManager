@@ -21,7 +21,16 @@ public class CommonUtils {
     public static String executePowerShellScript(Path path) throws IOException, PowerShellException {
         path = path.normalize();
 
-        String command = "powershell.exe " + path.toString();
+        String filePath;
+        String command;
+        if(path.isAbsolute()){
+            filePath = path.toString();
+            command = "powershell.exe " + filePath;
+        }else{
+            filePath = "./" + path.toString();
+            command = "powershell.exe -File " + filePath;
+        }
+
         String success;
         Process powerShellProcess = Runtime.getRuntime().exec(command);
 

@@ -66,6 +66,13 @@ public class PowerShellCommand {
 
     @Test
     public void executePowerShellScript3() throws IOException, PowerShellException {
+        String result = CommonUtils.executePowerShellScript("20170929113452336_file.ps1");
+
+        Assert.assertEquals("1", result);
+    }
+
+    @Test
+    public void executePowerShellScript4() throws IOException, PowerShellException {
         String result = CommonUtils.executePowerShellScript(SettingsUtils.getBaseSettingsDir()+"/assets/ps/test.ps1");
 
         Assert.assertEquals("1", result);

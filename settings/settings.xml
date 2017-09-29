@@ -1,5 +1,5 @@
 <config>
-    <setting key="out" value="out" />
+    <setting key="out" value="" />
     <setting key="db.url" value="jdbc:postgresql://localhost:5432/" />
     <!--<setting key="db.url" value="jdbc:sqlserver://192.168.168.151:1433" />-->
     <setting key="db.name" value="tests" />

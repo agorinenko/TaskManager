@@ -43,6 +43,9 @@ public class VersionsRepository {
     }
 
     public List<Version> getLocalVersions() throws CommandException {
+        return getLocalVersions("");
+    }
+    public List<Version> getLocalVersions(String extension) throws CommandException {
         if(null == this.localVersions){
             LocalVersionManager manager = new LocalVersionManager();
             if(!StringUtils.isNullOrEmpty(this.baseDir)){
@@ -50,7 +53,7 @@ public class VersionsRepository {
             }
 
             try {
-                localVersions = manager.select();
+                localVersions = manager.select(extension);
                 localVersions.sort(new VersionComparator());
             } catch (IOException e) {
                 throw new CommandException(e.getMessage());

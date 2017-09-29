@@ -34,7 +34,7 @@ public class Push extends BaseDbCommand {
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
         VersionsRepository versionsRepository = initVersionsRepository(params);
-        List<Version> localVersions = versionsRepository.getLocalVersions();
+        List<Version> localVersions = versionsRepository.getLocalVersions(".sql");
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
 
         for (Version version : localVersions) {
