@@ -14,12 +14,20 @@ import ru.taskmanager.errors.PowerShellException;
 import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.utils.CommonUtils;
 import ru.taskmanager.utils.ListUtils;
+import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * Created by agorinenko on 28.09.2017.
@@ -29,6 +37,9 @@ public class PowerShellCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
         SuccessResult result = new SuccessResult();
+
+        HashMap<String, Object> psParams = ListUtils.convertToHashMap(params);
+
 
         LocalVersionManager manager = new LocalVersionManager();
 
@@ -41,6 +52,18 @@ public class PowerShellCommand extends SafetyCommand {
                     manager.setBaseDir(outValue);
                 }
             } catch (StringIsEmptyException e) {}
+        }
+
+        KeyValueParam env = ListUtils.getKeyValueParam(params, "env");
+        if(null != env){
+            String envValue = null;
+            try {
+                envValue = env.getStringValue();
+                if(!StringUtils.isNullOrEmpty(envValue)){
+                    extendPowerShellParametersByEnv(psParams, envValue);
+                }
+            } catch (StringIsEmptyException e) {}
+            catch (FileNotFoundException e) {}
         }
 
         KeyValueParam versionParam = ListUtils.getKeyValueParam(params, "v");
@@ -61,7 +84,7 @@ public class PowerShellCommand extends SafetyCommand {
 
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
                     try {
-                        psResult = CommonUtils.executePowerShellScript(path);
+                        psResult = CommonUtils.executePowerShellScript(path, psParams);
                     } catch (PowerShellException e) {
                         psResult = e.getMessage();
                     }
@@ -79,6 +102,31 @@ public class PowerShellCommand extends SafetyCommand {
         String resultMessage = sb.toString();
         result.setMessage(resultMessage);
         return result;
+    }
+
+    private void extendPowerShellParametersByEnv(HashMap<String, Object> psParams, String env) throws FileNotFoundException {
+        Path path = Paths.get("env.json");
+        if(Files.exists(path)){
+
+            JsonReader jsonReader = Json.createReader(new FileInputStream(path.toFile().getAbsoluteFile()));
+            try{
+                JsonObject json = jsonReader.readObject();
+                JsonObject envObject = json.getJsonObject(env);
+
+                Set<Map.Entry<String, JsonValue>> set = envObject.entrySet();
+
+                for(Map.Entry<String, JsonValue> entry : set) {
+                    String key = entry.getKey();
+                    JsonValue value = entry.getValue();
+
+                    if(!StringUtils.isNullOrEmpty(key) && null != value && !StringUtils.isNullOrEmpty(value.toString())){
+                        psParams.put(key, value.toString());
+                    }
+                }
+            }finally {
+                jsonReader.close();
+            }
+        }
     }
 
 }

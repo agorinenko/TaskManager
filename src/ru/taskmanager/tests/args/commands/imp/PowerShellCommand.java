@@ -11,7 +11,10 @@ import ru.taskmanager.utils.CommonUtils;
 import ru.taskmanager.utils.SettingsUtils;
 
 import java.io.IOException;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.assertTrue;
 
@@ -51,7 +54,7 @@ public class PowerShellCommand {
 
     @Test
     public void executePowerShellScript2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
-        ParamsManager manager = new ParamsManager(new String[]{ "ps", "out:out/dir2", "v:20170928161435508" });
+        ParamsManager manager = new ParamsManager(new String[]{ "ps", "out:out/dir2", "v:20170929113452336" });
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();
@@ -66,15 +69,35 @@ public class PowerShellCommand {
 
     @Test
     public void executePowerShellScript3() throws IOException, PowerShellException {
-        String result = CommonUtils.executePowerShellScript("20170929113452336_file.ps1");
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("WebApplication", "http://dev");
+        params.put("test", "dev");
+        params.put("ENV", "dev");
+
+        String result = CommonUtils.executePowerShellScript("20170929113452336_file.ps1", params);
+
+        Assert.assertEquals("http://dev\r\ndev\r\ndev", result);
+    }
+
+    @Test
+    public void executePowerShellScript4() throws IOException, PowerShellException {
+        String result = CommonUtils.executePowerShellScript(SettingsUtils.getBaseSettingsDir() + "/assets/ps/test.ps1", new HashMap<String, Object>());
 
         Assert.assertEquals("1", result);
     }
 
     @Test
-    public void executePowerShellScript4() throws IOException, PowerShellException {
-        String result = CommonUtils.executePowerShellScript(SettingsUtils.getBaseSettingsDir()+"/assets/ps/test.ps1");
+    public void executePowerShellScript5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+        ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452336", "env:dev" });
 
-        Assert.assertEquals("1", result);
+        Executor executor = new Executor(manager);
+        List<CommandResult> result = executor.execute();
+        String message = result.get(0).getMessage();
+
+        System.out.print("executePowerShellScript5---->"+message);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0) instanceof SuccessResult);
+        assertTrue(message.length() > 0);
     }
 }

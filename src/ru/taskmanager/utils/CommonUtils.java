@@ -9,26 +9,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by agorinenko on 28.09.2017.
  */
 public class CommonUtils {
-    public static String executePowerShellScript(String script) throws IOException, PowerShellException {
+    public static String executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
         Path path = Paths.get(script);
-        return executePowerShellScript(path);
+        return executePowerShellScript(path, params);
     }
-    public static String executePowerShellScript(Path path) throws IOException, PowerShellException {
+
+    public static String executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
         path = path.normalize();
 
         String filePath;
         String command;
+        String paramsString = buildScriptParams(params);
         if(path.isAbsolute()){
             filePath = path.toString();
-            command = "powershell.exe " + filePath;
+            command = "powershell.exe " + filePath + paramsString;
         }else{
             filePath = "./" + path.toString();
-            command = "powershell.exe -File " + filePath;
+            command = "powershell.exe -File " + filePath + paramsString;
         }
 
         String success;
@@ -49,6 +55,22 @@ public class CommonUtils {
         }
 
         return success;
+    }
+
+    private static String buildScriptParams(HashMap<String, Object> params){
+        if(null != params && params.size() > 0){
+            StringBuilder str = new StringBuilder();
+            for(Map.Entry<String, Object> entry : params.entrySet()) {
+                String key = entry.getKey();
+                String value = (String) entry.getValue();
+
+                if(!StringUtils.isNullOrEmpty(key) && !StringUtils.isNullOrEmpty(value)){
+                    str.append(String.format(" -%s %s", key, value));
+                }
+            }
+            return str.toString();
+        }
+        return "";
     }
 
     private static String buildPowerShellResult(InputStream in) throws IOException {
