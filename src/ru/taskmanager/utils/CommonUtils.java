@@ -62,12 +62,17 @@ public class CommonUtils {
             StringBuilder str = new StringBuilder();
             for(Map.Entry<String, Object> entry : params.entrySet()) {
                 String key = entry.getKey();
-                String value = (String) entry.getValue();
+                Object value = entry.getValue();
 
-                if(!StringUtils.isNullOrEmpty(key) && !StringUtils.isNullOrEmpty(value)){
+                if(!StringUtils.isNullOrEmpty(key)){
+                    if(value instanceof String ){
+                        value = String.format("\"%s\"", value);
+                    }
+
                     str.append(String.format(" -%s %s", key, value));
                 }
             }
+
             return str.toString();
         }
         return "";

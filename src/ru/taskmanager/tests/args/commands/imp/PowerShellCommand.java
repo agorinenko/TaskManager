@@ -101,6 +101,7 @@ public class PowerShellCommand {
         assertTrue(result.get(0) instanceof SuccessResult);
         assertTrue(message.length() > 0);
     }
+
     @Test
     public void executePowerShellScript6() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452336", "env:dev" });
