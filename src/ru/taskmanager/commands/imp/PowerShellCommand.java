@@ -16,11 +16,9 @@ import ru.taskmanager.utils.CommonUtils;
 import ru.taskmanager.utils.ListUtils;
 import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
+import javax.json.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -119,8 +117,10 @@ public class PowerShellCommand extends SafetyCommand {
                     String key = entry.getKey();
                     JsonValue value = entry.getValue();
 
-                    if(!StringUtils.isNullOrEmpty(key) && null != value && !StringUtils.isNullOrEmpty(value.toString())){
-                        psParams.put(key, value.toString());
+
+                    if(!StringUtils.isNullOrEmpty(key) && null != value){
+                        Object o = detectValue(value);
+                        psParams.put(key, o);
                     }
                 }
             }finally {
@@ -128,5 +128,27 @@ public class PowerShellCommand extends SafetyCommand {
             }
         }
     }
+
+    private Object detectValue(JsonValue value){
+        JsonValue.ValueType type = value.getValueType();
+
+        if(type == JsonValue.ValueType.NULL){
+            return null;
+        } else if(type == JsonValue.ValueType.ARRAY){
+            throw new NotImplementedException();
+        } else if(type == JsonValue.ValueType.OBJECT){
+            throw new NotImplementedException();
+        }else if(type == JsonValue.ValueType.STRING){
+            return ((JsonString)value).getString();
+        }else if(type == JsonValue.ValueType.NUMBER){
+            throw new NotImplementedException();
+        }else if(type == JsonValue.ValueType.TRUE || type == JsonValue.ValueType.FALSE){
+            return Boolean.valueOf(value.toString());
+        }
+
+        throw new NotImplementedException();
+    }
+
+
 
 }

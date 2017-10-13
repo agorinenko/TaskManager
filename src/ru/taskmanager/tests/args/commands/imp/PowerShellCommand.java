@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -94,10 +95,25 @@ public class PowerShellCommand {
         List<CommandResult> result = executor.execute();
         String message = result.get(0).getMessage();
 
-        System.out.print("executePowerShellScript5---->"+message);
+        System.out.print(message);
 
         assertTrue(result.size() > 0);
         assertTrue(result.get(0) instanceof SuccessResult);
         assertTrue(message.length() > 0);
+    }
+    @Test
+    public void executePowerShellScript6() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+        ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452336", "env:dev" });
+
+        Executor executor = new Executor(manager);
+        List<CommandResult> result = executor.execute();
+        String message = result.get(0).getMessage();
+
+        System.out.print("executePowerShellScript6---->"+message);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0) instanceof SuccessResult);
+        assertTrue(message.length() > 0);
+        //assertEquals("http://dev;dev;dev;dev\agorinenko", message);
     }
 }
