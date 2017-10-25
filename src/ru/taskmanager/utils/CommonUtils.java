@@ -67,11 +67,16 @@ public class CommonUtils {
                 if(!StringUtils.isNullOrEmpty(key)){
                     if(value instanceof String ){
                         value = String.format("\"%s\"", value);
+                        str.append(String.format(" -%s %s", key, value));
                     } else if(value instanceof Boolean){
-                        value = String.format("%s", (Boolean)value ? "$true" : "$false");
+                        //value = String.format("%s", (Boolean)value ? "$true" : "$false");
+
+                        if((Boolean)value) {
+                            str.append(String.format(" -%s", key));
+                        }
                     }
 
-                    str.append(String.format(" -%s %s", key, value));
+
                 }
             }
 
