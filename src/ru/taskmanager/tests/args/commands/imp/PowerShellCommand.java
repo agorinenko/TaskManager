@@ -77,7 +77,7 @@ public class PowerShellCommand {
 
         String result = CommonUtils.executePowerShellScript("20170929113452336_file.ps1", params);
 
-        Assert.assertEquals("http://dev\r\ndev\r\ndev", result);
+        Assert.assertEquals("http://dev;dev;dev;test\\agorinenko;False", result);
     }
 
     @Test

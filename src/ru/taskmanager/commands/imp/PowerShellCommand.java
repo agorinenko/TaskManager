@@ -77,7 +77,9 @@ public class PowerShellCommand extends SafetyCommand {
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
 
                 Path path = localVersion.getLocalPath();
-                sb.append("Execute script:" + path);
+                String process = "Execute script:" + path;
+                sb.append(process);
+                System.out.println(process);
                 StringUtils.appendLineSeparator(sb);
 
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {

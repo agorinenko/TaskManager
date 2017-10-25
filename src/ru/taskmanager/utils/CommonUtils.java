@@ -67,6 +67,8 @@ public class CommonUtils {
                 if(!StringUtils.isNullOrEmpty(key)){
                     if(value instanceof String ){
                         value = String.format("\"%s\"", value);
+                    } else if(value instanceof Boolean){
+                        value = String.format("%s", (Boolean)value ? "$true" : "$false");
                     }
 
                     str.append(String.format(" -%s %s", key, value));
