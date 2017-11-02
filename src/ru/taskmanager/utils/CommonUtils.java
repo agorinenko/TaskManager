@@ -1,29 +1,23 @@
 package ru.taskmanager.utils;
 
 import ru.taskmanager.errors.PowerShellException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by agorinenko on 28.09.2017.
  */
 public class CommonUtils {
-    public static String executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static void executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
         Path path = Paths.get(script);
-        return executePowerShellScript(path, params);
+        executePowerShellScript(path, params);
     }
 
-    public static String executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static void executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
         path = path.normalize();
 
         String filePath;
@@ -37,24 +31,77 @@ public class CommonUtils {
             command = "powershell.exe -File " + filePath + paramsString;
         }
 
-        String success;
-        Process powerShellProcess = Runtime.getRuntime().exec(command);
-
+        //String success;
+        Runtime runtime = Runtime.getRuntime();
+        Process powerShellProcess = runtime.exec(command);
         try{
-            powerShellProcess.getOutputStream().close();
+            Thread errorProcess = new Thread(new ProcessWorker(powerShellProcess.getErrorStream(), System.err));
+            Thread inputProcess = new Thread(new ProcessWorker(powerShellProcess.getInputStream(), System.out));
 
-            String error = buildPowerShellResult(powerShellProcess.getErrorStream());
-            if(!StringUtils.isNullOrEmpty(error)){
-                throw new PowerShellException(error);
+            errorProcess.start();
+            inputProcess.start();
+
+            try {
+                powerShellProcess.waitFor();
+                errorProcess.join();
+                inputProcess.join();
+            } catch (InterruptedException e) {
+                throw new PowerShellException("InterruptedException");
             }
-
-            success = buildPowerShellResult(powerShellProcess.getInputStream());
-            success = StringUtils.trimEnd(success, System.lineSeparator());
         }finally {
             powerShellProcess.destroy();
         }
 
-        return success;
+//        ProcessWorker worker = new ProcessWorker(powerShellProcess);
+//        worker.start();
+//        try {
+//            worker.join(10000);
+//            if (null == worker.getExit()) {
+//                throw new PowerShellException("Timeout exception 10sec");
+//            }
+//        } catch(InterruptedException ex) {
+//            worker.interrupt();
+//            Thread.currentThread().interrupt();
+//            throw new PowerShellException("InterruptedException");
+//        } finally {
+//            powerShellProcess.destroy();
+//        }
+
+       // powerShellProcess.getOutputStream().flush();
+        //powerShellProcess.getOutputStream().close();
+//        try {
+//            powerShellProcess.waitFor();
+//        } catch (InterruptedException e) {
+//            throw new PowerShellException("Wait error");
+//        }
+
+//        try{
+//            String error="";
+//            InputStream errorStream = powerShellProcess.getErrorStream();
+//            try{
+//                error = buildPowerShellResult(errorStream);
+//            }finally {
+//                errorStream.close();
+//            }
+//            if(!StringUtils.isNullOrEmpty(error)){
+//                throw new PowerShellException(error);
+//            }
+//
+//            InputStream inputStream = powerShellProcess.getInputStream();
+//            try{
+//                success = buildPowerShellResult(inputStream);
+//            }finally {
+//                inputStream.close();
+//            }
+//
+//            success = StringUtils.trimEnd(success, System.lineSeparator());
+//
+//        }finally {
+//            powerShellProcess.destroy();
+//        }
+
+        //success = "Success";
+        //return success;
     }
 
     private static String buildScriptParams(HashMap<String, Object> params){
@@ -85,20 +132,37 @@ public class CommonUtils {
         return "";
     }
 
-    private static String buildPowerShellResult(InputStream in) throws IOException {
-        StringBuilder str = new StringBuilder();
-        BufferedReader stdout = new BufferedReader(new InputStreamReader(in));
-        try {
-            String line;
-            while ((line = stdout.readLine()) != null) {
-                str.append(line);
-
-                StringUtils.appendLineSeparator(str);
-            }
-        } finally {
-            stdout.close();
-        }
-
-        return str.toString();
-    }
+//    private static String buildPowerShellResult(InputStream in) throws IOException {
+//
+//        StringBuilder str = new StringBuilder();
+//        for (int i = 0; i < in.available(); i++) {
+//            Reader r = new InputStreamReader(in);
+//            char[] buffer = new char[1024];
+//            while (r.read(buffer) > 0){
+//                str.append(buffer, 0, buffer.length);
+//            }
+//        }
+//
+//        return str.toString();
+//    }
+//    private static String buildPowerShellResult(InputStream in) throws IOException {
+//        int i = in.available();
+//        if(0==i){
+//            return "";
+//        }
+//        StringBuilder str = new StringBuilder();
+//        BufferedReader stdout = new BufferedReader(new InputStreamReader(in));
+//        try {
+//            String line;
+//            while ((line = stdout.readLine()) != null) {
+//                str.append(line);
+//
+//                StringUtils.appendLineSeparator(str);
+//            }
+//        } finally {
+//            stdout.close();
+//        }
+//
+//        return str.toString();
+//    }
 }

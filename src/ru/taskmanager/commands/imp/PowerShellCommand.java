@@ -37,8 +37,6 @@ public class PowerShellCommand extends SafetyCommand {
         SuccessResult result = new SuccessResult();
 
         HashMap<String, Object> psParams = ListUtils.convertToHashMap(params);
-
-
         LocalVersionManager manager = new LocalVersionManager();
 
         KeyValueParam out = ListUtils.getKeyValueParam(params, "out");
@@ -73,18 +71,18 @@ public class PowerShellCommand extends SafetyCommand {
             List<Version> localVersions = manager.select(".ps1");
             localVersions.sort(new VersionComparator());
             for (int i = 0; i < localVersions.size(); i++) {
-                String psResult;
+                String psResult = "";
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
 
                 Path path = localVersion.getLocalPath();
-                String process = "Execute script:" + path;
-                sb.append(process);
-                System.out.println(process);
-                StringUtils.appendLineSeparator(sb);
+                //String process = "Execute script:" + path;
+                //sb.append(process);
+                //System.out.println(process);
+                //StringUtils.appendLineSeparator(sb);
 
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
                     try {
-                        psResult = CommonUtils.executePowerShellScript(path, psParams);
+                        CommonUtils.executePowerShellScript(path, psParams);
                     } catch (PowerShellException e) {
                         psResult = e.getMessage();
                     }
