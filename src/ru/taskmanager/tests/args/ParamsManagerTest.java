@@ -1,4 +1,4 @@
-package ru.taskmanager.tests.args;
+package args;
 
 import org.junit.Test;
 import ru.taskmanager.args.ParamsManager;
@@ -63,6 +63,40 @@ public class ParamsManagerTest {
 
         assertEquals(p1.getKey(), "p1");
         assertEquals(p2.getKey(), "p2");
+    }
+
+    @Test
+    public void getKeyValueParam() throws Exception {
+        ParamsManager manager = new ParamsManager(new String[]{ "c1", "c2", "c3", "p1:1", "p2:v2" });
+
+        KeyValueParam p1 = manager.getKeyValueParam("p1");
+        KeyValueParam p2 = manager.getKeyValueParam("p2");
+        assertTrue(p1 instanceof IntegerParam);
+        assertTrue(p2 instanceof StringParam);
+
+        assertEquals(p1.getValue(), 1);
+        assertEquals(p2.getValue(), "v2");
+    }
+
+    @Test
+    public void mergeKeyValueParams() throws Exception {
+        ParamsManager manager = new ParamsManager(new String[]{ "c1", "c2", "c3", "p1:1", "p2:v2", "p4:2", "env:dev" });
+
+        assertEquals(manager.envPresent(), true);
+
+        KeyValueParam p1 = manager.getKeyValueParam("p1");
+        KeyValueParam p2 = manager.getKeyValueParam("p2");
+        KeyValueParam p3 = manager.getKeyValueParam("p3");
+        KeyValueParam p4 = manager.getKeyValueParam("p4");
+        assertTrue(p1 instanceof IntegerParam);
+        assertTrue(p2 instanceof StringParam);
+        assertTrue(p3 instanceof StringParam);
+        assertTrue(p4 instanceof IntegerParam);
+
+        assertEquals(p1.getValue(), 1);
+        assertEquals(p2.getValue(), "v2");
+        assertEquals(p3.getValue(), "p3_dev");
+        assertEquals(p4.getValue(), 2);
     }
 
     @Test

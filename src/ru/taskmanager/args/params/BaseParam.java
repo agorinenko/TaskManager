@@ -8,6 +8,11 @@ public abstract class BaseParam {
     protected String key;
     protected String stringValue;
 
+    public BaseParam(String key, String stringValue){
+        this.key = key;
+        this.stringValue = stringValue;
+    }
+
     public BaseParam(String arg) throws StringIsEmptyException, CorruptedParamException {
         arg = arg.trim();
         checkString(arg);

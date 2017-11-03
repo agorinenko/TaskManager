@@ -41,25 +41,13 @@ public class PowerShellCommand extends SafetyCommand {
 
         KeyValueParam out = ListUtils.getKeyValueParam(params, "out");
         if(null != out){
-            String outValue = null;
+            String outValue;
             try {
                 outValue = out.getStringValue();
                 if(!StringUtils.isNullOrEmpty(outValue)){
                     manager.setBaseDir(outValue);
                 }
             } catch (StringIsEmptyException e) {}
-        }
-
-        KeyValueParam env = ListUtils.getKeyValueParam(params, "env");
-        if(null != env){
-            String envValue = null;
-            try {
-                envValue = env.getStringValue();
-                if(!StringUtils.isNullOrEmpty(envValue)){
-                    extendPowerShellParametersByEnv(psParams, envValue);
-                }
-            } catch (StringIsEmptyException e) {}
-            catch (FileNotFoundException e) {}
         }
 
         KeyValueParam versionParam = ListUtils.getKeyValueParam(params, "v");
@@ -75,10 +63,6 @@ public class PowerShellCommand extends SafetyCommand {
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
 
                 Path path = localVersion.getLocalPath();
-                //String process = "Execute script:" + path;
-                //sb.append(process);
-                //System.out.println(process);
-                //StringUtils.appendLineSeparator(sb);
 
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
                     try {
@@ -101,54 +85,4 @@ public class PowerShellCommand extends SafetyCommand {
         result.setMessage(resultMessage);
         return result;
     }
-
-    private void extendPowerShellParametersByEnv(HashMap<String, Object> psParams, String env) throws FileNotFoundException {
-        Path path = Paths.get("env.json");
-        if(Files.exists(path)){
-
-            JsonReader jsonReader = Json.createReader(new FileInputStream(path.toFile().getAbsoluteFile()));
-            try{
-                JsonObject json = jsonReader.readObject();
-                JsonObject envObject = json.getJsonObject(env);
-
-                Set<Map.Entry<String, JsonValue>> set = envObject.entrySet();
-
-                for(Map.Entry<String, JsonValue> entry : set) {
-                    String key = entry.getKey();
-                    JsonValue value = entry.getValue();
-
-
-                    if(!StringUtils.isNullOrEmpty(key) && null != value){
-                        Object o = detectValue(value);
-                        psParams.put(key, o);
-                    }
-                }
-            }finally {
-                jsonReader.close();
-            }
-        }
-    }
-
-    private Object detectValue(JsonValue value){
-        JsonValue.ValueType type = value.getValueType();
-
-        if(type == JsonValue.ValueType.NULL){
-            return null;
-        } else if(type == JsonValue.ValueType.ARRAY){
-            throw new NotImplementedException();
-        } else if(type == JsonValue.ValueType.OBJECT){
-            throw new NotImplementedException();
-        }else if(type == JsonValue.ValueType.STRING){
-            return ((JsonString)value).getString();
-        }else if(type == JsonValue.ValueType.NUMBER){
-            throw new NotImplementedException();
-        }else if(type == JsonValue.ValueType.TRUE || type == JsonValue.ValueType.FALSE){
-            return Boolean.valueOf(value.toString());
-        }
-
-        throw new NotImplementedException();
-    }
-
-
-
 }

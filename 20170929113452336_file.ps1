@@ -1,7 +1,7 @@
 Param(
-  [string]$WebApplication = "http://portal/",
-  [string]$test = "test",
-  [string]$owner = "test\agorinenko",
+  [string]$WebApplication = "",
+  [string]$test = "",
+  [string]$owner = "",
   [string]$ENV,
   [switch]$BooleanParam
 )

@@ -9,6 +9,10 @@ public class IntegerParam extends KeyValueParam {
         super(arg);
     }
 
+    public IntegerParam(String key, String stringValue) {
+        super(key, stringValue);
+    }
+
     @Override
     public Object getValue() {
         return Integer.parseInt(stringValue);

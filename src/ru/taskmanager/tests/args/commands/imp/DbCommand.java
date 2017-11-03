@@ -1,5 +1,6 @@
-package ru.taskmanager.tests.args.commands.imp;
+package args.commands.imp;
 
+import args.TestUtils;
 import org.junit.Test;
 import ru.taskmanager.api.Version;
 import ru.taskmanager.args.ParamsManager;
@@ -10,14 +11,7 @@ import ru.taskmanager.errors.ConfigurationException;
 import ru.taskmanager.errors.CorruptedParamException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
-import ru.taskmanager.tests.args.TestUtils;
-import ru.taskmanager.utils.StringUtils;
-
-import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 import static org.junit.Assert.assertTrue;

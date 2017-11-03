@@ -1,4 +1,4 @@
-package ru.taskmanager.tests.args;
+package args;
 
 import ru.taskmanager.api.Version;
 import ru.taskmanager.args.ParamsManager;
@@ -50,7 +50,8 @@ public class TestUtils {
         return versionTimestamp;
     }
 
-    public static void execPushCommand(String vParameter, String outParameter) throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public static void execPushCommand(String vParameter, String outParameter)
+            throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:push", vParameter, outParameter, "c:test comment" });
 
         Executor executor = new Executor(manager);

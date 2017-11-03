@@ -24,4 +24,18 @@ public class ParamsFactory {
             return new CommandParam(arg);
         }
     }
+
+    public KeyValueParam createKeyValueParam(String key, String stringValue) throws StringIsEmptyException, CorruptedParamException {
+        KeyValueParam result;
+        if(IntegerParam.isIntegerParam(stringValue)){
+            result = new IntegerParam(key, stringValue);
+        } else if(IntegerParam.isBooleanParam(stringValue)){
+            result = new BooleanParam(key, stringValue);
+        }
+        else {
+            result = new StringParam(key, stringValue);
+        }
+
+        return result;
+    }
 }

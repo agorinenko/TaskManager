@@ -1,4 +1,4 @@
-package ru.taskmanager.tests.args.params;
+package args.params;
 
 import org.junit.Test;
 import ru.taskmanager.args.params.BaseParam;

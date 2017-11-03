@@ -9,6 +9,10 @@ public class BooleanParam extends KeyValueParam {
         super(arg);
     }
 
+    public BooleanParam(String key, String stringValue) {
+        super(key, stringValue);
+    }
+
     @Override
     public Object getValue() {
         return Boolean.parseBoolean(stringValue);

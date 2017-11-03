@@ -6,6 +6,10 @@ import ru.taskmanager.errors.StringIsEmptyException;
 public abstract class KeyValueParam extends BaseParam {
     private static final String argSeparator = ":";
 
+    public KeyValueParam(String key, String stringValue) {
+        super(key, stringValue);
+    }
+
     public static boolean isKeyValueParam(String arg){
         int separatorIndex = arg.indexOf(argSeparator);
 
@@ -30,6 +34,10 @@ public abstract class KeyValueParam extends BaseParam {
         super(arg);
     }
 
+    private void setStringValue(String value){
+        this.stringValue = value;
+    }
+
     @Override
     protected void parseArg(String arg) throws CorruptedParamException, StringIsEmptyException {
         int separatorIndex = arg.indexOf(argSeparator);
@@ -40,7 +48,7 @@ public abstract class KeyValueParam extends BaseParam {
         key = arg.substring(0, separatorIndex);
         key = sanitizeString(key);
 
-        stringValue = arg.substring(separatorIndex + 1);
-        stringValue = sanitizeString(stringValue);
+        setStringValue(arg.substring(separatorIndex + 1));
+        setStringValue(sanitizeString(stringValue));
     }
 }

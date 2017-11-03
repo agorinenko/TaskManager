@@ -8,6 +8,10 @@ public class StringParam extends KeyValueParam {
         super(arg);
     }
 
+    public StringParam(String key, String stringValue) {
+        super(key, stringValue);
+    }
+
     @Override
     public Object getValue() {
         return stringValue;
