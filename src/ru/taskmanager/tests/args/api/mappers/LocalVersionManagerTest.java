@@ -1,10 +1,10 @@
-package ru.taskmanager.tests.args.api.mappers;
+package args.api.mappers;
 
+import args.TestUtils;
 import org.junit.Test;
 import ru.taskmanager.api.Version;
 import ru.taskmanager.api.mappers.LocalVersionManager;
 import ru.taskmanager.errors.CommandException;
-import ru.taskmanager.tests.args.TestUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +30,7 @@ public class LocalVersionManagerTest {
     public void select() throws IOException {
         LocalVersionManager manager = new LocalVersionManager();
 
-        Path testMigration = TestUtils.generateTestMigration(null);
+        Path testMigration = args.TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
 
         List<Version> list = manager.select();
