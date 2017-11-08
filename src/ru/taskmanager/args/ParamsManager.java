@@ -180,7 +180,12 @@ public class ParamsManager {
         }else if(type == JsonValue.ValueType.STRING){
             return ((JsonString)value).getString();
         }else if(type == JsonValue.ValueType.NUMBER){
-            throw new NotImplementedException();
+            boolean isIntegral = ((JsonNumber)value).isIntegral();
+            if(isIntegral){
+                return ((JsonNumber)value).longValue();
+            }
+
+            return ((JsonNumber)value).doubleValue();
         }else if(type == JsonValue.ValueType.TRUE || type == JsonValue.ValueType.FALSE){
             return Boolean.valueOf(value.toString());
         }
