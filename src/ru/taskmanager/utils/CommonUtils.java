@@ -112,18 +112,14 @@ public class CommonUtils {
                 Object value = entry.getValue();
 
                 if(!StringUtils.isNullOrEmpty(key)){
-                    if(value instanceof String ){
+                    if(value instanceof String || value instanceof Integer){
                         value = String.format("\"%s\"", value);
                         str.append(String.format(" -%s %s", key, value));
                     } else if(value instanceof Boolean){
-                        //value = String.format("%s", (Boolean)value ? "$true" : "$false");
-
                         if((Boolean)value) {
                             str.append(String.format(" -%s", key));
                         }
                     }
-
-
                 }
             }
 
