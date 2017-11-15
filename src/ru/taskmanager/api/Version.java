@@ -32,7 +32,7 @@ public class Version extends Row {
             setVersionTimestamp(null);
         }
         setName(name);
-        setCreatedBy(SettingsUtils.getSettingsValue("author"));
+        setCreatedBy((String) SettingsUtils.getSettingsValue("author"));
     }
 
     public String getDescription() {

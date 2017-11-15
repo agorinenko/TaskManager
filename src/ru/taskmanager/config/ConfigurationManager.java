@@ -1,44 +1,36 @@
 package ru.taskmanager.config;
 
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import ru.taskmanager.errors.ConfigurationException;
 import ru.taskmanager.utils.SettingsUtils;
-import ru.taskmanager.utils.StringUtils;
-import ru.taskmanager.utils.XmlUtils;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Created by agorinenko on 15.11.2017.
+ */
 public abstract class ConfigurationManager {
-    private XmlConfiguration xmlConfiguration;
+    protected Configuration configuration;
+    protected boolean configurationIsLoad;
 
-    protected void load() throws ConfigurationException {
-        String appConfig = getAppConfig();
-        Document xDoc;
-        try {
-            xDoc = XmlUtils.getXmlDocument(appConfig);
-        } catch (ParserConfigurationException e) {
-            throw new ConfigurationException("Parser configuration exception:" + e.getMessage());
-        } catch (IOException e) {
-            throw new ConfigurationException("IO exception:" + e.getMessage());
-        } catch (SAXException e) {
-            throw new ConfigurationException("SAX exception:" + e.getMessage());
+    protected ConfigurationManager() throws ConfigurationException {
+        configuration = createConfiguration();
+
+        if(!configurationIsLoad) {
+            configuration.load();
+
+            configurationIsLoad = true;
         }
-
-        xmlConfiguration = new XmlConfiguration(xDoc);
-        xmlConfiguration.load();
     }
 
+    protected abstract Configuration createConfiguration() throws ConfigurationException;
     protected abstract String getAppConfig();
 
     protected String getBaseDir(){
         return SettingsUtils.getBaseSettingsDir();
     }
 
-    public Map<String, String> getEntityByKey(String key) throws ConfigurationException {
-        Map<String, String> item = (Map<String, String>)xmlConfiguration.getEntityByKey(key);
+    public Map<String, Object> getEntityByKey(String key) throws ConfigurationException {
+        Map<String, Object> item = (Map<String, Object>) configuration.getEntityByKey(key);
 
         if(null == item){
             throw new ConfigurationException("Item " + key + " not found");

@@ -1,6 +1,8 @@
 package ru.taskmanager.utils;
 
 import ru.taskmanager.Main;
+import ru.taskmanager.api.EnvironmentParameter;
+import ru.taskmanager.config.EnvironmentVariables;
 import ru.taskmanager.config.Settings;
 import ru.taskmanager.errors.ConfigurationException;
 
@@ -33,7 +35,7 @@ public class SettingsUtils {
     }
 
     public static String getBaseScriptDir(){
-        String dbFolder = SettingsUtils.getSettingsValue("db.folder");
+        String dbFolder = (String) SettingsUtils.getSettingsValue("db.folder");
         dbFolder = StringUtils.trimEnd(dbFolder, "//");
 
         Path path = Paths.get(getBaseSettingsDir(), "assets", dbFolder);
@@ -47,29 +49,51 @@ public class SettingsUtils {
     }
 
     public static String getOutScriptDir(){
-        String outFolder = SettingsUtils.getSettingsValue("out");
+        String outFolder = (String) SettingsUtils.getSettingsValue("out");
         outFolder = StringUtils.trimEnd(outFolder, "//");
 
         Path path = Paths.get(outFolder);
         return path.toString();
     }
 
-    public static String getSettingsOrDefaultValue(String key){
-        String value = getSettingsValue(key);
+    public static Object getSettingsOrDefaultValue(String key){
+        Object value = getSettingsValue(key);
 
-        if(StringUtils.isNullOrEmpty(value)){
+        if(null == value){
             value = getSettingsValue(key + ".default");
         }
 
         return value;
     }
-    public static String getSettingsValue(String key){
-        Map<String, String> items = null;
+    public static Object getSettingsValue(String key){
+        Map<String, Object> items;
+        Object value = null;
         try {
-            items = Settings.getInstance().getEntityByKey(key);
+            EnvironmentParameter env = EnvironmentVariables.getInstance().getEnvironmentParameter();
+            if(null != env) {
+                items = EnvironmentVariables.getInstance().getEntityByKey(env.getEnv());
+
+                if (items.containsKey(key)) {
+                    value = null != items ? items.get(key) : null;
+                } else {
+                    value = getSettings(key);
+                }
+            } else {
+                value = getSettings(key);
+            }
         } catch (ConfigurationException e) {
         }
-        String value = null != items ? StringUtils.trim(items.get("value"), " ") : "";
+
+        return value;
+    }
+
+    public static Object getSettings(String key){
+        Object value = null;
+        Map<String, Object> items;
+        try {
+            items = Settings.getInstance().getEntityByKey(key);
+            value = null != items ? items.get("value") : null;
+        } catch (ConfigurationException ex) {}
 
         return value;
     }

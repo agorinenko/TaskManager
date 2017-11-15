@@ -21,16 +21,9 @@ public class StatementUtils {
         return getStatementsByFullFilePath(scriptPath);
     }
 
-//    public static List<String> getStatements(String baseScriptDir, String fileName) {
-//        fileName = StringUtils.trimStart(fileName, "//");
-//        String fullFilePath =  baseScriptDir + "/" + fileName;
-//
-//        return getStatementsByFullFilePath(fullFilePath);
-//    }
-
     public static List<String> getStatementsByFullFilePath(String fullFilePath) {
         List<String> statements;
-        String separator = SettingsUtils.getSettingsValue("db.separator.default");
+        String separator = (String) SettingsUtils.getSettingsValue("db.separator.default");
         try {
             StatementQueueBuilder builder = new StatementQueueBuilder(fullFilePath, separator);
             builder.build();

@@ -147,6 +147,8 @@ public class ParamsManager {
                 Set<Map.Entry<String, JsonValue>> set = envObject.entrySet();
 
                 for (Map.Entry<String, JsonValue> entry : set) {
+                    Map<String, String> map = new HashMap<>();
+
                     String key = entry.getKey();
                     if (!StringUtils.isNullOrEmpty(key) && !keyExist(key)) {
                         JsonValue value = entry.getValue();

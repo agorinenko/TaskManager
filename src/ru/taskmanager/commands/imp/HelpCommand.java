@@ -18,7 +18,7 @@ public class HelpCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
         SuccessResult result = new SuccessResult();
-        String helpText = SettingsUtils.getSettingsValue("help");
+        String helpText = (String) SettingsUtils.getSettingsValue("help");
         helpText = StringUtils.replaceAllSpecialConstants(helpText);
         result.setMessage(helpText);
         return result;

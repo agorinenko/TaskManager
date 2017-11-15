@@ -16,8 +16,8 @@ public final class CommandMapper {
 
     public Command initCommandObject() throws ClassNotFoundException, StringIsEmptyException, IllegalAccessException, InstantiationException, ConfigurationException {
         String key = param.getKey();
-        Map<String, String> map = Commands.getInstance().getEntityByKey(key);
-        String className = map.get("class");
+        Map<String, Object> map = Commands.getInstance().getEntityByKey(key);
+        String className = (String)map.get("class");
 
         Class commandClass = Class.forName(className);
         Object commandInstance = commandClass.newInstance();

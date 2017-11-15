@@ -22,16 +22,19 @@ public class ConnectionManager {
     private String pwd;
     private String dbName;
 
-    public ConnectionManager() throws ConnectionManagerException {
-        String driver = SettingsUtils.getSettingsOrDefaultValue("db.driver");
+    private String driver;
+    private String driverName;
+
+    private ConnectionManager() throws ConnectionManagerException {
+        driver = (String) SettingsUtils.getSettingsOrDefaultValue("db.driver");
         driver = StringUtils.replaceAllSpecialConstants(driver);
-        String driverName = SettingsUtils.getSettingsValue("db.driver.name");
+        driverName = (String) SettingsUtils.getSettingsValue("db.driver.name");
 
-        url = SettingsUtils.getSettingsValue("db.url");
-        user = SettingsUtils.getSettingsValue("db.user");
-        pwd = SettingsUtils.getSettingsValue("db.pwd");
+        url = (String) SettingsUtils.getSettingsValue("db.url");
+        user = (String) SettingsUtils.getSettingsValue("db.user");
+        pwd = (String) SettingsUtils.getSettingsValue("db.pwd");
 
-        dbName = SettingsUtils.getSettingsValue("db.name");
+        dbName = (String) SettingsUtils.getSettingsValue("db.name");
 
         urlWithDb = formatUrl();
 
@@ -84,15 +87,14 @@ public class ConnectionManager {
     }
 
     private String formatUrl() throws ConnectionManagerException {
-        String driver = SettingsUtils.getSettingsValue("db.driver.name");
-        if(driver.equalsIgnoreCase("org.postgresql.Driver")){
+        if(driverName.equalsIgnoreCase("org.postgresql.Driver")){
             String _url = StringUtils.trimEnd(url, "//");
             return String.format("%1$s/%2$s", _url, dbName);
-        } else if(driver.equalsIgnoreCase("com.microsoft.sqlserver.jdbc.SQLServerDriver")){
+        } else if(driverName.equalsIgnoreCase("com.microsoft.sqlserver.jdbc.SQLServerDriver")){
             String _url = StringUtils.trimEnd(url, ";");
             return String.format("%1$s;databaseName=%2$s;", _url, dbName);
         }
 
-        throw new ConnectionManagerException(String.format("Driver %1$s doesn't support", driver));
+        throw new ConnectionManagerException(String.format("Driver %1$s doesn't support", driverName));
     }
 }

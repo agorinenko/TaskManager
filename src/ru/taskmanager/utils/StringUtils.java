@@ -43,7 +43,7 @@ public class StringUtils {
     }
 
     public static String replaceAllDbConstants(String str){
-        str = str.replaceAll("DATA_BASE_NAME",  SettingsUtils.getSettingsValue("db.name"));
+        str = str.replaceAll("DATA_BASE_NAME", (String) SettingsUtils.getSettingsValue("db.name"));
 
         return str;
     }

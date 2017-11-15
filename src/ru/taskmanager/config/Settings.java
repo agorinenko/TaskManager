@@ -2,16 +2,16 @@ package ru.taskmanager.config;
 
 import ru.taskmanager.errors.ConfigurationException;
 
-public class Settings extends ConfigurationManager {
+public class Settings extends XmlConfigurationManager {
     private static volatile Settings instance;
+
     private Settings() throws ConfigurationException {
-        load();
     }
 
     public static Settings getInstance() throws ConfigurationException {
         Settings localInstance = instance;
         if (localInstance == null) {
-            synchronized (ConfigurationManager.class) {
+            synchronized (Settings.class) {
                 localInstance = instance;
                 if (localInstance == null) {
                     instance = localInstance = new Settings();

@@ -85,6 +85,14 @@ public class DbCommand {
     }
 
     @Test
+    public void push2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+        Path testMigration = TestUtils.generateTestMigration(null);
+        assertTrue(null != testMigration);
+
+        TestUtils.execPushCommand(new String[]{ "env:dev" });
+    }
+
+    @Test
     public void push_target_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
