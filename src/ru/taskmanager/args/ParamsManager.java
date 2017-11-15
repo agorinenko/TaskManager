@@ -1,5 +1,7 @@
 package ru.taskmanager.args;
 
+import ru.taskmanager.config.EnvironmentVariables;
+import ru.taskmanager.errors.ConfigurationException;
 import ru.taskmanager.errors.CorruptedParamException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
@@ -133,65 +135,23 @@ public class ParamsManager {
             } catch (StringIsEmptyException e) {}
             catch (FileNotFoundException e) {}
             catch (CorruptedParamException e) {}
+            catch (ConfigurationException e) {}
         }
     }
 
-    private void extendParametersByEnv(String env) throws FileNotFoundException, RequiredParamException, StringIsEmptyException, CorruptedParamException {
-        Path path = Paths.get("env.json");
-        if (Files.exists(path)) {
-            JsonReader jsonReader = Json.createReader(new FileInputStream(path.toFile().getAbsoluteFile()));
-            try {
-                JsonObject json = jsonReader.readObject();
-                JsonObject envObject = json.getJsonObject(env);
-
-                Set<Map.Entry<String, JsonValue>> set = envObject.entrySet();
-
-                for (Map.Entry<String, JsonValue> entry : set) {
-                    Map<String, String> map = new HashMap<>();
-
-                    String key = entry.getKey();
-                    if (!StringUtils.isNullOrEmpty(key) && !keyExist(key)) {
-                        JsonValue value = entry.getValue();
-                        Object realValue = detectValue(value);
-                        if (null != realValue) {
-                            String stringValue = realValue.toString();
-                            keyValueParams.add(factory.createKeyValueParam(key, stringValue));
-                            keys.add(key);
-                        }
-                    }
+    private void extendParametersByEnv(String env) throws FileNotFoundException, RequiredParamException, StringIsEmptyException, CorruptedParamException, ConfigurationException {
+        Map<String, Object> set = EnvironmentVariables.getInstance().getEntityByKey(env);
+        for (Map.Entry<String, Object> entry : set.entrySet()) {
+            String key = entry.getKey();
+            if (!StringUtils.isNullOrEmpty(key) && !keyExist(key)) {
+                Object realValue = entry.getValue();
+                if (null != realValue) {
+                    String stringValue = realValue.toString();
+                    keyValueParams.add(factory.createKeyValueParam(key, stringValue));
+                    keys.add(key);
                 }
-            } finally {
-                jsonReader.close();
             }
         }
     }
 
-    private Object detectValue(JsonValue value){
-        if(null == value){
-            return null;
-        }
-
-        JsonValue.ValueType type = value.getValueType();
-
-        if(type == JsonValue.ValueType.NULL){
-            return null;
-        } else if(type == JsonValue.ValueType.ARRAY){
-            throw new NotImplementedException();
-        } else if(type == JsonValue.ValueType.OBJECT){
-            throw new NotImplementedException();
-        }else if(type == JsonValue.ValueType.STRING){
-            return ((JsonString)value).getString();
-        }else if(type == JsonValue.ValueType.NUMBER){
-            boolean isIntegral = ((JsonNumber)value).isIntegral();
-            if(isIntegral){
-                return ((JsonNumber)value).longValue();
-            }
-
-            return ((JsonNumber)value).doubleValue();
-        }else if(type == JsonValue.ValueType.TRUE || type == JsonValue.ValueType.FALSE){
-            return Boolean.valueOf(value.toString());
-        }
-
-        throw new NotImplementedException();
-    }
 }
