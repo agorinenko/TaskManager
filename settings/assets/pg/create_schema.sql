@@ -68,7 +68,7 @@ DECLARE
 BEGIN
   UPDATE ver.version_set SET
   DELETED_AT = CURRENT_TIMESTAMP
-  WHERE version = _version;
+  WHERE version = _version AND DELETED_AT IS NULL;
 
   GET DIAGNOSTICS _ret = ROW_COUNT;
 

@@ -84,7 +84,7 @@ CREATE PROCEDURE ver.DELETE_VERSION(
 
     UPDATE ver.version_set SET
       DELETED_AT = CURRENT_TIMESTAMP
-    WHERE version = @_version;
+    WHERE version = @_version AND DELETED_AT IS NULL;
 
     SET @_ret = @@ROWCOUNT;
 
