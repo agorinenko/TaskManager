@@ -14,7 +14,12 @@ public class Main {
 
             Executor executor = new Executor(manager);
             List<CommandResult> result = executor.execute();
-            String message = result.get(0).getMessage();
+            String message;
+            if(result.size()>0) {
+                message = result.get(0).getMessage();
+            } else {
+                message = "No results";
+            }
 
             if(null != message) {
                 System.out.print(message);
