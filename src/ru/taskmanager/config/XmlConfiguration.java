@@ -8,6 +8,7 @@ import ru.taskmanager.utils.XmlUtils;
 import javax.xml.xpath.XPathExpressionException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class XmlConfiguration implements Configuration {
@@ -22,6 +23,16 @@ public class XmlConfiguration implements Configuration {
     @Override
     public Object getEntityByKey(String key) {
         return dictionary.get(key);
+    }
+
+    @Override
+    public Set<String> getKeys() {
+        return dictionary.keySet();
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return dictionary.containsKey(key);
     }
 
     @Override

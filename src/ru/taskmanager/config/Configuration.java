@@ -2,6 +2,8 @@ package ru.taskmanager.config;
 
 import ru.taskmanager.errors.ConfigurationException;
 
+import java.util.Set;
+
 public interface Configuration {
 
     /**
@@ -10,6 +12,10 @@ public interface Configuration {
      * @return значение
      */
     Object getEntityByKey(String key);
+
+    Set<String> getKeys();
+
+    boolean containsKey(String key);
 
     /**
      * Загрузка конфигурации

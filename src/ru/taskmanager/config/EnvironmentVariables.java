@@ -7,7 +7,7 @@ import ru.taskmanager.errors.ConfigurationException;
 /**
  * Created by agorinenko on 15.11.2017.
  */
-public class EnvironmentVariables extends JsonConfigurationManager {
+public class EnvironmentVariables extends EnvJsonConfigurationManager {
     private static volatile EnvironmentVariables instance;
 
     private EnvironmentVariables() throws ConfigurationException {
