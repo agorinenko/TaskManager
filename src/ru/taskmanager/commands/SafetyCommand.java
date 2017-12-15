@@ -38,4 +38,16 @@ public abstract class SafetyCommand implements Command {
             return new ErrorResult(ex);
         }
     }
+
+    protected String GetStringParam(List<KeyValueParam> params, String key){
+        KeyValueParam param = ListUtils.getKeyValueParam(params, key);
+        String val = "";
+        if(null != param){
+            try {
+                val = param.getStringValue();
+            } catch (StringIsEmptyException e) {}
+        }
+
+        return val;
+    }
 }

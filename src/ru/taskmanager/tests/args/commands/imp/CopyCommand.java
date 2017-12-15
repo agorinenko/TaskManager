@@ -14,10 +14,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
-public class PlanCommand {
+public class CopyCommand {
     @Test
-    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
-        ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan" });
+    public void init() throws StringIsEmptyException, RequiredParamException, CorruptedParamException, ClassNotFoundException, InstantiationException, ConfigurationException, IllegalAccessException {
+        ParamsManager manager = new ParamsManager(new String[]{ "copy", "from:C:\\test", "to:\\\\172.26.72.233\\install\\release01.01" });
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();

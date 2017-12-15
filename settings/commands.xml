@@ -9,4 +9,5 @@
     <setting key="ps" class="ru.taskmanager.commands.imp.PowerShellCommand" />
     <setting key="plan" class="ru.taskmanager.commands.imp.PlanCommand" />
     <setting key="p" class="ru.taskmanager.commands.imp.PlanCommand" />
+    <setting key="copy" class="ru.taskmanager.commands.imp.CopyCommand" />
 </config>
