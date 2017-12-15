@@ -6,6 +6,7 @@ import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.ConfigurationException;
 import ru.taskmanager.errors.RequiredParamException;
 import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.output.Printer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,11 @@ public final class Executor {
         };
 
         return result;
+    }
+
+    public void executeAndPrint(Printer printer) throws StringIsEmptyException, InstantiationException, ClassNotFoundException, IllegalAccessException, ConfigurationException, RequiredParamException {
+        List<CommandResult> result = execute();
+        printer.print(result);
     }
 
     private CommandResult executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {

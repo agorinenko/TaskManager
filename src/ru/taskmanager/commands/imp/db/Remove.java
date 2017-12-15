@@ -8,6 +8,7 @@ import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StatementUtils;
+import ru.taskmanager.utils.StringUtils;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Remove  extends SafetyCommand {
 
         resultMessage = "The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
 
-        result.setMessage(resultMessage);
+        result.setMessage(resultMessage + System.lineSeparator());
         return result;
     }
 }

@@ -1,9 +1,4 @@
-Param(
-  [string]$WebApplication = "",
-  [string]$test = "",
-  [string]$owner = "",
-  [string]$ENV,
-  [switch]$BooleanParam,
-  [System.Int32]$language = -1
-)
-Write-Host "$language"
+#[Console]::OutputEncoding = [Text.UTF8Encoding]::UTF8
+$OutputEncoding = [Console]::OutputEncoding
+Write-Host $OutputEncoding
+Write-Host "Привет, я пишу тебе с приветом"

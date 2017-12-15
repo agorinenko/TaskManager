@@ -15,8 +15,22 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 
 public class PlanCommand {
+//    @Test
+//    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+//        ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan" });
+//
+//        Executor executor = new Executor(manager);
+//        List<CommandResult> result = executor.execute();
+//        String message = result.get(0).getMessage();
+//
+//        System.out.print(message);
+//
+//        assertTrue(result.size() > 0);
+//        assertTrue(result.get(0) instanceof SuccessResult);
+//        assertTrue(message.length() > 0);
+//    }
     @Test
-    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void init2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
         ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan" });
 
         Executor executor = new Executor(manager);

@@ -35,7 +35,7 @@ public class Init extends SafetyCommand {
 
         resultMessage = "The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
 
-        result.setMessage(resultMessage);
+        result.setMessage(resultMessage + System.lineSeparator());
         return result;
     }
 }

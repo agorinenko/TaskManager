@@ -70,6 +70,7 @@ public class Push extends BaseDbCommand {
             }
         };
         StringUtils.appendLine(sb);
+        StringUtils.appendLineSeparator(sb);
 
         String resultMessage = sb.toString();
         result.setMessage(resultMessage);

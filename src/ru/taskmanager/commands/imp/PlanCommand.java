@@ -3,9 +3,9 @@ package ru.taskmanager.commands.imp;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.*;
-import ru.taskmanager.config.JsonConfiguration;
 import ru.taskmanager.config.PlanJsonConfiguration;
 import ru.taskmanager.errors.*;
+import ru.taskmanager.output.ConsolePrinter;
 import ru.taskmanager.utils.ListUtils;
 import ru.taskmanager.utils.StringUtils;
 
@@ -17,6 +17,15 @@ import java.util.stream.Collectors;
 public class PlanCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+        KeyValueParam envParam = ListUtils.getKeyValueParam(params, "env");
+
+        String env = null;
+        if(null != envParam){
+            try {
+                env = envParam.getStringValue();
+            } catch (StringIsEmptyException e) {
+            }
+        }
 
         KeyValueParam planFileNameParam = ListUtils.getKeyValueParam(params, "f");
         String planFileName = null;
@@ -43,25 +52,25 @@ public class PlanCommand extends SafetyCommand {
             throw new CommandException(String.format("Plan file %s invalid: %s", planFileName, e.getMessage()));
         }
 
-        StringBuilder sb = new StringBuilder();
         for (Integer order: planConfig.getOrdersList()) {
             PlanJsonConfiguration.PlanKeyValue value =  planConfig.getEntityByOrder(order);
-            List<CommandResult> result = ExecuteOperation(value);
-            String successMessage = generateMessage(result, SuccessResult.class);
-            if (!StringUtils.isNullOrEmpty(successMessage)) {
-                sb.append(successMessage);
-            }
+            ExecuteOperation(value, env);
         }
 
         SuccessResult result = new SuccessResult();
-        result.setMessage(sb.toString());
+        result.setMessage(String.format("The plan '%s' was successful", planFileName));
         return result;
     }
 
-    private List<CommandResult> ExecuteOperation(PlanJsonConfiguration.PlanKeyValue parameters) throws CommandException {
+    private void ExecuteOperation(PlanJsonConfiguration.PlanKeyValue parameters, String env) throws CommandException {
+        ConsolePrinter printer = new ConsolePrinter();
         String command = parameters.getKey();
         List<String> args = new ArrayList(parameters.getValue());
         args.add(command);
+
+        if(!StringUtils.isNullOrEmpty(env)){
+            args.add(String.format("env:%s", env));
+        }
 
         ParamsManager manager = null;
         try {
@@ -79,12 +88,11 @@ public class PlanCommand extends SafetyCommand {
             List<CommandResult> result = executor.execute();
 
             String errorMessage = generateMessage(result, ErrorResult.class);
-
             if(!StringUtils.isNullOrEmpty(errorMessage)){
                 throw new CommandException(String.format("Command %s error: %s", command, errorMessage));
             }
 
-            return result;
+            printer.print(result);
         } catch (RequiredParamException e) {
             throw new CommandException(e.getMessage());
         } catch (ClassNotFoundException e) {

@@ -1,14 +1,5 @@
 [
   {
-    "name": "db",
-    "params": [ "o:init", "env:dev" ]
-  },
-  {
-    "name": "db",
-    "params": [ "o:push", "env:dev" ]
-  },
-  {
-    "name": "ps",
-    "params": [ "env:dev" ]
+    "name": "ps"
   }
 ]

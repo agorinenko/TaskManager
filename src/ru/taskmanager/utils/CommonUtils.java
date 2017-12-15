@@ -31,7 +31,6 @@ public class CommonUtils {
             command = "powershell.exe -File " + filePath + paramsString;
         }
 
-        //String success;
         Runtime runtime = Runtime.getRuntime();
         Process powerShellProcess = runtime.exec(command);
         try{
@@ -51,57 +50,6 @@ public class CommonUtils {
         }finally {
             powerShellProcess.destroy();
         }
-
-//        ProcessWorker worker = new ProcessWorker(powerShellProcess);
-//        worker.start();
-//        try {
-//            worker.join(10000);
-//            if (null == worker.getExit()) {
-//                throw new PowerShellException("Timeout exception 10sec");
-//            }
-//        } catch(InterruptedException ex) {
-//            worker.interrupt();
-//            Thread.currentThread().interrupt();
-//            throw new PowerShellException("InterruptedException");
-//        } finally {
-//            powerShellProcess.destroy();
-//        }
-
-       // powerShellProcess.getOutputStream().flush();
-        //powerShellProcess.getOutputStream().close();
-//        try {
-//            powerShellProcess.waitFor();
-//        } catch (InterruptedException e) {
-//            throw new PowerShellException("Wait error");
-//        }
-
-//        try{
-//            String error="";
-//            InputStream errorStream = powerShellProcess.getErrorStream();
-//            try{
-//                error = buildPowerShellResult(errorStream);
-//            }finally {
-//                errorStream.close();
-//            }
-//            if(!StringUtils.isNullOrEmpty(error)){
-//                throw new PowerShellException(error);
-//            }
-//
-//            InputStream inputStream = powerShellProcess.getInputStream();
-//            try{
-//                success = buildPowerShellResult(inputStream);
-//            }finally {
-//                inputStream.close();
-//            }
-//
-//            success = StringUtils.trimEnd(success, System.lineSeparator());
-//
-//        }finally {
-//            powerShellProcess.destroy();
-//        }
-
-        //success = "Success";
-        //return success;
     }
 
     private static String buildScriptParams(HashMap<String, Object> params){

@@ -1,9 +1,6 @@
 package ru.taskmanager.utils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-
+import java.io.*;
 /**
  * Created by agorinenko on 02.11.2017.
  */
@@ -17,12 +14,14 @@ public class ProcessWorker implements Runnable {
     }
 
     public void run() {
+
+        String charset = "UTF-8";
+
         try {
-            int c;
-            while ((c = is.read()) != -1)
-                os.print((char) c);
-        } catch (IOException x) {
-            // Handle error
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, charset));
+            bufferedReader.lines().forEach(os::println);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

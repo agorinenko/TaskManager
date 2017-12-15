@@ -45,6 +45,8 @@ public class Delete extends BaseDbCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("Operation status:" + statusStr + "(" + status + ")");
 
+        StringUtils.appendLineSeparator(sb);
+
         String resultMessage = sb.toString();
         result.setMessage(resultMessage);
         return result;

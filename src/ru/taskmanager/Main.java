@@ -3,6 +3,7 @@ package ru.taskmanager;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
+import ru.taskmanager.output.ConsolePrinter;
 
 import java.util.List;
 
@@ -13,18 +14,8 @@ public class Main {
             ParamsManager manager = new ParamsManager(args);
 
             Executor executor = new Executor(manager);
-            List<CommandResult> result = executor.execute();
-            String message;
-            if(result.size()>0) {
-                message = result.get(0).getMessage();
-            } else {
-                message = "No results";
-            }
+            executor.executeAndPrint(new ConsolePrinter());
 
-            if(null != message) {
-                System.out.print(message);
-                System.out.print(System.lineSeparator());
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
