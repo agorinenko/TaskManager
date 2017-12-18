@@ -5,10 +5,7 @@ import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -21,8 +18,8 @@ import static org.junit.Assert.assertTrue;
 
 public class PlanCommand {
     @Test
-    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
-        ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan" });
+    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
+        ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan", "env:dev" });
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();

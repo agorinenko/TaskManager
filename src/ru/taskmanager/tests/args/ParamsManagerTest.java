@@ -7,6 +7,7 @@ import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.IntegerParam;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.args.params.StringParam;
+import ru.taskmanager.errors.UniqueParamException;
 
 import java.util.List;
 
@@ -117,4 +118,19 @@ public class ParamsManagerTest {
         assertEquals(p3.getKey(), "c3");
     }
 
+    @Test(expected=UniqueParamException.class)
+    public void checkUniqueParams() throws Exception {
+        ParamsManager manager = new ParamsManager(new String[]{ "c1", "p1:1", "p1:2", "p2:v2" });
+
+        List<KeyValueParam> params = manager.getKeyValueParams();
+    }
+    @Test
+    public void checkUniqueParams2() throws Exception {
+        ParamsManager manager = new ParamsManager(new String[]{ "c1", "p4:p4_dev", "env:dev" });
+
+        KeyValueParam param = manager.getKeyValueParam("p4");
+
+        assertEquals(param.getKey(), "p4");
+        assertEquals(param.getStringValue(), "p4_dev");
+    }
 }

@@ -7,10 +7,8 @@ import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
+
 import java.nio.file.Path;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class DbCommand {
     @Test
-    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void init() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:init" });
 
         Executor executor = new Executor(manager);
@@ -33,7 +31,7 @@ public class DbCommand {
     }
 
     @Test
-    public void init2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void init2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:init", "onlyschema:true" });
 
         Executor executor = new Executor(manager);
@@ -48,7 +46,7 @@ public class DbCommand {
     }
 
     @Test
-    public void remove() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void remove() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:remove" });
 
         Executor executor = new Executor(manager);
@@ -63,7 +61,7 @@ public class DbCommand {
     }
 
     @Test
-    public void push0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void push0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
 
@@ -74,7 +72,7 @@ public class DbCommand {
     }
 
     @Test
-    public void push1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void push1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         Path testMigration = TestUtils.generateTestMigration("out:out/dir2");
         assertTrue(null != testMigration);
 
@@ -85,7 +83,7 @@ public class DbCommand {
     }
 
     @Test
-    public void push2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void push2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
 
@@ -93,7 +91,7 @@ public class DbCommand {
     }
 
     @Test
-    public void push_target_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void push_target_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
         String versionTimestamp = TestUtils.getVersionTimestampString(testMigration);
@@ -102,7 +100,7 @@ public class DbCommand {
     }
 
     @Test
-    public void push_target_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void push_target_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         Path testMigration = TestUtils.generateTestMigration("out:out/dir2");
         assertTrue(null != testMigration);
         String versionTimestamp = TestUtils.getVersionTimestampString(testMigration);
@@ -111,7 +109,7 @@ public class DbCommand {
     }
 
     @Test
-    public void status0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void status0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:status" });
 
         Executor executor = new Executor(manager);
@@ -126,7 +124,7 @@ public class DbCommand {
     }
 
     @Test
-    public void status1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void status1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:status", "out:out/dir2" });
 
         Executor executor = new Executor(manager);
@@ -141,7 +139,7 @@ public class DbCommand {
     }
 
     @Test
-    public void delete_target_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void delete_target_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
 
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
@@ -163,7 +161,7 @@ public class DbCommand {
     }
 
     @Test
-    public void delete_target_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void delete_target_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
 
         Path testMigration = TestUtils.generateTestMigration("out:out/dir2");
         assertTrue(null != testMigration);
@@ -185,7 +183,7 @@ public class DbCommand {
     }
 
     @Test
-    public void delete_last_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void delete_last_version0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
 
         Path testMigration = TestUtils.generateTestMigration(null);
         assertTrue(null != testMigration);
@@ -206,7 +204,7 @@ public class DbCommand {
         assertTrue(message.length() > 0);
     }
     @Test
-    public void delete_last_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void delete_last_version1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
 
         Path testMigration = TestUtils.generateTestMigration("out:out/dir2");
         assertTrue(null != testMigration);

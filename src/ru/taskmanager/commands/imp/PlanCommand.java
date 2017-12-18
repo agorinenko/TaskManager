@@ -72,14 +72,16 @@ public class PlanCommand extends SafetyCommand {
             args.add(String.format("env:%s", env));
         }
 
-        ParamsManager manager = null;
+        ParamsManager manager;
         try {
             manager = new ParamsManager(args.toArray(new String[args.size()]));
         } catch (StringIsEmptyException e) {
-            e.printStackTrace();
+            throw new CommandException(e.getMessage());
         } catch (CorruptedParamException e) {
             throw new CommandException(e.getMessage());
         } catch (RequiredParamException e) {
+            throw new CommandException(e.getMessage());
+        }catch (UniqueParamException e) {
             throw new CommandException(e.getMessage());
         }
 

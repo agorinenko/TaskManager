@@ -1,5 +1,8 @@
 [
   {
-    "name": "ps"
+    "name": "ps",
+    "params": [
+      "p3:from_file"
+    ]
   }
 ]

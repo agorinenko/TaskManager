@@ -28,6 +28,8 @@ public abstract class SafetyCommand implements Command {
 
             if(!StringUtils.isNullOrEmpty(env)){
                 try {
+                    //Устанавливаем значение среды, чтобы корректно брать настройки программы.
+                    // Параметры запроса уже обработанны с учетом env.json
                     EnvironmentVariables.getInstance().setEnvironmentParameter(env);
                 } catch (ConfigurationException e) {
                 }
@@ -39,7 +41,7 @@ public abstract class SafetyCommand implements Command {
         }
     }
 
-    protected String GetStringParam(List<KeyValueParam> params, String key){
+    protected String getStringParam(List<KeyValueParam> params, String key){
         KeyValueParam param = ListUtils.getKeyValueParam(params, key);
         String val = "";
         if(null != param){

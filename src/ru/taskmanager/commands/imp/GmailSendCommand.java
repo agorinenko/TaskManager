@@ -16,11 +16,11 @@ public class GmailSendCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
 
-        String userName = GetStringParam(params, "from");
-        String to = GetStringParam(params, "to");
-        String password = GetStringParam(params, "pass");
-        String subj = GetStringParam(params, "subj");
-        String body = GetStringParam(params, "body");
+        String userName = getStringParam(params, "from");
+        String to = getStringParam(params, "to");
+        String password = getStringParam(params, "pass");
+        String subj = getStringParam(params, "subj");
+        String body = getStringParam(params, "body");
 
 
         Properties props = new Properties();

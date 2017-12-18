@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class PowerShellCommand {
     @Test
-    public void executePowerShellScript() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps" });
 
         Executor executor = new Executor(manager);
@@ -39,7 +39,7 @@ public class PowerShellCommand {
     }
 
     @Test
-    public void executePowerShellScript1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "out:out/dir2" });
 
         Executor executor = new Executor(manager);
@@ -53,7 +53,7 @@ public class PowerShellCommand {
     }
 
     @Test
-    public void executePowerShellScript2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "out:out/dir2", "v:20170929113452336" });
 
         Executor executor = new Executor(manager);
@@ -86,7 +86,7 @@ public class PowerShellCommand {
     }
 
     @Test
-    public void executePowerShellScript5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452336", "env:dev" });
 
         Executor executor = new Executor(manager);
@@ -101,7 +101,7 @@ public class PowerShellCommand {
     }
 
     @Test
-    public void executePowerShellScript6() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript6() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452336", "env:dev" });
 
         Executor executor = new Executor(manager);
@@ -116,7 +116,7 @@ public class PowerShellCommand {
         //assertEquals("http://dev;dev;dev;dev\agorinenko", message);
     }
     @Test
-    public void executePowerShellScript7() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void executePowerShellScript7() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452337" });
 
         Executor executor = new Executor(manager);

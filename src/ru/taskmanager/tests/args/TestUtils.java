@@ -5,10 +5,7 @@ import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
 import ru.taskmanager.utils.StringUtils;
 
 import java.nio.file.Files;
@@ -55,7 +52,7 @@ public class TestUtils {
     }
 
     public static void execPushCommand(String vParameter, String outParameter)
-            throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+            throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
 
         List<String> pList = new ArrayList();
         if(!StringUtils.isNullOrEmpty(vParameter)){
@@ -69,21 +66,10 @@ public class TestUtils {
         String[] stringArray = pList.toArray(new String[0]);
 
         execPushCommand(stringArray);
-//        ParamsManager manager = new ParamsManager(new String[]{ "db", "o:push", vParameter, outParameter, "c:test comment" });
-//
-//        Executor executor = new Executor(manager);
-//        List<CommandResult> result = executor.execute();
-//        String message = result.get(0).getMessage();
-//
-//        System.out.print(message);
-//
-//        assertTrue(result.size() > 0);
-//        assertTrue(result.get(0) instanceof SuccessResult);
-//        assertTrue(message.length() > 0);
     }
 
     public static void execPushCommand(String[] outParameters)
-            throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+            throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
 
         List<String> pList = new LinkedList<String>(Arrays.asList(outParameters));
         pList.add("db");

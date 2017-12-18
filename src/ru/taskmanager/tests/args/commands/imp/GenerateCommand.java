@@ -5,10 +5,7 @@ import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -17,43 +14,43 @@ import static org.junit.Assert.assertTrue;
 
 public class GenerateCommand {
     @Test
-    public void exec() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "g", "t:sql" });
         testMigration(manager);
     }
 
     @Test
-    public void exec0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec0() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "g" });
         testMigration(manager);
     }
 
     @Test
-    public void exec1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec1() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:sql", "n:test" });
         testMigration(manager);
     }
 
     @Test
-    public void exec2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:sql" });
         testMigration(manager);
     }
 
     @Test
-    public void exec3() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec3() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "generate", "t:log", "n:test", "stamp:true" });
         testMigration(manager);
     }
 
     @Test
-    public void exec4() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec4() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "g", "out:out/dir2" });
         testMigration(manager);
     }
 
     @Test
-    public void exec5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException {
+    public void exec5() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "g", "t:ps1" });
         testMigration(manager);
     }

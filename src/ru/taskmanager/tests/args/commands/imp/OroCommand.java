@@ -4,10 +4,7 @@ import org.junit.Test;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
 
 import java.util.List;
 
@@ -16,7 +13,7 @@ import java.util.List;
  */
 public class OroCommand {
 
-    public void startMaster() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException {
+    public void startMaster() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "oro", "o:start", "t:master" });
 
         Executor executor = new Executor(manager);

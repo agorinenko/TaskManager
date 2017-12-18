@@ -1,10 +1,7 @@
 package ru.taskmanager.args;
 
 import ru.taskmanager.config.EnvironmentVariables;
-import ru.taskmanager.errors.ConfigurationException;
-import ru.taskmanager.errors.CorruptedParamException;
-import ru.taskmanager.errors.RequiredParamException;
-import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.errors.*;
 import ru.taskmanager.args.params.BaseParam;
 import ru.taskmanager.args.params.CommandParam;
 import ru.taskmanager.args.params.KeyValueParam;
@@ -26,12 +23,14 @@ public class ParamsManager {
     private List<KeyValueParam> keyValueParams;
     private List<String> requiredKeys;
     private List<String> keys;
+    private Set<String> argsKeys;//Ключи параметров
     private ParamsFactory factory;
 
-    public ParamsManager(String[] args) throws StringIsEmptyException, CorruptedParamException, RequiredParamException {
+    public ParamsManager(String[] args) throws StringIsEmptyException, CorruptedParamException, RequiredParamException, UniqueParamException {
         factory = new ParamsFactory();
         commandParams = new ArrayList<>();
         keyValueParams = new ArrayList<>();
+        argsKeys = new HashSet<>();
         keys = new ArrayList<>();
 
         for (String arg: args) {
@@ -43,18 +42,17 @@ public class ParamsManager {
         }
     }
 
-    private void appendParam(ParamsFactory factory, String arg) throws StringIsEmptyException, CorruptedParamException {
+    private void appendParam(ParamsFactory factory, String arg) throws StringIsEmptyException, CorruptedParamException, UniqueParamException {
         if(!StringUtils.isNullOrEmpty(arg)){
             BaseParam param = factory.create(arg);
             if(param instanceof CommandParam){
                 commandParams.add((CommandParam) param);
+                keys.add(param.getKey());
             } else if(param instanceof KeyValueParam) {
-                keyValueParams.add((KeyValueParam) param);
+                appendKeyValueParam((KeyValueParam) param);
             } else{
                 throw new NotImplementedException();
             }
-
-            keys.add(param.getKey());
         }
     }
     /**
@@ -109,6 +107,10 @@ public class ParamsManager {
         return keys.stream().filter(k -> k.equalsIgnoreCase(key)).findFirst().isPresent();
     }
 
+    public boolean keyValueParamExist(String key){
+        return argsKeys.stream().filter(k -> k.equalsIgnoreCase(key)).findFirst().isPresent();
+    }
+
     public boolean envPresent(){
         return keyExist("env");
     }
@@ -136,21 +138,36 @@ public class ParamsManager {
             catch (FileNotFoundException e) {}
             catch (CorruptedParamException e) {}
             catch (ConfigurationException e) {}
+            catch (UniqueParamException e) {}
         }
     }
 
-    private void extendParametersByEnv(String env) throws FileNotFoundException, RequiredParamException, StringIsEmptyException, CorruptedParamException, ConfigurationException {
+    private void extendParametersByEnv(String env) throws FileNotFoundException, RequiredParamException, StringIsEmptyException, CorruptedParamException, ConfigurationException, UniqueParamException {
         Map<String, Object> set = EnvironmentVariables.getInstance().getEntityByKey(env);
         for (Map.Entry<String, Object> entry : set.entrySet()) {
             String key = entry.getKey();
-            if (!StringUtils.isNullOrEmpty(key) && !keyExist(key)) {
+            if (!StringUtils.isNullOrEmpty(key) && !keyValueParamExist(key)) {
                 Object realValue = entry.getValue();
                 if (null != realValue) {
                     String stringValue = realValue.toString();
-                    keyValueParams.add(factory.createKeyValueParam(key, stringValue));
-                    keys.add(key);
+                    KeyValueParam param = factory.createKeyValueParam(key, stringValue);
+                    appendKeyValueParam(param);
                 }
             }
+        }
+    }
+
+    private void appendKeyValueParam(KeyValueParam param) throws StringIsEmptyException, UniqueParamException {
+        String key = param.getKey();
+        if(!keyValueParamExist(key) && !StringUtils.isNullOrEmpty(key)){
+            Object realValue = param.getValue();
+            if (null != realValue) {
+                keyValueParams.add(param);
+                argsKeys.add(key);
+                keys.add(key);
+            }
+        } else {
+            throw new UniqueParamException(String.format("Parameter \"%s\" already exist", key));
         }
     }
 

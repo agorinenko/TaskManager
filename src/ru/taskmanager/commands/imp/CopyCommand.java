@@ -15,8 +15,8 @@ import java.util.List;
 public class CopyCommand extends SafetyCommand {
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        String from = GetStringParam(params, "from");
-        String to = GetStringParam(params, "to");
+        String from = getStringParam(params, "from");
+        String to = getStringParam(params, "to");
         if(StringUtils.isNullOrEmpty(to)){
             throw new CommandException("Parameter \"to\" is null or empty");
         }
