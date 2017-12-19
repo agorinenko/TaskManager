@@ -7,11 +7,7 @@ import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.*;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
 

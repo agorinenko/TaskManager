@@ -2,7 +2,4 @@
 Param(
   [string]$p333,
   [string]$p3
-)
-############################# /Parameters #############################
-Write-Host $p3;
-Write-Host $p333;
+  !!need error!!!

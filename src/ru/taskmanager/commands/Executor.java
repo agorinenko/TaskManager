@@ -39,30 +39,6 @@ public final class Executor {
         CommandMapper mapper = new CommandMapper(commandParam);
         Command command = mapper.initCommandObject();
 
-        //List<KeyValueParam> sanitizeKeyValueParams = sanitizeKeyValueParams(commandParam, params);
         return command.execute(params);
     }
-
-//    private List<KeyValueParam> sanitizeKeyValueParams(CommandParam commandParam, List<KeyValueParam> params) throws StringIsEmptyException {
-//        String commandName = commandParam.getKey();
-//
-//        List<KeyValueParam> result = new ArrayList<>();
-//        for (KeyValueParam kvp : params){
-//            String kvpName = kvp.getKey();
-//            String commandKvpName = String.format("%s.%s", commandName, kvpName);
-//            boolean commandParamIsPresent = params.stream().filter(i -> {
-//                try {
-//                    return i.getKey().equalsIgnoreCase(commandKvpName);
-//                } catch (StringIsEmptyException e) {
-//                    return false;
-//                }
-//            }).findFirst().isPresent();
-//
-//            if(!commandParamIsPresent){
-//                result.add(kvp);
-//            }
-//        }
-//
-//        return result;
-//    }
 }

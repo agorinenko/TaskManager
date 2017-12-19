@@ -54,7 +54,7 @@ public class PlanCommand extends SafetyCommand {
 
         for (Integer order: planConfig.getOrdersList()) {
             PlanJsonConfiguration.PlanKeyValue value =  planConfig.getEntityByOrder(order);
-            ExecuteOperation(value, env);
+            executeOperation(params, value, env);
         }
 
         SuccessResult result = new SuccessResult();
@@ -62,10 +62,11 @@ public class PlanCommand extends SafetyCommand {
         return result;
     }
 
-    private void ExecuteOperation(PlanJsonConfiguration.PlanKeyValue parameters, String env) throws CommandException {
+    private void executeOperation(List<KeyValueParam> params, PlanJsonConfiguration.PlanKeyValue parameters, String env) throws CommandException {
         ConsolePrinter printer = new ConsolePrinter();
         String command = parameters.getKey();
-        List<String> args = new ArrayList(parameters.getValue());
+        List<String> planParams = sanitizePlanParams(params, parameters.getValue());
+        List<String> args = new ArrayList(planParams);
         args.add(command);
 
         if(!StringUtils.isNullOrEmpty(env)){
@@ -108,6 +109,25 @@ public class PlanCommand extends SafetyCommand {
         } catch (ConfigurationException e) {
             throw new CommandException(e.getMessage());
         }
+    }
+
+    private List<String> sanitizePlanParams(List<KeyValueParam> params, List<String> planParams){
+        String separator = "->";
+        String separator2 = ":";
+        return planParams.stream().map(i-> {
+            if(i.contains(separator)){
+                String[] parts = i.split(separator);
+                String rawData = parts[1];
+                if(rawData.contains(separator2)){
+                    String paramName = rawData.split(separator2)[0];
+                    String newValue = getStringParam(params, parts[0]);
+
+                    return String.format("%s:%s", paramName, newValue);
+                }
+            }
+
+            return i;
+        }).collect(Collectors.toList());
     }
 
     private String generateMessage(List<CommandResult> result, Class clazz) {

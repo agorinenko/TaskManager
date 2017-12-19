@@ -1,9 +1,10 @@
-package ru.taskmanager.tests.args.commands.imp;
+package args.commands.imp;
 
 import org.junit.Assert;
 import org.junit.Test;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
+import ru.taskmanager.commands.ErrorResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.*;
@@ -129,5 +130,20 @@ public class PowerShellCommand {
         assertTrue(result.get(0) instanceof SuccessResult);
         assertTrue(message.length() > 0);
         //assertEquals("http://dev;dev;dev;dev\agorinenko", message);
+    }
+
+    @Test
+    public void executePowerShellScript8() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, ConfigurationException, IllegalAccessException, UniqueParamException {
+        ParamsManager manager = new ParamsManager(new String[]{ "ps", "v:20170929113452338" });
+
+        Executor executor = new Executor(manager);
+        List<CommandResult> result = executor.execute();
+        String message = result.get(0).getMessage();
+
+        System.out.print("executePowerShellScript8---->" + message);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0) instanceof ErrorResult);
+        assertTrue(message.length() > 0);
     }
 }

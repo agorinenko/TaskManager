@@ -1,5 +1,6 @@
 package ru.taskmanager.utils;
 
+import ru.taskmanager.api.PowerShellResult;
 import ru.taskmanager.errors.PowerShellException;
 
 import java.io.*;
@@ -12,14 +13,15 @@ import java.util.Map;
  * Created by agorinenko on 28.09.2017.
  */
 public class CommonUtils {
-    public static void executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static PowerShellResult executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
         Path path = Paths.get(script);
-        executePowerShellScript(path, params);
+        return executePowerShellScript(path, params);
     }
 
-    public static void executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static PowerShellResult executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
         path = path.normalize();
 
+        PowerShellResult result;
         String filePath;
         String command;
         String paramsString = buildScriptParams(params);
@@ -34,22 +36,28 @@ public class CommonUtils {
         Runtime runtime = Runtime.getRuntime();
         Process powerShellProcess = runtime.exec(command);
         try{
-            Thread errorProcess = new Thread(new ProcessWorker(powerShellProcess.getErrorStream(), System.err));
-            Thread inputProcess = new Thread(new ProcessWorker(powerShellProcess.getInputStream(), System.out));
+            ProcessWorker errProcessWorker = new ProcessWorker(powerShellProcess.getErrorStream(), System.err);
+            ProcessWorker outProcessWorker = new ProcessWorker(powerShellProcess.getInputStream(), System.out);
+
+            Thread errorProcess = new Thread(errProcessWorker);
+            Thread inputProcess = new Thread(outProcessWorker);
 
             errorProcess.start();
             inputProcess.start();
-
             try {
                 powerShellProcess.waitFor();
                 errorProcess.join();
                 inputProcess.join();
+
+                result = new PowerShellResult(outProcessWorker.getLineCount(), errProcessWorker.getLineCount());
             } catch (InterruptedException e) {
                 throw new PowerShellException("InterruptedException");
             }
         }finally {
             powerShellProcess.destroy();
         }
+
+        return result;
     }
 
     private static String buildScriptParams(HashMap<String, Object> params){
@@ -76,37 +84,4 @@ public class CommonUtils {
         return "";
     }
 
-//    private static String buildPowerShellResult(InputStream in) throws IOException {
-//
-//        StringBuilder str = new StringBuilder();
-//        for (int i = 0; i < in.available(); i++) {
-//            Reader r = new InputStreamReader(in);
-//            char[] buffer = new char[1024];
-//            while (r.read(buffer) > 0){
-//                str.append(buffer, 0, buffer.length);
-//            }
-//        }
-//
-//        return str.toString();
-//    }
-//    private static String buildPowerShellResult(InputStream in) throws IOException {
-//        int i = in.available();
-//        if(0==i){
-//            return "";
-//        }
-//        StringBuilder str = new StringBuilder();
-//        BufferedReader stdout = new BufferedReader(new InputStreamReader(in));
-//        try {
-//            String line;
-//            while ((line = stdout.readLine()) != null) {
-//                str.append(line);
-//
-//                StringUtils.appendLineSeparator(str);
-//            }
-//        } finally {
-//            stdout.close();
-//        }
-//
-//        return str.toString();
-//    }
 }

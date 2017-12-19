@@ -1,17 +1,16 @@
 package ru.taskmanager.commands.imp;
 
-import ru.taskmanager.api.LocalVersion;
-import ru.taskmanager.api.Version;
-import ru.taskmanager.api.VersionComparator;
-import ru.taskmanager.api.VersionsRepository;
+import ru.taskmanager.api.*;
 import ru.taskmanager.api.mappers.LocalVersionManager;
 import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.commands.CommandResult;
+import ru.taskmanager.commands.ErrorResult;
 import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.PowerShellException;
 import ru.taskmanager.errors.StringIsEmptyException;
+import ru.taskmanager.output.ConsolePrinter;
 import ru.taskmanager.utils.CommonUtils;
 import ru.taskmanager.utils.ListUtils;
 import ru.taskmanager.utils.SettingsUtils;
@@ -34,55 +33,56 @@ public class PowerShellCommand extends SafetyCommand {
 
     @Override
     public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
 
         HashMap<String, Object> psParams = ListUtils.convertToHashMap(params);
         LocalVersionManager manager = new LocalVersionManager();
 
-        KeyValueParam out = ListUtils.getKeyValueParam(params, "out");
-        if(null != out){
-            String outValue;
-            try {
-                outValue = out.getStringValue();
-                if(!StringUtils.isNullOrEmpty(outValue)){
-                    manager.setBaseDir(outValue);
-                }
-            } catch (StringIsEmptyException e) {}
+        String outValue = getStringParam(params, "out");
+        if(!StringUtils.isNullOrEmpty(outValue)){
+            manager.setBaseDir(outValue);
         }
 
-        KeyValueParam versionParam = ListUtils.getKeyValueParam(params, "v");
-        String v = null != versionParam ? versionParam.getDefaultOrStringValue("") : "";
+        String v = getStringParam(params, "v");
         boolean versionIsMissing = StringUtils.isNullOrEmpty(v) ? true : false;
 
-        StringBuilder sb = new StringBuilder();
+        boolean isError = false;
         try {
             List<Version> localVersions = manager.select(".ps1");
             localVersions.sort(new VersionComparator());
             for (int i = 0; i < localVersions.size(); i++) {
-                String psResult = "";
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
-
-                Path path = localVersion.getLocalPath();
-
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
-                    try {
-                        CommonUtils.executePowerShellScript(path, psParams);
-                    } catch (PowerShellException e) {
-                        psResult = e.getMessage();
+                    PowerShellResult result = executeOperation(localVersion, psParams);
+                    if(result.getErrorLines() > 0){
+                        isError = true;
                     }
-                } else {
-                    psResult = "MISSED";
                 }
-
-                sb.append(psResult);
-                StringUtils.appendLineSeparator(sb);
             }
         } catch (IOException e) {
             throw new CommandException(e.getMessage());
         }
 
-        String resultMessage = sb.toString();
-        result.setMessage(resultMessage);
+        CommandResult result;
+        String message;
+        if(isError){
+            result = new ErrorResult(new CommandException("The power shell command was successful with errors"));
+            message = "The power shell command was successful with errors" + System.lineSeparator();
+        } else{
+            result = new SuccessResult();
+            message = "The power shell command was successful" + System.lineSeparator();
+        }
+        result.setMessage(message);
         return result;
+    }
+
+    private PowerShellResult executeOperation(LocalVersion localVersion, HashMap<String, Object> psParams) throws CommandException {
+        Path path = localVersion.getLocalPath();
+        try {
+            return CommonUtils.executePowerShellScript(path, psParams);
+        } catch (PowerShellException e) {
+            throw new CommandException(e.getMessage());
+        } catch (IOException e) {
+            throw new CommandException(e.getMessage());
+        }
     }
 }

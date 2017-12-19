@@ -18,7 +18,7 @@ public abstract class Printer {
                 }
             }
         } else {
-            SuccessResult noResult =new SuccessResult();
+            SuccessResult noResult = new SuccessResult();
             noResult.setMessage("No result");
             printSuccess(noResult);
         }

@@ -16,7 +16,7 @@ public class TreeCopierTest {
 
     @Test
     public void initTreeCopierTest() throws ConfigurationException, IOException {
-        TreeCopier copier = new TreeCopier(Paths.get("C:\\test"), Paths.get("\\\\172.26.72.233\\install\\release01.01"));
+        TreeCopier copier = new TreeCopier(Paths.get("C:\\test"), Paths.get("C:\\test\\1"));
         copier.copy();
     }
 }

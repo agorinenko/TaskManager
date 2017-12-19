@@ -2,7 +2,8 @@
   {
     "name": "ps",
     "params": [
-      "p3:from_file"
+      "p4->p333:Hello, p333!",
+      "p3:Hello, p3!"
     ]
   }
 ]
