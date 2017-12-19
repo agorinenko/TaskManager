@@ -45,12 +45,14 @@ public class PowerShellCommand {
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();
-        String message = result.get(0).getMessage();
+        if(result.size()>0) {
+            String message = result.get(0).getMessage();
 
-        System.out.print(message);
-
-        assertTrue(result.size() > 0);
-        assertTrue(result.get(0) instanceof SuccessResult);
+            System.out.print(message);
+            assertTrue(result.get(0) instanceof SuccessResult);
+        } else {
+            System.out.print("Size is 0");
+        }
     }
 
     @Test
@@ -59,12 +61,15 @@ public class PowerShellCommand {
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();
+        if(result.size()>0) {
         String message = result.get(0).getMessage();
 
         System.out.print(message);
 
-        assertTrue(result.size() > 0);
         assertTrue(result.get(0) instanceof SuccessResult);
+        } else {
+            System.out.print("Size is 0");
+        }
     }
 
     @Test
