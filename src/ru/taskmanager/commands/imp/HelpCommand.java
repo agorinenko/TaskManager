@@ -16,11 +16,9 @@ import java.util.Map;
 public class HelpCommand extends SafetyCommand {
 
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         String helpText = (String) SettingsUtils.getSettingsValue("help");
         helpText = StringUtils.replaceAllSpecialConstants(helpText);
-        result.setMessage(helpText);
-        return result;
+        return createSingleSuccessResult(helpText);
     }
 }

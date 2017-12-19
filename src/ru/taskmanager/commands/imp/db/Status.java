@@ -17,9 +17,7 @@ import java.util.function.Consumer;
 public class Status extends BaseDbCommand {
 
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
-
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         StringBuilder sb = new StringBuilder();
         sb.append("Versions list:");
         StringUtils.appendLineSeparator(sb);
@@ -38,7 +36,6 @@ public class Status extends BaseDbCommand {
             if(null != version.getVersionTimestamp()) {
                 String createdBy = StringUtils.formatString(version.getCreatedBy(), 16, ' ');
                 String name = StringUtils.formatString(version.getName(), 30, ' ');
-                //String description = StringUtils.formatString(version.getDescription(), 30, ' ');
                 String versionTimestamp = df.format(version.getVersionTimestamp());
                 Boolean isLocal = versionsRepository.isLocal(version);
                 Boolean isRemote = versionsRepository.isRemote(version);
@@ -56,8 +53,6 @@ public class Status extends BaseDbCommand {
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
 
-        String resultMessage = sb.toString();
-        result.setMessage(resultMessage);
-        return result;
+        return createSingleSuccessResult(sb.toString());
     }
 }

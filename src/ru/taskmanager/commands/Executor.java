@@ -24,8 +24,9 @@ public final class Executor {
         List<KeyValueParam> params = paramsManager.getKeyValueParams();
 
         for (CommandParam commandParam : commands) {
-            result.add(executeCommand(commandParam, params));
-        };
+            List<CommandResult> commandResult = executeCommand(commandParam, params);
+            result.addAll(commandResult);
+        }
 
         return result;
     }
@@ -35,7 +36,7 @@ public final class Executor {
         printer.print(result);
     }
 
-    private CommandResult executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {
+    private List<CommandResult> executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {
         CommandMapper mapper = new CommandMapper(commandParam);
         Command command = mapper.initCommandObject();
 

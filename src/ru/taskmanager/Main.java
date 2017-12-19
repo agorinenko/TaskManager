@@ -15,7 +15,6 @@ public class Main {
 
             Executor executor = new Executor(manager);
             executor.executeAndPrint(new ConsolePrinter());
-
         } catch (Exception e) {
             e.printStackTrace();
         }

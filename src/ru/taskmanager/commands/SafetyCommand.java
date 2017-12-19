@@ -8,14 +8,15 @@ import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.utils.ListUtils;
 import ru.taskmanager.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SafetyCommand implements Command {
 
-    public abstract CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException;
+    public abstract List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException;
 
     @Override
-    public CommandResult execute(List<KeyValueParam> params) {
+    public List<CommandResult> execute(List<KeyValueParam> params) {
         try {
             KeyValueParam envParam = ListUtils.getKeyValueParam(params, "env");
             String env = null;
@@ -37,8 +38,19 @@ public abstract class SafetyCommand implements Command {
 
             return safetyExecute(params);
         } catch (CommandException ex){
-            return new ErrorResult(ex);
+            List<CommandResult> result = new ArrayList<>(1);
+            result.add(new ErrorResult(ex));
+            return result;
         }
+    }
+
+    protected List<CommandResult> createSingleSuccessResult(String message){
+        List<CommandResult> result = new ArrayList<>(1);
+        SuccessResult successResult = new SuccessResult();
+        successResult.setMessage(message);
+        result.add(successResult);
+
+        return result;
     }
 
     protected String getStringParam(List<KeyValueParam> params, String key){

@@ -14,7 +14,7 @@ import java.util.Properties;
 
 public class GmailSendCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
 
         String userName = getStringParam(params, "from");
         String to = getStringParam(params, "to");
@@ -50,8 +50,6 @@ public class GmailSendCommand extends SafetyCommand {
             throw new CommandException(e.getMessage());
         }
 
-        SuccessResult result = new SuccessResult();
-        result.setMessage("The send mail from \"" + userName + "\"  was successful" + System.lineSeparator());
-        return result;
+        return createSingleSuccessResult(("The send mail from \"" + userName + "\"  was successful"));
     }
 }

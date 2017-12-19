@@ -18,10 +18,7 @@ import java.util.List;
 
 public class Init extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
-        String resultMessage = "";
-
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         BooleanParam onlySchemaParam = (BooleanParam) ListUtils.getKeyValueParam(params, "onlyschema");
         Boolean onlySchema = null != onlySchemaParam ? onlySchemaParam.getBooleanValue() : false;
 
@@ -33,9 +30,6 @@ public class Init extends SafetyCommand {
         List<String> createSchemaStatements = StatementUtils.getDbFolderStatements("create_schema.sql");
         DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
 
-        resultMessage = "The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
-
-        result.setMessage(resultMessage + System.lineSeparator());
-        return result;
+        return createSingleSuccessResult("The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
     }
 }

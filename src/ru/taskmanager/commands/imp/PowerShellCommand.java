@@ -32,7 +32,7 @@ import java.util.*;
 public class PowerShellCommand extends SafetyCommand {
 
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
 
         HashMap<String, Object> psParams = ListUtils.convertToHashMap(params);
         LocalVersionManager manager = new LocalVersionManager();
@@ -45,40 +45,35 @@ public class PowerShellCommand extends SafetyCommand {
         String v = getStringParam(params, "v");
         boolean versionIsMissing = StringUtils.isNullOrEmpty(v) ? true : false;
 
-        boolean isError = false;
+        List<CommandResult> result = new ArrayList<>();
         try {
             List<Version> localVersions = manager.select(".ps1");
             localVersions.sort(new VersionComparator());
             for (int i = 0; i < localVersions.size(); i++) {
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
-                    PowerShellResult result = executeOperation(localVersion, psParams);
-                    if(result.getErrorLines() > 0){
-                        isError = true;
-                    }
+                    CommandResult scriptResult = executeOperation(localVersion, psParams);
+                    result.add(scriptResult);
                 }
             }
         } catch (IOException e) {
             throw new CommandException(e.getMessage());
         }
 
-        CommandResult result;
-        String message;
-        if(isError){
-            result = new ErrorResult(new CommandException("The power shell command was successful with errors"));
-            message = "The power shell command was successful with errors" + System.lineSeparator();
-        } else{
-            result = new SuccessResult();
-            message = "The power shell command was successful" + System.lineSeparator();
-        }
-        result.setMessage(message);
         return result;
     }
 
-    private PowerShellResult executeOperation(LocalVersion localVersion, HashMap<String, Object> psParams) throws CommandException {
+    private CommandResult executeOperation(LocalVersion localVersion, HashMap<String, Object> psParams) throws CommandException {
         Path path = localVersion.getLocalPath();
         try {
-            return CommonUtils.executePowerShellScript(path, psParams);
+            PowerShellResult shellResult = CommonUtils.executePowerShellScript(path, psParams);
+            if(shellResult.getErrorLines() > 0) {
+                return new ErrorResult(new CommandException(String.format("The script %s was completed with errors", path)));
+            } else {
+                SuccessResult successResult = new SuccessResult();
+                successResult.setMessage(String.format("The script %s was successful", path));
+                return successResult;
+            }
         } catch (PowerShellException e) {
             throw new CommandException(e.getMessage());
         } catch (IOException e) {

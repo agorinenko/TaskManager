@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class PlanCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam envParam = ListUtils.getKeyValueParam(params, "env");
 
         String env = null;
@@ -52,18 +52,18 @@ public class PlanCommand extends SafetyCommand {
             throw new CommandException(String.format("Plan file %s invalid: %s", planFileName, e.getMessage()));
         }
 
+        List<CommandResult> result = new ArrayList<>();
         for (Integer order: planConfig.getOrdersList()) {
             PlanJsonConfiguration.PlanKeyValue value =  planConfig.getEntityByOrder(order);
-            executeOperation(params, value, env);
+            List<CommandResult> commandResult = executeOperation(params, value, env);
+            result.addAll(commandResult);
         }
 
-        SuccessResult result = new SuccessResult();
-        result.setMessage(String.format("The plan '%s' was successful", planFileName));
         return result;
     }
 
-    private void executeOperation(List<KeyValueParam> params, PlanJsonConfiguration.PlanKeyValue parameters, String env) throws CommandException {
-        ConsolePrinter printer = new ConsolePrinter();
+    private List<CommandResult> executeOperation(List<KeyValueParam> params, PlanJsonConfiguration.PlanKeyValue parameters, String env) throws CommandException {
+
         String command = parameters.getKey();
         List<String> planParams = sanitizePlanParams(params, parameters.getValue());
         List<String> args = new ArrayList(planParams);
@@ -90,12 +90,14 @@ public class PlanCommand extends SafetyCommand {
         try {
             List<CommandResult> result = executor.execute();
 
-            String errorMessage = generateMessage(result, ErrorResult.class);
-            if(!StringUtils.isNullOrEmpty(errorMessage)){
-                throw new CommandException(String.format("Command %s error: %s", command, errorMessage));
-            }
-
+//            String errorMessage = generateMessage(result, ErrorResult.class);
+//            if(!StringUtils.isNullOrEmpty(errorMessage)){
+//                throw new CommandException(String.format("Command %s error: %s", command, errorMessage));
+//            }
+            ConsolePrinter printer = new ConsolePrinter();
             printer.print(result);
+
+            return result;
         } catch (RequiredParamException e) {
             throw new CommandException(e.getMessage());
         } catch (ClassNotFoundException e) {
@@ -130,16 +132,16 @@ public class PlanCommand extends SafetyCommand {
         }).collect(Collectors.toList());
     }
 
-    private String generateMessage(List<CommandResult> result, Class clazz) {
-        List<CommandResult> errors = result.stream()
-                .filter(i -> (clazz.isInstance(i)))
-                .collect(Collectors.toList());
-
-        String message = errors.stream()
-                .map(i -> i.getMessage())
-                .reduce((commandResult, commandResult2) -> commandResult += commandResult2 + ";")
-                .orElse("");
-
-        return message;
-    }
+//    private String generateMessage(List<CommandResult> result, Class clazz) {
+//        List<CommandResult> errors = result.stream()
+//                .filter(i -> (clazz.isInstance(i)))
+//                .collect(Collectors.toList());
+//
+//        String message = errors.stream()
+//                .map(i -> i.getMessage())
+//                .reduce((commandResult, commandResult2) -> commandResult += commandResult2 + ";")
+//                .orElse("");
+//
+//        return message;
+//    }
 }

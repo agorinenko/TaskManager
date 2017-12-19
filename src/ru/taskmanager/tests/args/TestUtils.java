@@ -37,8 +37,6 @@ public class TestUtils {
 
             return file;
         } catch (Exception e) {
-            e.printStackTrace();
-
             return null;
         }
     }

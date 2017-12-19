@@ -11,13 +11,11 @@ import java.util.List;
 
 public class TestSuccessCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         try {
-            result.setMessage(params.get(0).getStringValue());
+            return createSingleSuccessResult(params.get(0).getStringValue());
         } catch (StringIsEmptyException e) {
             throw new CommandException(e);
         }
-        return result;
     }
 }

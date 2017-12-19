@@ -14,16 +14,10 @@ import java.util.List;
 
 public class Remove  extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
-        String resultMessage = "";
-
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         List<String> createDbStatements = StatementUtils.getDbFolderStatements("drop_db.sql");
         DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatements(conn, createDbStatements), true);
 
-        resultMessage = "The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful";
-
-        result.setMessage(resultMessage + System.lineSeparator());
-        return result;
+        return createSingleSuccessResult("The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
     }
 }

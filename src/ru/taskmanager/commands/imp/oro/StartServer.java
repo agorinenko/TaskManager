@@ -15,13 +15,12 @@ import java.util.List;
  */
 public class StartServer extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         try {
             MasterServer.start(8888);
+            return createSingleSuccessResult("");
         } catch (ServerException e) {
             throw new CommandException(e.toString());
         }
-        return result;
     }
 }

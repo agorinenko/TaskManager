@@ -18,16 +18,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class GenerateCommand extends SafetyCommand {
 
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
-        String resultMessage = "";
-
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam typeParam = ListUtils.getKeyValueParam(params, "t");
         KeyValueParam fileNameParam = ListUtils.getKeyValueParam(params, "n");
         KeyValueParam useTimeStampParam  = ListUtils.getKeyValueParam(params, "stamp");
@@ -72,9 +70,12 @@ public class GenerateCommand extends SafetyCommand {
         }
         Path file = manager.createFile(formatFileName);
 
-        resultMessage = String.format("File '%1$s' created", file);
-        result.setMessage(resultMessage);
-        result.addMetaData("file", file);
+        List<CommandResult> result = new ArrayList<>(1);
+        SuccessResult successResult = new SuccessResult();
+        successResult.setMessage(String.format("File '%1$s' created", file));
+        successResult.addMetaData("file", file);
+
+        result.add(successResult);
         return result;
     }
 }

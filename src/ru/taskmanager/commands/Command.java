@@ -9,5 +9,5 @@ public interface Command {
      * @param params Параметры команды
      * @return Результат выполнения команды
      */
-    CommandResult execute(List<KeyValueParam> params);
+    List<CommandResult> execute(List<KeyValueParam> params);
 }

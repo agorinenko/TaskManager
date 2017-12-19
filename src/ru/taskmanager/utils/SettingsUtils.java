@@ -26,7 +26,6 @@ public class SettingsUtils {
                 File codeSource = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
                 base = codeSource.getParent();
             } catch (URISyntaxException e) {
-                e.printStackTrace();
             }
         }
         Path path = Paths.get(StringUtils.trimEnd(base, "//"), "settings");

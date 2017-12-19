@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TestErrorCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         try {
             throw new CommandException(params.get(1).getStringValue());
         } catch (StringIsEmptyException e) {

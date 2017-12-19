@@ -18,8 +18,7 @@ import java.util.List;
 public class Delete extends BaseDbCommand {
 
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-        SuccessResult result = new SuccessResult();
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam versionParam = ListUtils.getKeyValueParam(params, "v");
 
         String version = null != versionParam ? versionParam.getDefaultOrStringValue("") : "";
@@ -44,11 +43,8 @@ public class Delete extends BaseDbCommand {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Operation status:" + statusStr + "(" + status + ")");
-
         StringUtils.appendLineSeparator(sb);
 
-        String resultMessage = sb.toString();
-        result.setMessage(resultMessage);
-        return result;
+        return createSingleSuccessResult(sb.toString());
     }
 }

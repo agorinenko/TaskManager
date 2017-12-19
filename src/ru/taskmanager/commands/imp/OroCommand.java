@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class OroCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam commandParam  = ListUtils.getKeyValueParam(params, "o");
 
         String forExampleText = (String) SettingsUtils.getSettingsValue("oroCommandsHelp");

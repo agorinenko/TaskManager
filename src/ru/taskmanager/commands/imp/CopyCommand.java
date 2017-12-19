@@ -14,11 +14,16 @@ import java.util.List;
 
 public class CopyCommand extends SafetyCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         String from = getStringParam(params, "from");
         String to = getStringParam(params, "to");
+
         if(StringUtils.isNullOrEmpty(to)){
             throw new CommandException("Parameter \"to\" is null or empty");
+        }
+
+        if(StringUtils.isNullOrEmpty(from)){
+            throw new CommandException("Parameter \"from\" is null or empty");
         }
 
         TreeCopier copier;
@@ -26,11 +31,9 @@ public class CopyCommand extends SafetyCommand {
             copier = new TreeCopier(Paths.get(from), Paths.get(to));
             copier.copy();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new CommandException(e.getMessage());
         }
 
-        SuccessResult result = new SuccessResult();
-        result.setMessage("The copy from \"" + from + "\" to \"" + to + "\" was successful" + System.lineSeparator());
-        return result;
+        return createSingleSuccessResult("The copy from \"" + from + "\" to \"" + to + "\" was successful");
     }
 }

@@ -8,6 +8,7 @@ import ru.taskmanager.commands.SafetyCommand;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.utils.ListUtils;
+import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
 
 import java.text.DateFormat;
@@ -16,10 +17,7 @@ import java.util.List;
 
 public class Push extends BaseDbCommand {
     @Override
-    public CommandResult safetyExecute(List<KeyValueParam> params) throws CommandException {
-
-        SuccessResult result = new SuccessResult();
-
+    public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
         KeyValueParam versionParam = ListUtils.getKeyValueParam(params, "v");
         String v = null != versionParam ? versionParam.getDefaultOrStringValue("") : "";
         boolean versionIsMissing = StringUtils.isNullOrEmpty(v) ? true : false;
@@ -68,12 +66,10 @@ public class Push extends BaseDbCommand {
 
                 sb.append(System.lineSeparator());
             }
-        };
+        }
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
 
-        String resultMessage = sb.toString();
-        result.setMessage(resultMessage);
-        return result;
+        return createSingleSuccessResult(sb.toString());
     }
 }

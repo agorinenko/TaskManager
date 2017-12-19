@@ -37,7 +37,7 @@ public class ProcessWorker implements Runnable {
                 os.println(s);
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            os.println(e.getMessage());
         }
     }
 }
