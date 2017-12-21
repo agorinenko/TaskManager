@@ -14,12 +14,12 @@
 * [Задания для ведения версий схемы баз данных](#Действие-db)
 ## Прочее
 * [Лицензионное соглашение](LICENSE.md)
-* [Дистрибутивы](#https://drive.google.com/drive/folders/12WfyHs6anOjbV5Fe8YmzTkV4dQCeIq3z)  
+* [Дистрибутивы](https://drive.google.com/drive/folders/12WfyHs6anOjbV5Fe8YmzTkV4dQCeIq3z)  
 * [Сборка дистрибутива](DISTRIB.md)  
 * [Конфигурация и настройка](CONF.md)
 * [Как задать или настроить системную переменную PATH?](https://www.java.com/ru/download/help/path.xml)
 ## Установка для операционных систем Windows
-1) [Скачайте](#https://drive.google.com/drive/folders/12WfyHs6anOjbV5Fe8YmzTkV4dQCeIq3z) последнюю версию дистрибутива
+1) [Скачайте](https://drive.google.com/drive/folders/12WfyHs6anOjbV5Fe8YmzTkV4dQCeIq3z) последнюю версию дистрибутива
 2) Распакуйте архив в нужную директорию. Назовем её C:\tm_distr
 3) Добавьте переменную окружения `TM_HOME` Windows, указав в качестве значения путь к директории распаковки архива, 
 например, C:\tm_distr
