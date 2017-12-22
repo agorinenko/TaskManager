@@ -9,7 +9,7 @@ import java.nio.file.Path;
 /**
  * Created by agorinenko on 15.11.2017.
  */
-abstract public class JsonConfiguration implements Configuration {
+public abstract class JsonConfiguration implements Configuration {
 
     protected final Path jsonPath;
 
