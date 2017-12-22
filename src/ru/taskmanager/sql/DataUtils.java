@@ -2,6 +2,8 @@ package ru.taskmanager.sql;
 
 import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.api.mappers.VersionMapper;
+import ru.taskmanager.args.ParamsManager;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.ConnectionManagerException;
 import ru.taskmanager.utils.Builder;
@@ -12,11 +14,13 @@ import java.util.*;
 
 public class DataUtils {
 
-    public static List<BaseMapper> createConnection(SqlActions action, boolean isGlobal) throws ConnectionManagerException, SQLException {
+    public static List<BaseMapper> createConnection(List<KeyValueParam> params, SqlActions action, boolean isGlobal) throws ConnectionManagerException, SQLException {
         if(null == action){
             throw new ConnectionManagerException("Sql action is null");
         }
-        Connection conn = isGlobal ? ConnectionManager.getInstance().getGlobalConnection(): ConnectionManager.getInstance().getConnection();
+        Connection conn = isGlobal ?
+                ConnectionManager.getInstance(params).getGlobalConnection() :
+                ConnectionManager.getInstance(params).getConnection();
         try {
             return action.execute(conn);
         } finally {
@@ -25,13 +29,13 @@ public class DataUtils {
             }
         }
     }
-    public static List<BaseMapper> createConnection(SqlActions action) throws ConnectionManagerException, SQLException {
-        return createConnection(action, false);
+    public static List<BaseMapper> createConnection(List<KeyValueParam> params, SqlActions action) throws ConnectionManagerException, SQLException {
+        return createConnection(params, action, false);
     }
 
-    public static List<BaseMapper> createConnectionInCommandContext(SqlActions action, boolean isGlobal) throws CommandException {
+    public static List<BaseMapper> createConnectionInCommandContext(List<KeyValueParam> params, SqlActions action, boolean isGlobal) throws CommandException {
         try {
-            return createConnection(action, isGlobal);
+            return createConnection(params, action, isGlobal);
         } catch (SQLException e) {
             throw new CommandException(String.format("%1$s; Code:%2$s;", e.getMessage(), e.getErrorCode()));
         } catch (ConnectionManagerException e) {
@@ -39,8 +43,8 @@ public class DataUtils {
         }
     }
 
-    public static List<BaseMapper> createConnectionInCommandContext(SqlActions action) throws CommandException {
-        return createConnectionInCommandContext(action, false);
+    public static List<BaseMapper> createConnectionInCommandContext(List<KeyValueParam> params, SqlActions action) throws CommandException {
+        return createConnectionInCommandContext(params, action, false);
     }
 
     public static<MapperType extends BaseMapper> List<BaseMapper> executeStatement(Connection conn, String statement, Object[] params, Builder<MapperType> builder) throws SQLException {

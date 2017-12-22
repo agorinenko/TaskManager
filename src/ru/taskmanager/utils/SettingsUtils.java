@@ -1,27 +1,32 @@
 package ru.taskmanager.utils;
 
 import ru.taskmanager.Main;
-import ru.taskmanager.api.EnvironmentParameter;
-import ru.taskmanager.config.EnvironmentVariables;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.config.Settings;
 import ru.taskmanager.errors.ConfigurationException;
 
 import java.io.File;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class SettingsUtils {
 
-    public static String getBaseSettingsDir(){
-        String base = "";
-
+    public static String getHome(){
+        String home = "";
         Map<String, String> env = System.getenv();
         if (env.containsKey("TM_HOME")){
-            base = env.get("TM_HOME");
-        } else {
+            home = env.get("TM_HOME");
+        }
+
+        return home;
+    }
+
+    public static String getBaseSettingsDir(){
+        String base = getHome();
+        if (StringUtils.isNullOrEmpty(base)){
             try {
                 File codeSource = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI());
                 base = codeSource.getParent();
@@ -47,8 +52,8 @@ public class SettingsUtils {
         return path.toString();
     }
 
-    public static String getOutScriptDir(){
-        String outFolder = (String) SettingsUtils.getSettingsValue("out");
+    public static String getOutScriptDir(List<KeyValueParam> params){
+        String outFolder = (String) SettingsUtils.getSettingsOrParamValue(params, "out");
         outFolder = StringUtils.trimEnd(outFolder, "//");
 
         Path path = Paths.get(outFolder);
@@ -64,29 +69,21 @@ public class SettingsUtils {
 
         return value;
     }
-    public static Object getSettingsValue(String key){
-        Map<String, Object> items;
-        Object value = null;
-        try {
-            EnvironmentParameter env = EnvironmentVariables.getInstance().getEnvironmentParameter();
-            if(null != env) {
-                items = EnvironmentVariables.getInstance().getEntityByKey(env.getEnv());
 
-                if (items.containsKey(key)) {
-                    value = null != items ? items.get(key) : null;
-                } else {
-                    value = getSettings(key);
-                }
-            } else {
-                value = getSettings(key);
-            }
-        } catch (ConfigurationException e) {
+    public static Object getSettingsOrParamValue(List<KeyValueParam> params, String key){
+        KeyValueParam param = ListUtils.getKeyValueParam(params, key);
+        if(null != param){
+            return param.getValue();
         }
 
-        return value;
+        return getSettingsValue(key);
     }
 
-    public static Object getSettings(String key){
+    public static Object getSettingsValue(String key){
+        return getSettingsInternal(key);
+    }
+
+    private static Object getSettingsInternal(String key){
         Object value = null;
         Map<String, Object> items;
         try {

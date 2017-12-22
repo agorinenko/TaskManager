@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 
-public class ParamsManager {
+public final class ParamsManager {
     private List<CommandParam> commandParams;
     private List<KeyValueParam> keyValueParams;
     private List<String> requiredKeys;
@@ -135,14 +135,13 @@ public class ParamsManager {
                     extendParametersByEnv(envValue);
                 }
             } catch (StringIsEmptyException e) {}
-            catch (FileNotFoundException e) {}
             catch (CorruptedParamException e) {}
             catch (ConfigurationException e) {}
             catch (UniqueParamException e) {}
         }
     }
 
-    private void extendParametersByEnv(String env) throws FileNotFoundException, RequiredParamException, StringIsEmptyException, CorruptedParamException, ConfigurationException, UniqueParamException {
+    private void extendParametersByEnv(String env) throws StringIsEmptyException, CorruptedParamException, ConfigurationException, UniqueParamException {
         Map<String, Object> set = EnvironmentVariables.getInstance().getEntityByKey(env);
         for (Map.Entry<String, Object> entry : set.entrySet()) {
             String key = entry.getKey();

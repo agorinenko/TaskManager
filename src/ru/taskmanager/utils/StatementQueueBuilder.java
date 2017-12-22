@@ -1,5 +1,7 @@
 package ru.taskmanager.utils;
 
+import ru.taskmanager.args.params.KeyValueParam;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -31,7 +33,7 @@ public class StatementQueueBuilder {
         this.separator = separator;
     }
 
-    public void build() {
+    public void build(List<KeyValueParam> params) {
         statements = new ArrayList<>();
         setState("START");
         Reader reader = null;
@@ -52,13 +54,13 @@ public class StatementQueueBuilder {
                     }
 
                     if(appendStatement){
-                        appendStatement(builder);
+                        appendStatement(params, builder);
                         builder = new StringBuilder();
                     }
                 }
 
                 if(!appendStatement) {
-                    appendStatement(builder);
+                    appendStatement(params, builder);
                 }
 
             }finally {
@@ -117,12 +119,12 @@ public class StatementQueueBuilder {
         return statements;
     }
 
-    public void appendStatement(StringBuilder builder) {
+    public void appendStatement(List<KeyValueParam> params, StringBuilder builder) {
         String sql = builder.toString();
         sql = StringUtils.trim(sql, " ");
 
         if (!StringUtils.isNullOrEmpty(sql)) {
-            sql = StringUtils.replaceAllDbConstants(sql);
+            sql = StringUtils.replaceAllDbConstants(params, sql);
             statements.add(sql);
 
             appendStatement = false;

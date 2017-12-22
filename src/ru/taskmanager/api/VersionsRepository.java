@@ -3,6 +3,7 @@ package ru.taskmanager.api;
 import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.api.mappers.LocalVersionManager;
 import ru.taskmanager.api.mappers.VersionMapper;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.StringIsEmptyException;
 import ru.taskmanager.sql.DataUtils;
@@ -20,16 +21,11 @@ public class VersionsRepository {
     private List<Version> localVersions;
     private List<Version> allVersions;
 
-    private String baseDir;
-    public void setBaseDir(String baseDir){
-        this.baseDir = baseDir;
-    }
-
-    public List<Version> getRemoteVersions() throws CommandException {
+    public List<Version> getRemoteVersions(List<KeyValueParam> params) throws CommandException {
         if(null == this.remoteVersions){
-            List<String> selectVersionsStatements = StatementUtils.getDbFolderStatements("select_versions.sql");
+            List<String> selectVersionsStatements = StatementUtils.getDbFolderStatements(params, "select_versions.sql");
 
-            List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(conn -> {
+            List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(params, conn -> {
                 return DataUtils.executeStatementsAsTransaction(conn, selectVersionsStatements, () ->  new VersionMapper());
             });
 
@@ -42,15 +38,12 @@ public class VersionsRepository {
         return this.remoteVersions;
     }
 
-    public List<Version> getLocalVersions() throws CommandException {
-        return getLocalVersions("");
+    public List<Version> getLocalVersions(List<KeyValueParam> params) throws CommandException {
+        return getLocalVersions(params, "");
     }
-    public List<Version> getLocalVersions(String extension) throws CommandException {
+    public List<Version> getLocalVersions(List<KeyValueParam> params, String extension) throws CommandException {
         if(null == this.localVersions){
-            LocalVersionManager manager = new LocalVersionManager();
-            if(!StringUtils.isNullOrEmpty(this.baseDir)){
-                manager.setBaseDir(this.baseDir);
-            }
+            LocalVersionManager manager = new LocalVersionManager(params);
 
             try {
                 localVersions = manager.select(extension);
@@ -63,39 +56,39 @@ public class VersionsRepository {
         return this.localVersions;
     }
 
-    public List<Version> getAllVersions() throws CommandException {
+    public List<Version> getAllVersions(List<KeyValueParam> params) throws CommandException {
         if(null == this.allVersions){
-            allVersions = LocalVersionManager.merge(getRemoteVersions(), getLocalVersions());
+            allVersions = LocalVersionManager.merge(getRemoteVersions(params), getLocalVersions(params));
             allVersions.sort(new VersionComparator());
         }
 
         return this.allVersions;
     }
 
-    public Boolean isLocal(Version version) throws CommandException {
-        return LocalVersionManager.versionExist(this.getLocalVersions(), version);
+    public Boolean isLocal(List<KeyValueParam> params, Version version) throws CommandException {
+        return LocalVersionManager.versionExist(this.getLocalVersions(params), version);
     }
 
-    public Boolean isRemote(Version version) throws CommandException {
-        return LocalVersionManager.versionExist(this.getRemoteVersions(), version);
+    public Boolean isRemote(List<KeyValueParam> params, Version version) throws CommandException {
+        return LocalVersionManager.versionExist(this.getRemoteVersions(params), version);
     }
 
-    public int pushItem(Version version) throws CommandException {
+    public int pushItem(List<KeyValueParam> params, Version version) throws CommandException {
         VersionMapper mapper = new VersionMapper();
-        int id = mapper.insert(version);
+        int id = mapper.insert(params, version);
 
         return id;
     }
 
-    public Version getRemoteVersion(String version) throws CommandException {
-        List<Version> remoteVersions = getRemoteVersions();
+    public Version getRemoteVersion(List<KeyValueParam> params, String version) throws CommandException {
+        List<Version> remoteVersions = getRemoteVersions(params);
         Version remoteVersion = remoteVersions.stream().filter(i -> i.getVersionTimestampString().equalsIgnoreCase(version)).findFirst().orElse(null);
 
         return remoteVersion;
     }
 
-    public Version getFirstRemoteVersion() throws CommandException {
-        List<Version> remoteVersions = getRemoteVersions();
+    public Version getFirstRemoteVersion(List<KeyValueParam> params) throws CommandException {
+        List<Version> remoteVersions = getRemoteVersions(params);
         Version remoteVersion = remoteVersions.stream().findFirst().orElse(null);
 
         return remoteVersion;

@@ -35,12 +35,7 @@ public class PowerShellCommand extends SafetyCommand {
     public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
 
         HashMap<String, Object> psParams = ListUtils.convertToHashMap(params);
-        LocalVersionManager manager = new LocalVersionManager();
-
-        String outValue = getStringParam(params, "out");
-        if(!StringUtils.isNullOrEmpty(outValue)){
-            manager.setBaseDir(outValue);
-        }
+        LocalVersionManager manager = new LocalVersionManager(params);
 
         String v = getStringParam(params, "v");
         boolean versionIsMissing = StringUtils.isNullOrEmpty(v) ? true : false;

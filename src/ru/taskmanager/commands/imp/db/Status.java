@@ -30,15 +30,15 @@ public class Status extends BaseDbCommand {
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
         VersionsRepository versionsRepository = initVersionsRepository(params);
-        List<Version> allVersions = versionsRepository.getAllVersions();
+        List<Version> allVersions = versionsRepository.getAllVersions(params);
 
         for (Version version : allVersions) {
             if(null != version.getVersionTimestamp()) {
                 String createdBy = StringUtils.formatString(version.getCreatedBy(), 16, ' ');
                 String name = StringUtils.formatString(version.getName(), 30, ' ');
                 String versionTimestamp = df.format(version.getVersionTimestamp());
-                Boolean isLocal = versionsRepository.isLocal(version);
-                Boolean isRemote = versionsRepository.isRemote(version);
+                Boolean isLocal = versionsRepository.isLocal(params, version);
+                Boolean isRemote = versionsRepository.isRemote(params, version);
 
                 sb.append(String.format("%1$s | %2$s | %3$s | %4$s | %5$s ",
                         StringUtils.formatString(versionTimestamp, 24, ' '),

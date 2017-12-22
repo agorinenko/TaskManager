@@ -32,13 +32,13 @@ public class Push extends BaseDbCommand {
         StringUtils.appendLine(sb);
         StringUtils.appendLineSeparator(sb);
         VersionsRepository versionsRepository = initVersionsRepository(params);
-        List<Version> localVersions = versionsRepository.getLocalVersions(".sql");
+        List<Version> localVersions = versionsRepository.getLocalVersions(params, ".sql");
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss S");
 
         for (Version version : localVersions) {
             String versionTimestamp = df.format(version.getVersionTimestamp());
             if(null != versionTimestamp) {
-                Boolean isRemote = versionsRepository.isRemote(version);
+                Boolean isRemote = versionsRepository.isRemote(params, version);
                 String name = StringUtils.formatString(version.getName(), 30, ' ');
 
                 String statusStr;
@@ -46,7 +46,7 @@ public class Push extends BaseDbCommand {
                     statusStr = "INSTALL";
                 } else{
                     if(versionIsMissing || version.getVersionTimestampString().equalsIgnoreCase(v)) {
-                        int status = versionsRepository.pushItem(version);
+                        int status = versionsRepository.pushItem(params, version);
                         if (status > 0) {
                             statusStr = "OK";
                         } else if (status == 0) {

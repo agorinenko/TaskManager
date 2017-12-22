@@ -1,9 +1,13 @@
 package ru.taskmanager.utils;
 
+import ru.taskmanager.FinalConstants;
+import ru.taskmanager.args.params.KeyValueParam;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 
 public class StringUtils {
@@ -35,6 +39,7 @@ public class StringUtils {
 
     public static String replaceAllSpecialConstants(String str){
         str = str.replaceAll("#NEW_LINE#",  System.lineSeparator());
+        str = str.replaceAll("#VERSION#", FinalConstants.Version);
 
         String baseScriptDir = Matcher.quoteReplacement(SettingsUtils.getBaseScriptDir());
         str = str.replaceAll("#BASE_SCRIPT_DIR#",  baseScriptDir);
@@ -42,8 +47,8 @@ public class StringUtils {
         return str;
     }
 
-    public static String replaceAllDbConstants(String str){
-        str = str.replaceAll("DATA_BASE_NAME", (String) SettingsUtils.getSettingsValue("db.name"));
+    public static String replaceAllDbConstants(List<KeyValueParam> params, String str){
+        str = str.replaceAll("DATA_BASE_NAME", (String) SettingsUtils.getSettingsOrParamValue(params, "db.name"));
 
         return str;
     }

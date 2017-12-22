@@ -15,8 +15,8 @@ import java.util.List;
 public class Remove  extends SafetyCommand {
     @Override
     public List<CommandResult> safetyExecute(List<KeyValueParam> params) throws CommandException {
-        List<String> createDbStatements = StatementUtils.getDbFolderStatements("drop_db.sql");
-        DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatements(conn, createDbStatements), true);
+        List<String> createDbStatements = StatementUtils.getDbFolderStatements(params, "drop_db.sql");
+        DataUtils.createConnectionInCommandContext(params, conn -> DataUtils.executeStatements(conn, createDbStatements), true);
 
         return createSingleSuccessResult("The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
     }

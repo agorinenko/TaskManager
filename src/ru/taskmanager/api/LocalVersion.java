@@ -1,5 +1,6 @@
 package ru.taskmanager.api;
 
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.utils.StatementUtils;
 
 import java.nio.file.Path;
@@ -18,7 +19,7 @@ public class LocalVersion extends Version {
         return this.localPath;
     }
 
-    public List<String> getStatements() {
-        return StatementUtils.getStatementsByFullFilePath(getLocalPath().toString());
+    public List<String> getStatements(List<KeyValueParam> params) {
+        return StatementUtils.getStatementsByFullFilePath(params, getLocalPath().toString());
     }
 }

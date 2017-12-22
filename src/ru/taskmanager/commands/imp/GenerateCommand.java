@@ -29,7 +29,6 @@ public class GenerateCommand extends SafetyCommand {
         KeyValueParam typeParam = ListUtils.getKeyValueParam(params, "t");
         KeyValueParam fileNameParam = ListUtils.getKeyValueParam(params, "n");
         KeyValueParam useTimeStampParam  = ListUtils.getKeyValueParam(params, "stamp");
-        KeyValueParam out = ListUtils.getKeyValueParam(params, "out");
 
         String fileExtension = "txt";
         if(null != typeParam){
@@ -57,17 +56,8 @@ public class GenerateCommand extends SafetyCommand {
         }
 
         String formatFileName = String.format("%1$s%2$s.%3$s", timeStamp, fileName, fileExtension);
-        LocalVersionManager manager = new LocalVersionManager();
-        if(null != out){
-            String outValue = null;
-            try {
-                outValue = out.getStringValue();
-            } catch (StringIsEmptyException e) {}
+        LocalVersionManager manager = new LocalVersionManager(params);
 
-            if(!StringUtils.isNullOrEmpty(outValue)){
-                manager.setBaseDir(outValue);
-            }
-        }
         Path file = manager.createFile(formatFileName);
 
         List<CommandResult> result = new ArrayList<>(1);

@@ -11,4 +11,5 @@
     <setting key="p" class="ru.taskmanager.commands.imp.PlanCommand" />
     <setting key="copy" class="ru.taskmanager.commands.imp.CopyCommand" />
     <setting key="gmail" class="ru.taskmanager.commands.imp.GmailSendCommand" />
+    <setting key="info" class="ru.taskmanager.commands.imp.InfoCommand" />
 </config>

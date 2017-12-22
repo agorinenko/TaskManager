@@ -3,6 +3,7 @@ package ru.taskmanager.api.mappers;
 import ru.taskmanager.api.LocalVersion;
 import ru.taskmanager.api.Version;
 import ru.taskmanager.api.VersionComparator;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.utils.SettingsUtils;
 import ru.taskmanager.utils.StringUtils;
@@ -19,12 +20,8 @@ import java.util.stream.Stream;
 public class LocalVersionManager {
     private String baseDir;
 
-    public LocalVersionManager(){
-        this.baseDir = SettingsUtils.getOutScriptDir();
-    }
-
-    public void setBaseDir(String baseDir){
-        this.baseDir = baseDir;
+    public LocalVersionManager(List<KeyValueParam> params){
+        this.baseDir = SettingsUtils.getOutScriptDir(params);
     }
 
     public List<Version> select() throws IOException {

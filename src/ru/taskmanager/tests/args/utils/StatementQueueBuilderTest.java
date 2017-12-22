@@ -1,4 +1,4 @@
-package ru.taskmanager.tests.args.utils;
+package args.utils;
 
 import org.junit.Test;
 import ru.taskmanager.utils.SettingsUtils;
@@ -17,7 +17,7 @@ public class StatementQueueBuilderTest {
         String file = SettingsUtils.getScriptPath("test_sql.sql");
 
         StatementQueueBuilder builder = new StatementQueueBuilder(file, "--SEP--");
-        builder.build();
+        builder.build(null);
         List<String> statements = builder.getStatements();
         assertEquals(statements.stream().count(), 7);
         assertEquals(statements.get(0), "DROP DATABASE IF EXISTS test1;");

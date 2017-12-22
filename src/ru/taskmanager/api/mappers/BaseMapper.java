@@ -1,6 +1,6 @@
 package ru.taskmanager.api.mappers;
 
-import ru.taskmanager.api.Row;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 
 import java.sql.ResultSet;
@@ -34,7 +34,7 @@ public abstract class BaseMapper<T> {
         this.result = select(rs);
     }
 
-    public abstract int insert(T row) throws CommandException;
+    public abstract int insert(List<KeyValueParam> params, T row) throws CommandException;
 
     protected abstract void mapFields(T row, ResultSet rs) throws SQLException;
 }

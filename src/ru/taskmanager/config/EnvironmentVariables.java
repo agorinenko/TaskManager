@@ -1,7 +1,5 @@
 package ru.taskmanager.config;
 
-import ru.taskmanager.api.EnvironmentBuilder;
-import ru.taskmanager.api.EnvironmentParameter;
 import ru.taskmanager.errors.ConfigurationException;
 
 /**
@@ -25,18 +23,6 @@ public class EnvironmentVariables extends EnvJsonConfigurationManager {
         }
 
         return localInstance;
-    }
-
-    private EnvironmentParameter environmentParameter;
-
-    public void setEnvironmentParameter(String env){
-        environmentParameter = new EnvironmentBuilder()
-                .setEnv(env)
-                .build();
-    }
-
-    public EnvironmentParameter getEnvironmentParameter(){
-        return environmentParameter;
     }
 
     @Override

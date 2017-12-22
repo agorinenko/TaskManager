@@ -2,6 +2,7 @@ package ru.taskmanager.api;
 
 import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.api.mappers.InsertVersionMapper;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.StatementUtils;
@@ -25,7 +26,7 @@ public class Row {
 
 
 
-    public int delete() throws CommandException {
+    public int delete(List<KeyValueParam> params) throws CommandException {
         throw new NotImplementedException();
     }
 }

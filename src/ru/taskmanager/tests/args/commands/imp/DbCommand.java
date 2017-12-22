@@ -1,8 +1,8 @@
 package args.commands.imp;
 
-import args.TestUtils;
 import org.junit.Test;
-import ru.taskmanager.api.Version;
+
+import args.*;
 import ru.taskmanager.args.ParamsManager;
 import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
@@ -33,6 +33,21 @@ public class DbCommand {
     @Test
     public void init2() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
         ParamsManager manager = new ParamsManager(new String[]{ "db", "o:init", "onlyschema:true" });
+
+        Executor executor = new Executor(manager);
+        List<CommandResult> result = executor.execute();
+        String message = result.get(0).getMessage();
+
+        System.out.print(message);
+
+        assertTrue(result.size() > 0);
+        assertTrue(result.get(0) instanceof SuccessResult);
+        assertTrue(message.length() > 0);
+    }
+
+    @Test
+    public void init3() throws StringIsEmptyException, CorruptedParamException, ClassNotFoundException, InstantiationException, RequiredParamException, IllegalAccessException, ConfigurationException, UniqueParamException {
+        ParamsManager manager = new ParamsManager(new String[]{ "db", "o:init", "db.url:jdbc:postgresql://localhost:5432/", "db.name:test_db1", "db.user:postgres", "db.pwd:Bandit777rus", "db.separator:--SEP--" });
 
         Executor executor = new Executor(manager);
         List<CommandResult> result = executor.execute();

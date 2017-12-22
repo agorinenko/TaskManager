@@ -25,12 +25,12 @@ public class Delete extends BaseDbCommand {
         boolean versionIsMissing = StringUtils.isNullOrEmpty(version) ? true : false;
 
         VersionsRepository versionsRepository = initVersionsRepository(params);
-        Version remoteVersion = versionIsMissing ? versionsRepository.getFirstRemoteVersion() :versionsRepository.getRemoteVersion(version);
+        Version remoteVersion = versionIsMissing ? versionsRepository.getFirstRemoteVersion(params) :versionsRepository.getRemoteVersion(params, version);
         if(null == remoteVersion){
             throw new CommandException("Remote version '" + version + "' not found");
         }
 
-        int status = remoteVersion.delete();
+        int status = remoteVersion.delete(params);
         String statusStr;
 
         if (status > 0) {

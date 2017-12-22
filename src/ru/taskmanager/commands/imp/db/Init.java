@@ -23,12 +23,12 @@ public class Init extends SafetyCommand {
         Boolean onlySchema = null != onlySchemaParam ? onlySchemaParam.getBooleanValue() : false;
 
         if(!onlySchema) {
-            List<String> createDbStatements = StatementUtils.getDbFolderStatements("create_db.sql");
-            DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatements(conn, createDbStatements), true);
+            List<String> createDbStatements = StatementUtils.getDbFolderStatements(params, "create_db.sql");
+            DataUtils.createConnectionInCommandContext(params, conn -> DataUtils.executeStatements(conn, createDbStatements), true);
         }
 
-        List<String> createSchemaStatements = StatementUtils.getDbFolderStatements("create_schema.sql");
-        DataUtils.createConnectionInCommandContext(conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
+        List<String> createSchemaStatements = StatementUtils.getDbFolderStatements(params, "create_schema.sql");
+        DataUtils.createConnectionInCommandContext(params, conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
 
         return createSingleSuccessResult("The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
     }

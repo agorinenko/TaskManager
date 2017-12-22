@@ -3,6 +3,7 @@ package ru.taskmanager.api.mappers;
 import ru.taskmanager.api.LocalVersion;
 import ru.taskmanager.api.Row;
 import ru.taskmanager.api.Version;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.StatementUtils;
@@ -13,26 +14,26 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
-public class VersionMapper extends BaseMapper {
+public class VersionMapper extends BaseMapper<Version> {
 
     @Override
-    protected Object createInstanceOfRow() {
+    protected Version createInstanceOfRow() {
         return new Version();
     }
 
     @Override
-    public int insert(Object row) throws CommandException {
+    public int insert(List<KeyValueParam> params, Version row) throws CommandException {
 
         final int[] resultId = {-1};
 
         LocalVersion version = (LocalVersion) row;
-        List<String> insertVersionStatements = StatementUtils.getDbFolderStatements("insert_version.sql");
+        List<String> insertVersionStatements = StatementUtils.getDbFolderStatements(params, "insert_version.sql");
         String insertVersionStatement = StatementUtils.getSingleStatement(insertVersionStatements);
         if(!StringUtils.isNullOrEmpty(insertVersionStatement)) {
-            List<String> insertStatements = version.getStatements();
+            List<String> insertStatements = version.getStatements(params);
             if (insertStatements.size() > 0) {
-                List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(conn -> {
-                    Object[] params = {
+                List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(params, conn -> {
+                    Object[] ps = {
                             version.getVersionTimestampString(),
                             version.getCreatedBy(),
                             version.getName(),
@@ -41,7 +42,7 @@ public class VersionMapper extends BaseMapper {
 
                     DataUtils.executeStatementsAsTransaction(conn, insertStatements);
 
-                    return DataUtils.executeStatement(conn, insertVersionStatement, params, () -> new InsertVersionMapper());
+                    return DataUtils.executeStatement(conn, insertVersionStatement, ps, () -> new InsertVersionMapper());
                 });
 
                 if(sqlResult.size() > 0) {
@@ -61,8 +62,7 @@ public class VersionMapper extends BaseMapper {
     }
 
     @Override
-    protected void mapFields(Object row, ResultSet rs) throws SQLException {
-        Version version = (Version) row;
+    protected void mapFields(Version version, ResultSet rs) throws SQLException {
         version.setId(rs.getInt("id"));
         try {
             version.setVersionTimestamp(StringUtils.sdf.parse(rs.getString("version")));

@@ -80,6 +80,28 @@ public class ParamsManagerTest {
     }
 
     @Test
+    public void dbParams() throws Exception {
+        ParamsManager manager = new ParamsManager(new String[]{ "db", "o:init", "db.url:jdbc:postgresql://localhost:5432/", "db.name:test_db1", "db.user:postgres", "db.pwd:MyPassword", "db.separator:--SEP--" });
+
+        KeyValueParam p1 = manager.getKeyValueParam("db.url");
+        KeyValueParam p2 = manager.getKeyValueParam("db.name");
+        KeyValueParam p3 = manager.getKeyValueParam("db.user");
+        KeyValueParam p4 = manager.getKeyValueParam("db.pwd");
+        KeyValueParam p5 = manager.getKeyValueParam("db.separator");
+        assertTrue(p1 instanceof StringParam);
+        assertTrue(p2 instanceof StringParam);
+        assertTrue(p3 instanceof StringParam);
+        assertTrue(p4 instanceof StringParam);
+        assertTrue(p5 instanceof StringParam);
+
+        assertEquals(p1.getValue(), "jdbc:postgresql://localhost:5432/");
+        assertEquals(p2.getValue(), "test_db1");
+        assertEquals(p3.getValue(), "postgres");
+        assertEquals(p4.getValue(), "MyPassword");
+        assertEquals(p5.getValue(), "--SEP--");
+    }
+
+    @Test
     public void mergeKeyValueParams() throws Exception {
         ParamsManager manager = new ParamsManager(new String[]{ "c1", "c2", "c3", "p1:1", "p2:v2", "p4:2", "env:dev" });
 

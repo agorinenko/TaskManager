@@ -15,7 +15,7 @@
     <setting key="db.separator" value="" />
     <setting key="author" value="Anonymous" />
     <setting key="help" value="
-========= Task manager console 1.0.0 =========
+========= Task manager console #VERSION# =========
 #NEW_LINE#See full description on
 #NEW_LINE#https://github.com/agorinenko/TaskManager/#taskmanager
 #NEW_LINE#==============================================" />

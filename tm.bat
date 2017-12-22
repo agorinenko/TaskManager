@@ -1,1 +1,1 @@
-java -jar %~dp0TaskManager.jar %*
+%TM_HOME%\jre1.8.0_144\bin\java.exe -jar %~dp0TaskManager.jar %*

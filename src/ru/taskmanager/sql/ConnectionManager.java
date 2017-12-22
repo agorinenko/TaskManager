@@ -1,5 +1,7 @@
 package ru.taskmanager.sql;
 
+import ru.taskmanager.args.ParamsManager;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.ConnectionManagerException;
 import ru.taskmanager.utils.SettingsUtils;
@@ -12,6 +14,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ConnectionManager {
     private static volatile ConnectionManager instance;
@@ -25,16 +28,15 @@ public class ConnectionManager {
     private String driver;
     private String driverName;
 
-    private ConnectionManager() throws ConnectionManagerException {
+    private ConnectionManager(List<KeyValueParam> params) throws ConnectionManagerException {
         driver = (String) SettingsUtils.getSettingsOrDefaultValue("db.driver");
         driver = StringUtils.replaceAllSpecialConstants(driver);
         driverName = (String) SettingsUtils.getSettingsValue("db.driver.name");
 
-        url = (String) SettingsUtils.getSettingsValue("db.url");
-        user = (String) SettingsUtils.getSettingsValue("db.user");
-        pwd = (String) SettingsUtils.getSettingsValue("db.pwd");
-
-        dbName = (String) SettingsUtils.getSettingsValue("db.name");
+        url = (String) SettingsUtils.getSettingsOrParamValue(params, "db.url");
+        user = (String) SettingsUtils.getSettingsOrParamValue(params, "db.user");
+        pwd = (String) SettingsUtils.getSettingsOrParamValue(params, "db.pwd");
+        dbName = (String) SettingsUtils.getSettingsOrParamValue(params, "db.name");
 
         urlWithDb = formatUrl();
 
@@ -62,13 +64,13 @@ public class ConnectionManager {
         }
     }
 
-    public static ConnectionManager getInstance() throws ConnectionManagerException {
+    public static ConnectionManager getInstance(List<KeyValueParam> params) throws ConnectionManagerException {
         ConnectionManager localInstance = instance;
         if (localInstance == null) {
             synchronized (ConnectionManager.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new ConnectionManager();
+                    instance = localInstance = new ConnectionManager(params);
                 }
             }
         }

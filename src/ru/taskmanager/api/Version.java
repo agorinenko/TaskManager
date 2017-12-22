@@ -3,6 +3,7 @@ package ru.taskmanager.api;
 import ru.taskmanager.api.mappers.BaseMapper;
 import ru.taskmanager.api.mappers.DeleteVersionMapper;
 import ru.taskmanager.api.mappers.InsertVersionMapper;
+import ru.taskmanager.args.params.KeyValueParam;
 import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.sql.DataUtils;
 import ru.taskmanager.utils.SettingsUtils;
@@ -80,18 +81,18 @@ public class Version extends Row {
     }
 
     @Override
-    public int delete() throws CommandException {
+    public int delete(List<KeyValueParam> params) throws CommandException {
         final int[] resultId = {-1};
 
-        List<String> deleteVersionStatements = StatementUtils.getDbFolderStatements("delete_version.sql");
+        List<String> deleteVersionStatements = StatementUtils.getDbFolderStatements(params, "delete_version.sql");
         String deleteVersionStatement = StatementUtils.getSingleStatement(deleteVersionStatements);
         if (!StringUtils.isNullOrEmpty(deleteVersionStatement)) {
 
-            List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(conn -> {
-                Object[] params = {
+            List<BaseMapper> sqlResult = DataUtils.createConnectionInCommandContext(params, conn -> {
+                Object[] ps = {
                         getVersionTimestampString()
                 };
-                return DataUtils.executeStatement(conn, deleteVersionStatement, params, () -> new DeleteVersionMapper());
+                return DataUtils.executeStatement(conn, deleteVersionStatement, ps, () -> new DeleteVersionMapper());
             });
             if (sqlResult.size() > 0) {
                 DeleteVersionMapper result = (DeleteVersionMapper) sqlResult.get(0);

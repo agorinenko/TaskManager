@@ -9,15 +9,19 @@ import java.util.Objects;
 
 public class ListUtils {
     public static KeyValueParam getKeyValueParam(List<KeyValueParam> params, String key){
-        KeyValueParam param = params.stream().filter(i -> {
-            try {
-                return i.getKey().equalsIgnoreCase(key);
-            } catch (StringIsEmptyException e) {
-                return false;
-            }
-        }).findFirst().orElse(null);
+        if(null != params) {
+            KeyValueParam param = params.stream().filter(i -> {
+                try {
+                    return i.getKey().equalsIgnoreCase(key);
+                } catch (StringIsEmptyException e) {
+                    return false;
+                }
+            }).findFirst().orElse(null);
 
-        return param;
+            return param;
+        }
+
+        return null;
     }
 
     public static HashMap<String, Object> convertToHashMap(List<KeyValueParam> params){

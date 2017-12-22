@@ -14,27 +14,15 @@ public class TreeCopier implements FileVisitor<Path> {
     public TreeCopier(Path source, Path target) throws IOException {
         this.source = source;
         this.target = target;
+
+        deleteFilesInDir(target);
+
         if(!Files.exists(this.target)) {
             Files.createDirectories(this.target);
         }
     }
 
-    public void copy() throws IOException {
-        Files.walkFileTree(source, this);
-    }
-
-    private boolean isRootTargetDir(Path p){
-        return p.equals(target);
-    }
-
-    @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-
-        Path targetDir = target.resolve(source.relativize(dir));
-        if(isRootTargetDir(targetDir)){
-            return FileVisitResult.CONTINUE;
-        }
-
+    private void deleteFilesInDir(Path targetDir) throws IOException {
         if(Files.exists(targetDir)){
             Files.walkFileTree(targetDir, new FileVisitor<Path>() {
                 @Override
@@ -59,6 +47,23 @@ public class TreeCopier implements FileVisitor<Path> {
                     return FileVisitResult.CONTINUE;
                 }
             });
+        }
+    }
+
+    public void copy() throws IOException {
+        Files.walkFileTree(source, this);
+    }
+
+    private boolean isRootTargetDir(Path p){
+        return p.equals(target);
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+
+        Path targetDir = target.resolve(source.relativize(dir));
+        if(isRootTargetDir(targetDir)){
+            return FileVisitResult.CONTINUE;
         }
 
         try {
