@@ -20,7 +20,7 @@ public class DbCommand extends SafetyCommand {
         KeyValueParam commandParam  = ListUtils.getKeyValueParam(params, "o");
 
         String forExampleText = (String) SettingsUtils.getSettingsValue("dbCommandsHelp");
-        forExampleText = StringUtils.replaceAllSpecialConstants(forExampleText);
+        forExampleText = StringUtils.replaceAllSpecialConstants(params, forExampleText);
         if(null == commandParam){
             throw new CommandException("Parameter 'o' is required. " + forExampleText);
         }

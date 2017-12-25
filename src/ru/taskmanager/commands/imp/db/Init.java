@@ -30,6 +30,6 @@ public class Init extends SafetyCommand {
         List<String> createSchemaStatements = StatementUtils.getDbFolderStatements(params, "create_schema.sql");
         DataUtils.createConnectionInCommandContext(params, conn -> DataUtils.executeStatementsAsTransaction(conn, createSchemaStatements));
 
-        return createSingleSuccessResult("The create db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
+        return createSingleSuccessResult("The create db '" + SettingsUtils.getSettingsOrParamValue(params, "db.name") + "' operation was successful");
     }
 }

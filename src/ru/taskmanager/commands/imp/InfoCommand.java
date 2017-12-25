@@ -20,7 +20,7 @@ public class InfoCommand extends SafetyCommand {
         addSuccessResult(results, String.format("Version: %s", FinalConstants.Version));
         addSuccessResult(results, String.format("Home: %s", SettingsUtils.getHome()));
         addSuccessResult(results, String.format("Base settings dir: %s", SettingsUtils.getBaseSettingsDir()));
-        addSuccessResult(results, String.format("Base script dir: %s", SettingsUtils.getBaseScriptDir()));
+        addSuccessResult(results, String.format("Base script dir: %s", SettingsUtils.getBaseScriptDir(params)));
         addSuccessResult(results, String.format("Out script dir: %s", SettingsUtils.getOutScriptDir(params)));
         addSuccessResult(results, String.format("Params: %s", keyValueParamsToString(params)));
 

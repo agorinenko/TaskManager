@@ -18,6 +18,6 @@ public class Remove  extends SafetyCommand {
         List<String> createDbStatements = StatementUtils.getDbFolderStatements(params, "drop_db.sql");
         DataUtils.createConnectionInCommandContext(params, conn -> DataUtils.executeStatements(conn, createDbStatements), true);
 
-        return createSingleSuccessResult("The drop db '" + SettingsUtils.getSettingsValue("db.name") + "' operation was successful");
+        return createSingleSuccessResult("The drop db '" + SettingsUtils.getSettingsOrParamValue(params, "db.name") + "' operation was successful");
     }
 }

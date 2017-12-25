@@ -30,8 +30,8 @@ public class ConnectionManager {
 
     private ConnectionManager(List<KeyValueParam> params) throws ConnectionManagerException {
         driver = (String) SettingsUtils.getSettingsOrDefaultValue("db.driver");
-        driver = StringUtils.replaceAllSpecialConstants(driver);
-        driverName = (String) SettingsUtils.getSettingsValue("db.driver.name");
+        driver = StringUtils.replaceAllSpecialConstants(params, driver);
+        driverName = (String) SettingsUtils.getSettingsOrParamValue(params, "db.driver.name");
 
         url = (String) SettingsUtils.getSettingsOrParamValue(params, "db.url");
         user = (String) SettingsUtils.getSettingsOrParamValue(params, "db.user");

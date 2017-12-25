@@ -19,7 +19,7 @@ public class StatementUtils {
     }
 
     public static List<String> getDbFolderStatements(List<KeyValueParam> params, String fileName) {
-        String scriptPath = SettingsUtils.getScriptPath(fileName);
+        String scriptPath = SettingsUtils.getScriptPath(params, fileName);
         return getStatementsByFullFilePath(params, scriptPath);
     }
 

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtils {
     public static final DateFormat sdf = new SimpleDateFormat(StringUtils.timestampFormat);
@@ -22,13 +23,20 @@ public class StringUtils {
         str = str.trim();
         return str.length() == 0;
     }
-
-    public static String trimStart(String str, String characters){
-        return str.replaceAll("^[" + characters + "]+", "");
+    public static boolean containsIgnoreCase (String str, String subString){
+        return str.toLowerCase().contains(subString.toLowerCase());
     }
 
-    public static String trimEnd(String str, String characters){
-        return str.replaceAll("[" + characters + "]+$", "");
+    public static String trimStart(String str, String characters) {
+        String pattern = "^[" + characters + "]+";
+        //pattern = Pattern.quote(pattern);
+        return str.replaceAll(pattern, "");
+    }
+
+    public static String trimEnd(String str, String characters) {
+        String pattern = "[" + characters + "]+$";
+        //pattern = Pattern.quote(pattern);
+        return str.replaceAll(pattern, "");
     }
 
     public static String trim(String str, String characters){
@@ -37,11 +45,11 @@ public class StringUtils {
         return str;
     }
 
-    public static String replaceAllSpecialConstants(String str){
+    public static String replaceAllSpecialConstants(List<KeyValueParam> params, String str){
         str = str.replaceAll("#NEW_LINE#",  System.lineSeparator());
         str = str.replaceAll("#VERSION#", FinalConstants.Version);
 
-        String baseScriptDir = Matcher.quoteReplacement(SettingsUtils.getBaseScriptDir());
+        String baseScriptDir = Matcher.quoteReplacement(SettingsUtils.getBaseScriptDir(params));
         str = str.replaceAll("#BASE_SCRIPT_DIR#",  baseScriptDir);
 
         return str;

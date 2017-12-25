@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class StatementQueueBuilder {
     private Path filePath;
@@ -76,7 +77,7 @@ public class StatementQueueBuilder {
             return "";
         }
 
-        if(str.contains(separator)){
+        if(StringUtils.containsIgnoreCase(str, separator)){
             appendStatement = true;
         }
 
@@ -122,6 +123,11 @@ public class StatementQueueBuilder {
     public void appendStatement(List<KeyValueParam> params, StringBuilder builder) {
         String sql = builder.toString();
         sql = StringUtils.trim(sql, " ");
+        int i = sql.lastIndexOf(this.separator);
+        if(i >= 0){
+            sql = sql.substring(0, i);
+        }
+        //sql = StringUtils.trim(sql, Pattern.quote(this.separator));
 
         if (!StringUtils.isNullOrEmpty(sql)) {
             sql = StringUtils.replaceAllDbConstants(params, sql);

@@ -38,16 +38,16 @@ public class SettingsUtils {
         return path.toString();
     }
 
-    public static String getBaseScriptDir(){
-        String dbFolder = (String) SettingsUtils.getSettingsValue("db.folder");
+    public static String getBaseScriptDir(List<KeyValueParam> params){
+        String dbFolder = (String) SettingsUtils.getSettingsOrParamValue(params, "db.folder");
         dbFolder = StringUtils.trimEnd(dbFolder, "//");
 
         Path path = Paths.get(getBaseSettingsDir(), "assets", dbFolder);
         return path.toString();
     }
 
-    public static String getScriptPath(String script){
-        String baseScriptDir = SettingsUtils.getBaseScriptDir();
+    public static String getScriptPath(List<KeyValueParam> params, String script){
+        String baseScriptDir = SettingsUtils.getBaseScriptDir(params);
         Path path = Paths.get(baseScriptDir, script);
         return path.toString();
     }
