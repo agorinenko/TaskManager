@@ -40,6 +40,8 @@ public class PowerShellCommand extends SafetyCommand {
         String v = getStringParam(params, "v");
         boolean versionIsMissing = StringUtils.isNullOrEmpty(v) ? true : false;
 
+        String charset = getStringParam(params, "encoding",  "UTF-8");
+
         List<CommandResult> result = new ArrayList<>();
         try {
             List<Version> localVersions = manager.select(".ps1");
@@ -47,7 +49,7 @@ public class PowerShellCommand extends SafetyCommand {
             for (int i = 0; i < localVersions.size(); i++) {
                 LocalVersion localVersion = (LocalVersion) localVersions.get(i);
                 if(versionIsMissing || localVersion.getVersionTimestampString().equalsIgnoreCase(v)) {
-                    CommandResult scriptResult = executeOperation(localVersion, psParams);
+                    CommandResult scriptResult = executeOperation(localVersion, psParams, charset);
                     result.add(scriptResult);
                 }
             }
@@ -58,15 +60,19 @@ public class PowerShellCommand extends SafetyCommand {
         return result;
     }
 
-    private CommandResult executeOperation(LocalVersion localVersion, HashMap<String, Object> psParams) throws CommandException {
+    private CommandResult executeOperation(LocalVersion localVersion, HashMap<String, Object> psParams, String charset) throws CommandException {
         Path path = localVersion.getLocalPath();
         try {
-            PowerShellResult shellResult = CommonUtils.executePowerShellScript(path, psParams);
-            if(shellResult.getErrorLines() > 0) {
-                return new ErrorResult(new CommandException(String.format("The script %s was completed with errors", path)));
+            PowerShellResult shellResult = CommonUtils.executePowerShellScript(path, psParams, charset);
+            String error = shellResult.getErrorResult();
+
+            if(!StringUtils.isNullOrEmpty(error)) {
+                return new ErrorResult(new CommandException(String.format("The script %s was completed with errors:\n %s", path, error)));
             } else {
+                String success = shellResult.getSuccessResult();
+
                 SuccessResult successResult = new SuccessResult();
-                successResult.setMessage(String.format("The script %s was successful", path));
+                successResult.setMessage(String.format("The script %s was successful: \n%s", path, success));
                 return successResult;
             }
         } catch (PowerShellException e) {

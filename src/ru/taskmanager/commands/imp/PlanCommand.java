@@ -94,8 +94,8 @@ public class PlanCommand extends SafetyCommand {
 //            if(!StringUtils.isNullOrEmpty(errorMessage)){
 //                throw new CommandException(String.format("Command %s error: %s", command, errorMessage));
 //            }
-            ConsolePrinter printer = new ConsolePrinter();
-            printer.print(result);
+//            ConsolePrinter printer = new ConsolePrinter();
+//            printer.print(result);
 
             return result;
         } catch (RequiredParamException e) {
@@ -114,21 +114,41 @@ public class PlanCommand extends SafetyCommand {
     }
 
     private List<String> sanitizePlanParams(List<KeyValueParam> params, List<String> planParams){
-        String separator = "->";
-        String separator2 = ":";
+//        String separator = "->";
+//        String separator2 = ":";
         return planParams.stream().map(i-> {
-            if(i.contains(separator)){
-                String[] parts = i.split(separator);
-                String rawData = parts[1];
-                if(rawData.contains(separator2)){
-                    String paramName = rawData.split(separator2)[0];
-                    String newValue = getStringParam(params, parts[0]);
+            for (KeyValueParam param : params) {
+                String key = null;
+                try {
+                    key = param.getKey();
+                } catch (StringIsEmptyException e) {
+                }
 
-                    return String.format("%s:%s", paramName, newValue);
+                if(!StringUtils.isNullOrEmpty(key)){
+                    key = String.format("{%s}", key);
+                }
+                if(i.contains(key)){
+                    String value = null;
+                    try {
+                        value = param.getStringValue();
+                    } catch (StringIsEmptyException e) {
+                    }
+                    if(!StringUtils.isNullOrEmpty(value)) {
+                        return i.replace(key, value);
+                    }
                 }
             }
-
             return i;
+//            if(i.contains(separator)){
+//                String[] parts = i.split(separator);
+//                String rawData = parts[1];
+//                if(rawData.contains(separator2)){
+//                    String paramName = rawData.split(separator2)[0];
+//                    String newValue = getStringParam(params, parts[0]);
+//
+//                    return String.format("%s:%s", paramName, newValue);
+//                }
+//            }
         }).collect(Collectors.toList());
     }
 

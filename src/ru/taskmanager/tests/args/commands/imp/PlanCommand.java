@@ -6,6 +6,7 @@ import ru.taskmanager.commands.CommandResult;
 import ru.taskmanager.commands.Executor;
 import ru.taskmanager.commands.SuccessResult;
 import ru.taskmanager.errors.*;
+import ru.taskmanager.output.ConsolePrinter;
 
 import java.util.List;
 
@@ -18,10 +19,9 @@ public class PlanCommand {
         ParamsManager manager = new ParamsManager(new String[]{ "plan", "f:plan", "env:dev" });
 
         Executor executor = new Executor(manager);
-        List<CommandResult> result = executor.execute();
+        List<CommandResult> result = executor.executeAndPrint(new ConsolePrinter());
         String message = result.get(0).getMessage();
 
-        System.out.print(message);
 
         assertTrue(result.size() > 0);
         assertTrue(result.get(0) instanceof SuccessResult);

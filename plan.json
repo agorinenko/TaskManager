@@ -2,8 +2,9 @@
   {
     "name": "ps",
     "params": [
-      "p4->p333:Hello, p333!",
-      "p3:Hello, p3!"
+      "encoding:Cp866",
+      "p333:Test {p4}",
+      "p3:Привет, p3!"
     ]
   }
 ]

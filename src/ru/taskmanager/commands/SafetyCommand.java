@@ -18,24 +18,6 @@ public abstract class SafetyCommand implements Command {
     @Override
     public List<CommandResult> execute(List<KeyValueParam> params) {
         try {
-            KeyValueParam envParam = ListUtils.getKeyValueParam(params, "env");
-            String env = null;
-            if(null != envParam){
-                try {
-                    env = envParam.getStringValue();
-                } catch (StringIsEmptyException e) {
-                }
-            }
-
-//            if(!StringUtils.isNullOrEmpty(env)){
-//                try {
-//                    //Устанавливаем значение среды, чтобы корректно брать настройки программы.
-//                    // Параметры запроса уже обработанны с учетом env.json
-//                    EnvironmentVariables.getInstance().setEnvironmentParameter(env);
-//                } catch (ConfigurationException e) {
-//                }
-//            }
-
             return safetyExecute(params);
         } catch (CommandException ex){
             List<CommandResult> result = new ArrayList<>(1);
@@ -51,6 +33,15 @@ public abstract class SafetyCommand implements Command {
         result.add(successResult);
 
         return result;
+    }
+
+    protected String getStringParam(List<KeyValueParam> params, String key, String defaultValue){
+        String val = getStringParam(params, key);
+        if(StringUtils.isNullOrEmpty(val)){
+            val = defaultValue;
+        }
+
+        return val;
     }
 
     protected String getStringParam(List<KeyValueParam> params, String key){

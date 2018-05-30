@@ -79,16 +79,12 @@ public class PowerShellCommand {
         params.put("test", "dev");
         params.put("ENV", "dev");
 
-        CommonUtils.executePowerShellScript("20170929113452336_file.ps1", params);
-
-        //Assert.assertEquals("http://dev;dev;dev;test\\agorinenko;False", result);
+        CommonUtils.executePowerShellScript("20170929113452336_file.ps1", params, "UTF-8");
     }
 
     @Test
     public void executePowerShellScript4() throws IOException, PowerShellException {
-        CommonUtils.executePowerShellScript(SettingsUtils.getBaseSettingsDir() + "/assets/ps/test.ps1", new HashMap<String, Object>());
-
-        //Assert.assertEquals("1", result);
+        CommonUtils.executePowerShellScript(SettingsUtils.getBaseSettingsDir() + "/assets/ps/test.ps1", new HashMap<String, Object>(), "UTF-8");
     }
 
     @Test

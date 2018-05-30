@@ -1,19 +1,19 @@
 package ru.taskmanager.api;
 
 public class PowerShellResult  implements java.io.Serializable{
-    private final int successLines;
-    private final int errorLines;
+    private final String successResult;
+    private final String errorResult;
 
-    public PowerShellResult(int successLines, int errorLines) {
-        this.successLines = successLines;
-        this.errorLines = errorLines;
+    public PowerShellResult(String successResult, String errorResult) {
+        this.successResult = successResult;
+        this.errorResult = errorResult;
     }
 
-    public int getSuccessLines() {
-        return successLines;
+    public String getSuccessResult() {
+        return successResult;
     }
 
-    public int getErrorLines() {
-        return errorLines;
+    public String getErrorResult() {
+        return errorResult;
     }
 }

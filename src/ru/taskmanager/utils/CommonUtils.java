@@ -1,7 +1,9 @@
 package ru.taskmanager.utils;
 
 import ru.taskmanager.api.PowerShellResult;
+import ru.taskmanager.errors.CommandException;
 import ru.taskmanager.errors.PowerShellException;
+import ru.taskmanager.errors.StringIsEmptyException;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -13,12 +15,12 @@ import java.util.Map;
  * Created by agorinenko on 28.09.2017.
  */
 public class CommonUtils {
-    public static PowerShellResult executePowerShellScript(String script, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static PowerShellResult executePowerShellScript(String script, HashMap<String, Object> params, String charsetName) throws IOException, PowerShellException {
         Path path = Paths.get(script);
-        return executePowerShellScript(path, params);
+        return executePowerShellScript(path, params, charsetName);
     }
 
-    public static PowerShellResult executePowerShellScript(Path path, HashMap<String, Object> params) throws IOException, PowerShellException {
+    public static PowerShellResult executePowerShellScript(Path path, HashMap<String, Object> params, String charsetName) throws IOException, PowerShellException {
         path = path.normalize();
 
         PowerShellResult result;
@@ -36,8 +38,8 @@ public class CommonUtils {
         Runtime runtime = Runtime.getRuntime();
         Process powerShellProcess = runtime.exec(command);
         try{
-            ProcessWorker errProcessWorker = new ProcessWorker(powerShellProcess.getErrorStream(), System.err);
-            ProcessWorker outProcessWorker = new ProcessWorker(powerShellProcess.getInputStream(), System.out);
+            ProcessWorker errProcessWorker = new ProcessWorker(powerShellProcess.getErrorStream(), charsetName);
+            ProcessWorker outProcessWorker = new ProcessWorker(powerShellProcess.getInputStream(), charsetName);
 
             Thread errorProcess = new Thread(errProcessWorker);
             Thread inputProcess = new Thread(outProcessWorker);
@@ -49,7 +51,7 @@ public class CommonUtils {
                 errorProcess.join();
                 inputProcess.join();
 
-                result = new PowerShellResult(outProcessWorker.getLineCount(), errProcessWorker.getLineCount());
+                result = new PowerShellResult(outProcessWorker.getResult(), errProcessWorker.getResult());
             } catch (InterruptedException e) {
                 throw new PowerShellException("InterruptedException");
             }

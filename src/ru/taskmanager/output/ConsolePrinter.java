@@ -9,13 +9,13 @@ import java.util.List;
 public class ConsolePrinter extends Printer {
     @Override
     protected void printError(ErrorResult errorResult) {
-        System.err.println(errorResult.getMessage());
-        System.err.print(System.lineSeparator());
+        System.out.print(errorResult.getMessage());
+        System.out.print(System.lineSeparator());
     }
 
     @Override
     protected void printSuccess(SuccessResult successResult) {
-        System.out.println(successResult.getMessage());
+        System.out.print(successResult.getMessage());
         System.out.print(System.lineSeparator());
     }
 }

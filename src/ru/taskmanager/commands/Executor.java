@@ -31,9 +31,10 @@ public final class Executor {
         return result;
     }
 
-    public void executeAndPrint(Printer printer) throws StringIsEmptyException, InstantiationException, ClassNotFoundException, IllegalAccessException, ConfigurationException, RequiredParamException {
+    public List<CommandResult> executeAndPrint(Printer printer) throws StringIsEmptyException, InstantiationException, ClassNotFoundException, IllegalAccessException, ConfigurationException, RequiredParamException {
         List<CommandResult> result = execute();
         printer.print(result);
+        return result;
     }
 
     private List<CommandResult> executeCommand(CommandParam commandParam, List<KeyValueParam> params) throws ClassNotFoundException, InstantiationException, StringIsEmptyException, IllegalAccessException, ConfigurationException {
